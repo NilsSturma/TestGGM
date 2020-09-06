@@ -62,38 +62,3 @@ cov_from_graph = function(g){
   cov = (diag(std) %*% corr %*% diag(std))
   return(cov)
 }
-
-##############################################################################################
-##############################################################################################
-
-
-# Create a graph
-colors <- c("tomato", "gray50")
-vertices <- data.frame(name=seq(1,8),
-                     type=c(rep(1,5), rep(2,3)), #1=observed -> always first m nodes should be observed
-                     color=colors[c(1,1,1,1,1,2,2,2)]) 
-edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
-g <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
-plot(g)
-
-# find set Q for this graph
-res = findQ(g)
-Q = res[[1]]
-not_Q = res[[2]]
-
-# Sample from given graph
-library(MASS)
-V(g)$var = rep(2,8)
-E(g)$corr = rep(0.5,7)
-cov = cov_from_graph(g)
-X = mvrnorm(100, mu=rep(0,5), Sigma=cov)
-
-
-
-
-
-
-# # Iterate over Q, not_Q
-# for (obj in Q){
-#   print(obj) # obj is a vector of length four
-# }
