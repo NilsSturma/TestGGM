@@ -1,5 +1,6 @@
 library(foreach)
 library(doParallel)
+library(MASS)
 source("star-tree-tests.R")
 
 
@@ -24,7 +25,7 @@ save=FALSE
 
 
 ###############################################
-# Compute empirical test sizes for all alphas #2
+# Compute empirical test sizes for all alphas #
 ###############################################
 
 cores = detectCores()
