@@ -1,90 +1,99 @@
 library(igraph)
-
-g = graph_from_literal(1--6--7--8--4, 2--6--7--8--3, 7--5)
-
-E(g) # this gives all edges
-length(E(g))
-E(g)$weight <- c(1,1,1,1,1,1,1) 
-E(g)$weight
-
-V(g)
-length(V(g))
-V(g)$type <- c(1,2,2,2,1,1,1,1) #1=observed
-V(g)$type
-
-colors <- c("tomato", "gray50")
-V(g)$color <- colors[V(g)$type]
-V(g)$color
-plot(g)
-g
-
-
-g[]  # matrix with weights (could use this to calculate a covariance matrix given a network)
-
-degree(g, mode="all")  # get degree og all nodes (important to distinguish leaves)
-
-
-# Compute intersection of two paths
-# !!! look at the function shortestPath from gdistance !!!
-path1 = shortest_paths(g, 
-               from=V(g)[name==1], 
-               to =V(g)[name==5],
-               output="epath",
-               weight=NA)
-path2 = shortest_paths(g, 
-                      from=V(g)[name==2], 
-                      to=V(g)[name==3],
-                      output="epath",       # "epath", "vpath" or "both"
-                      weight=NA)              # no weights are used
-
-intersection = intersect(unlist(path1$epath), unlist(path2$epath))
-intersection  #=2
-E(g)[2]
-
-
-
-
-# # get weights
-# E(g)[unlist(path_1_5$epath)]$weight
-
-
-##############################################################################################
-##############################################################################################
 library(CombMSC) # subsets
 
-m = sum(V(g)$type==1)
-sub_sets = subsets(5,4,1:m)
-
-Q = list()
-not_Q = list()
-res = NONE
 
 
-for (j in 1:nrow(sub_sets)){
-  p = sub_sets[j,1]
-  others = sub_sets[j,2:4]
-  count = 0
-  # Find the pair that gives an empty set when the intersection of its component paths is taken
-  for (i in 1:3){
-    path1 = shortest_paths(g, from=V(g)[name==p], to=V(g)[name==others[i]], output="epath", weight=NA)
-    path2 = shortest_paths(g, from=V(g)[name==others[-i][1]], to=V(g)[name==others[-i][2]], output="epath", weight=NA)  
-    intersection = intersect(unlist(path1$epath), unlist(path2$epath))
-    if (length(intersection)==0){
-      res = c(p, others[i], others[-i])
-      count = count + 1
+findQ = function(g){
+  
+  # g is a graph 
+  # V(g)$type indicates whether a node is observed or not (always first m oberseved)
+  
+  m = sum(V(g)$type==1)
+  sub_sets = subsets(m,4,1:m)
+  
+  Q = list()
+  not_Q = list()
+  res = NULL
+  
+  for (j in 1:nrow(sub_sets)){
+    p = sub_sets[j,1]
+    others = sub_sets[j,2:4]
+    count = 0
+    # Find the pair that gives an empty set when the intersection of its component paths is taken
+    for (i in 1:3){
+      path1 = shortest_paths(g, from=V(g)[name==p], to=V(g)[name==others[i]], output="epath", weight=NA)
+      path2 = shortest_paths(g, from=V(g)[name==others[-i][1]], to=V(g)[name==others[-i][2]], output="epath", weight=NA)  
+      intersection = intersect(unlist(path1$epath), unlist(path2$epath))
+      if (length(intersection)==0){
+        res = c(p, others[i], others[-i])
+        count = count + 1
+      }
+      if (count>1){
+        # If it exists more than one empty intersection of its component paths -> set not in Q
+        not_Q = c(not_Q, list(sub_sets[j,1:4]))
+        break
+      }
     }
-    if (count>1){
-      not_Q = c(not_Q, list( sub_sets[j,1:4]))
-      break
-    }
+    Q = c(Q, list(res))
   }
-  Q = c(Q, list(res))
+  return(list(Q, not_Q))
 }
 
-# convert to matrix
-Q = matrix(unlist(Q), nrow = length(Q), byrow = TRUE)
-# not_Q = matrix(unlist(not_Q), nrow = length(Q), byrow = TRUE)
+
+
+cov_from_graph = function(g){
+  
+  # g is an igraph object with the following attributes
+  # type: 1= observes, 2=unobserved
+  # var: variances for all nodes
+  # corr: correlation for all edges in (-1,1)
+  
+  std = sqrt(V(g)$var[V(g)$type==1])
+  m = sum(V(g)$type==1)
+  
+  corr = diag(rep(1,m))
+  for (i in 1:m){
+    for (j in min((i+1),m):m){
+      path = shortest_paths(g, from=V(g)[name==i], to=V(g)[name==j], output="epath", weight=NA)
+      corr[i,j] = prod(E(g)$corr[c(unlist(path$epath))])
+      corr[j,i] = corr[i,j]
+    }
+  }
+  cov = (diag(std) %*% corr %*% diag(std))
+  return(cov)
+}
+
+##############################################################################################
+##############################################################################################
+
+
+# Create a graph
+colors <- c("tomato", "gray50")
+vertices <- data.frame(name=seq(1,8),
+                     type=c(rep(1,5), rep(2,3)), #1=observed -> always first m nodes should be observed
+                     color=colors[c(1,1,1,1,1,2,2,2)]) 
+edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
+g <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+plot(g)
+
+# find set Q for this graph
+res = findQ(g)
+Q = res[[1]]
+not_Q = res[[2]]
+
+# Sample from given graph
+library(MASS)
+V(g)$var = rep(2,8)
+E(g)$corr = rep(0.5,7)
+cov = cov_from_graph(g)
+X = mvrnorm(100, mu=rep(0,5), Sigma=cov)
 
 
 
 
+
+
+# # Iterate over Q, not_Q
+# for (obj in Q){
+#   print(obj) # obj is a vector of length four
+# }
