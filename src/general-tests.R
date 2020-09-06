@@ -10,7 +10,7 @@ test_equality_constraints = function(X, Q, not_Q, method="1-dependent", B=3, E=1
   len_not_Q = length(not_Q)
   
   # Compute Y
-  len_Y = length(Q) + 2*length(not_Q)
+  len_Y = len_Q + 2 * len_not_Q
   Y = matrix(0, nrow=(n-1), ncol=len_Y)
   for (i in seq_along(Q)){
     p = Q[[i]][1]
@@ -28,7 +28,7 @@ test_equality_constraints = function(X, Q, not_Q, method="1-dependent", B=3, E=1
     Y[,(len_Q + len_not_Q +i)] = X[1:(n-1),p] * X[1:(n-1),q] * X[2:n,r] * X[2:n,s] - X[1:(n-1),p] * X[1:(n-1),s] * X[2:n,q] * X[2:n,r]
   }
   Y_mean = colMeans(Y)
-  
+
   # Compute the batched mean estimator for diag(cov(Y))
   cov_Y_diag = rep(0, length(Y_mean))
   Y_stand = t(t(Y) - Y_mean)  # Standardize each Y_i (Y_i - Y_mean) and save it in a matrix
@@ -37,10 +37,10 @@ test_equality_constraints = function(X, Q, not_Q, method="1-dependent", B=3, E=1
     cov_Y_diag = cov_Y_diag + colSums(Y_stand[L,])**2
   }
   cov_Y_diag = cov_Y_diag / (B*omega)
-  
+
   # Test statistic
   test_stat = sqrt(n-1) * max(abs( diag(cov_Y_diag**(-1/2)) %*% Y_mean ))
-  
+
   # Bootstrapping
   results = rep(0, E)
   for (i in 1:E){
@@ -52,11 +52,11 @@ test_equality_constraints = function(X, Q, not_Q, method="1-dependent", B=3, E=1
     }
     results[i] = max(abs( (1/sqrt(B*omega)) * diag(cov_Y_diag**(-1/2)) %*% sum ))
   }
-  
+
   # Critical values
   critical_values = quantile(results, probs=1-alphas)
-  
+
   # Reject if test_stat > critical_value
   is_rejected = test_stat > critical_values
-  return(c(test_stat, critical_values))
+  return(is_rejected)
 }

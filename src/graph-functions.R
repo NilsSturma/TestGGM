@@ -33,8 +33,11 @@ findQ = function(g){
         not_Q = c(not_Q, list(sub_sets[j,1:4]))
         break
       }
+      if (i==3){
+        Q = c(Q, list(res))
+      }
     }
-    Q = c(Q, list(res))
+   
   }
   return(list(Q, not_Q))
 }
