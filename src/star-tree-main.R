@@ -11,7 +11,7 @@ source("star-tree-tests.R")
 
 m = 10
 n = 500
-setup = 1
+setup = 2
 test_strategy = "calculate-Y"  
 # "half-and-half", "1-dependent" or "calculate-Y"
 
@@ -20,7 +20,7 @@ E = 1000
 alphas = seq(0.01, 0.99, 0.01)
 
 nr_exp = 500
-save=FALSE
+save=TRUE
 
 
 
@@ -67,7 +67,6 @@ stopCluster(cl)
 
 
 
-
 #########################
 # Plot and save results #
 #########################
@@ -91,6 +90,3 @@ abline(coef = c(0,1))
 if (save){
   dev.off() # close pdf file
 }
-
-
-
