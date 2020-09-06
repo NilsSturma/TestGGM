@@ -3,6 +3,7 @@ library(doParallel)
 source("star-tree-tests.R")
 
 
+
 #################
 # Set variables #
 #################
@@ -10,7 +11,7 @@ source("star-tree-tests.R")
 m = 10
 n = 500
 setup = 1
-test_strategy = "half-and-half"  
+test_strategy = "calculate-Y"  
 # "half-and-half", "1-dependent" or "calculate-Y"
 
 B = 3  # just for "1-dependent"
@@ -18,12 +19,12 @@ E = 1000
 alphas = seq(0.01, 0.99, 0.01)
 
 nr_exp = 500
-save=TRUE
+save=FALSE
 
 
 
 ###############################################
-# Compute empirical test sizes for all alphas #
+# Compute empirical test sizes for all alphas #2
 ###############################################
 
 cores = detectCores()
