@@ -1,7 +1,7 @@
 library(foreach)
 library(doParallel)
 library(MASS)
-source("star-tree-tests.R")
+source("tests.R")
 
 
 
