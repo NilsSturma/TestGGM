@@ -77,14 +77,14 @@ stopCluster(cl)
 # Plot and save results #
 #########################
 
-title = paste("Emprical power for different n. Each based on ", nr_exp, " experiments. Alpha = ", alpha, sep="")
-subtitle = paste("Fixed alternative: Setup ", setup, " with noise Unif[", a, ",", b, "].", sep="")
+title = paste("Emprical power for different n. (", nr_exp, " experiments each. Alpha = ", alpha, ")", sep="")
+subtitle = paste("Fixed alternative: Setup ", setup, " with noise created from Unif[", a, ",", b, "].", sep="")
 
 if (save){
   # use "./img/name.png" to save in subdirectory
   name_pdf = paste(name, ".pdf", sep="")
   name_rds = paste(name, ".rds", sep="")
-  saveRDS(sizes, file = name_rds) # read with readRDS()
+  saveRDS(results, file = name_rds) # read with readRDS()
   pdf(name_pdf) # create pdf file
 }
 

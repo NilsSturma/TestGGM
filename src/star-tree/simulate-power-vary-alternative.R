@@ -83,7 +83,7 @@ if (save){
   # use "./img/name.png" to save in subdirectory
   name_pdf = paste(name, ".pdf", sep="")
   name_rds = paste(name, ".rds", sep="")
-  saveRDS(sizes, file = name_rds) # read with readRDS()
+  saveRDS(results, file = name_rds) # read with readRDS()
   pdf(name_pdf) # create pdf file
 }
 
