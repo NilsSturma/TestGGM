@@ -91,7 +91,6 @@ if (save){
 plot(n_range, results, 
      xlab="n", ylab="Emprical power", main=title, sub=subtitle,
      type="p", pch=1)
-abline(coef = c(0,1))
 
 if (save){
   dev.off() # close pdf file

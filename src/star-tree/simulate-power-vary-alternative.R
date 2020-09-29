@@ -14,15 +14,12 @@ setup = 1
 B = 3 
 E = 1000
 alpha = 0.05 # fixed
-n_range = seq(100,1000,50)
 nr_exp = 500
 
 deviations = seq(0.1, 1.5, 0.1)
 
 save=TRUE
 name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_n=", n, "_alpha=", alpha, "_vary-alternative", sep="")
-
-shift_unif = function(x,a,b){a + (b-a) * x}
 
 
 #############################
@@ -47,9 +44,7 @@ results <- foreach(d = deviations, .combine=rbind, .packages=c("MASS", "CombMSC"
   } 
   
   # Create noise
-  a = -d
-  b = d
-  A = matrix(shift_unif(runif(m**2), a, b), ncol=m)   # elements in (a,b)
+  A = matrix(runif(m**2, -d, d), ncol=m)   # elements in (a,b)
   noise = t(A) %*% A # alwas pos. semidefinit
   
   # add noise to final covariance matrix
@@ -76,7 +71,7 @@ stopCluster(cl)
 # Plot and save results #
 #########################
 
-title = paste("Emprical power for different deviations of the star tree. Each based on ", nr_exp, " experiments.", sep="")
+title = paste("Emprical power for different deviations of the star tree.\nEach based on ", nr_exp, " experiments.", sep="")
 subtitle = paste("Deviations from setup ", setup, ", n = ", n, ", alpha = ", alpha, ".", sep="")
 
 if (save){
@@ -87,10 +82,9 @@ if (save){
   pdf(name_pdf) # create pdf file
 }
 
-plot(n_range, results, 
+plot(deviations[-15], results[-15], 
      xlab="deviation", ylab="Emprical power", main=title, sub=subtitle,
      type="p", pch=1)
-abline(coef = c(0,1))
 
 if (save){
   dev.off() # close pdf file
