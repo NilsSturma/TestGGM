@@ -2,7 +2,7 @@ library(foreach)
 library(doParallel)
 library(MASS) #mvrnorm
 source("graph-functions.R")
-source("general-tests.R")
+source("tests.R")
 
 
 #################
@@ -104,6 +104,7 @@ plot(alphas, sizes,
      xlab="Nominal level", ylab="Emprical test size", main=title, #sub=subtitle,
      type="p", pch=1)
 abline(coef = c(0,1))
+
 if (save){
   dev.off() # close pdf file
 }

@@ -205,7 +205,6 @@ test_calculate_Y <- function(X, E=1000, alphas=seq(0.01, 0.99, 0.01)){
   n = dim(X)[1]
   
   # Sample covariance 
-  ### Is this okay ???Or give in function true covariance matrix? ###
   S = matrix(0, nrow=m, ncol=m)
   for (i in 1:n){
     S = S + X[i,] %*% t(X[i,])
