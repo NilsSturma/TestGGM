@@ -18,7 +18,7 @@ nr_exp = 500
 
 # alternative
 beta_2 = c(1,1, rep(0,(m-2)))
-H = seq(0.1, 2, 0.1)
+H = seq(1, 20, 2)
 
 save=TRUE
 name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_n=", n, "_alpha=", alpha, "_vary-alternative", sep="")
@@ -86,7 +86,7 @@ if (save){
   pdf(name_pdf) # create pdf file
 }
 
-plot(deviations[-15], results[-15], 
+plot(H, results, 
      xlab="deviation", ylab="Emprical power", main=title, sub=subtitle,
      type="p", pch=1)
 
