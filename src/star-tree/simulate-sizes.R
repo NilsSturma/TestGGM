@@ -28,11 +28,15 @@ save=TRUE
 # Compute empirical test sizes for all alphas #
 ###############################################
 
-cores = detectCores()
+cores = 20#detectCores()
 cl <- makeCluster(cores, outfile = "")
 registerDoParallel(cl)
 
 sizes <- foreach(nr = 1:nr_exp, .combine=rbind, .packages=c("MASS", "CombMSC")) %dopar% {
+  
+  if((nr%%10) == 0){
+    print(nr)
+  }
   
   # Generate n independent data sets depending on the setup
   if (setup==1){

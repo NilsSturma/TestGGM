@@ -16,7 +16,9 @@ E = 1000
 alpha = 0.05 # fixed
 nr_exp = 500
 
-deviations = seq(0.1, 1.5, 0.1)
+# alternative
+beta_2 = c(1,1, rep(0,(m-2)))
+H = seq(0.1, 2, 0.1)
 
 save=TRUE
 name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_n=", n, "_alpha=", alpha, "_vary-alternative", sep="")
@@ -26,12 +28,12 @@ name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_n=", n, "_alpha=", alpha, "
 # Simulate power for each n #
 #############################
 
-cores = detectCores()
+cores = 20#detectCores()
 cl <- makeCluster(cores, outfile = "")
 registerDoParallel(cl)
 
 
-results <- foreach(d = deviations, .combine=rbind, .packages=c("MASS", "CombMSC")) %dopar% {
+results <- foreach(h = H, .combine=rbind, .packages=c("MASS", "CombMSC")) %dopar% {
   
   # Calculate covariance matrix for alternative
   if (setup==1){
@@ -43,16 +45,18 @@ results <- foreach(d = deviations, .combine=rbind, .packages=c("MASS", "CombMSC"
     Sigma = beta %*% t(beta) + diag(rep(1/3,m))
   } 
   
-  # Create noise
-  A = matrix(runif(m**2, -d, d), ncol=m)   # elements in (a,b)
-  noise = t(A) %*% A # alwas pos. semidefinit
   
   # add noise to final covariance matrix
-  Sigma = Sigma + noise
+  Sigma = Sigma + beta_2 %*% t(beta_2) * h / sqrt(n) 
   
   # Simulate power
   powers = rep(0, nr_exp)
   for (nr in 1:nr_exp){
+    
+    if((nr%%10) == 0){
+      print(nr)
+    }
+    
     # Generate n independent data sets from the alternative
     X = mvrnorm(n, mu=rep(0,m), Sigma=Sigma)
     
