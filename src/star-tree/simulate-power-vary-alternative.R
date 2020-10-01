@@ -18,10 +18,10 @@ nr_exp = 500
 
 # alternative
 beta_2 = c(1,1, rep(0,(m-2)))
-H = seq(1, 20, 2)
+H = seq(0, 2*sqrt(n), len=20)
 
 save=TRUE
-name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_n=", n, "_alpha=", alpha, "_vary-alternative", sep="")
+name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_n=", n, "_alpha=", alpha, "_vary-alternative-sparse", sep="")
 
 
 #############################
@@ -76,7 +76,7 @@ stopCluster(cl)
 #########################
 
 title = paste("Emprical power for different deviations of the star tree.\nEach based on ", nr_exp, " experiments.", sep="")
-subtitle = paste("Deviations from setup ", setup, ", n = ", n, ", alpha = ", alpha, ".", sep="")
+subtitle = paste("Deviations from setup ", setup, ", n = ", n, ", alpha = ", alpha, ", beta sparse", sep="")
 
 if (save){
   # use "./img/name.png" to save in subdirectory
@@ -86,8 +86,8 @@ if (save){
   pdf(name_pdf) # create pdf file
 }
 
-plot(H, results, 
-     xlab="deviation", ylab="Emprical power", main=title, sub=subtitle,
+plot(seq(0, 2, len=20), results, 
+     xlab="h", ylab="Emprical power", main=title, sub=subtitle,
      type="p", pch=1)
 
 if (save){
