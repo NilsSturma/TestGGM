@@ -9,13 +9,13 @@ source("tests.R")
 # Set variables #
 #################
 
-m = 10
+m = 20
 n = 500
 setup = 2
-test_strategy = "calculate-Y"  
+test_strategy = "half-and-half"  
 # "half-and-half", "1-dependent" or "calculate-Y"
 
-B = 3  # just for "1-dependent"
+#B = 3  # just for "1-dependent"
 E = 1000
 alphas = seq(0.01, 0.99, 0.01)
 

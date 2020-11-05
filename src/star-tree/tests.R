@@ -15,7 +15,7 @@ test_half_and_half <- function(X, E=1000, alphas=seq(0.01, 0.99, 0.01)){
   X1 = X[1:(n/2),]
   X2 = X[((n/2)+1):n, ]
   
-  # Compute Y_i, i=1,...,(n-1) in  a matrix
+  # Compute Y_i, i=1,...,(n/2) in  a matrix
   sub_sets = subsets(m,4,1:m)
   Y = matrix(0, nrow = n/2, ncol = 2 * choose(m,4))
   for (j in 1:nrow(sub_sets)){
@@ -27,14 +27,20 @@ test_half_and_half <- function(X, E=1000, alphas=seq(0.01, 0.99, 0.01)){
     Y[,j*2] = X1[,p] * X1[,q] * X2[,s] * X2[,r] - X1[,p] * X1[,r] * X2[,q] * X2[,s]
   }
   
+  Y_mean = colMeans(Y)
+  Y_stand = t(t(Y) - Y_mean) # Standardize each Y_i = (Y_i - Y_mean) and save it in a matrix
+  
+  # Diagonal of the sample covariance of Y
+  cov_Y_diag = colSums(Y_stand**2) / (n/2)
+  
   # Test statistic
-  test_stat = max(abs( (1/sqrt((n/2))) * colSums(Y) ))  # We need absolute values here to have a two sided test
+  test_stat = sqrt(n/2) * max(abs( diag(cov_Y_diag**(-1/2)) %*% Y_mean))  # We need absolute values here to have a two sided test
   
   # Bootstrapping 
   results = rep(0, E)
   for (i in 1:E){
     epsilons = rnorm((n/2), mean=0, sd=1)
-    results[i] = max(abs( (1/sqrt((n/2))) * colSums(Y*epsilons) ))  # We need absolute values here to have a two sided tes
+    results[i] = (1/sqrt((n/2))) * max(abs( diag(cov_Y_diag**(-1/2)) %*% colSums(Y_stand*epsilons)))  # We need absolute values here to have a two sided tes
   }
   
   # Critical values
@@ -69,10 +75,10 @@ test_1_dependent <- function(X, B=3, E=1000, alphas=seq(0.01, 0.99, 0.01)){
   }
   
   Y_mean = colMeans(Y)
+  Y_stand = t(t(Y) - Y_mean)  # Standardize each Y_i = (Y_i - Y_mean) and save it in a matrix
   
-  # Compute the batched mean estimator for diag(cov(Y))
+  # Compute the diagonal of the batched mean estimator cov(Y)
   cov_Y_diag = rep(0, length(Y_mean))
-  Y_stand = t(t(Y) - Y_mean)  # Standardize each Y_i (Y_i - Y_mean) and save it in a matrix
   for (b in 1:omega){
     L = seq(1+(b-1)*B, b*B)
     cov_Y_diag = cov_Y_diag + colSums(Y_stand[L,])**2
@@ -91,7 +97,7 @@ test_1_dependent <- function(X, B=3, E=1000, alphas=seq(0.01, 0.99, 0.01)){
       L = seq(1+(b-1)*B, b*B)
       sum = sum + epsilons[b] * colSums(Y_stand[L,])
     }
-    results[i] = max(abs( (1/sqrt(B*omega)) * diag(cov_Y_diag**(-1/2)) %*% sum ))
+    results[i] = (1/sqrt(B*omega)) * max(abs(diag(cov_Y_diag**(-1/2)) %*% sum ))
   }
   
   # Critical values
