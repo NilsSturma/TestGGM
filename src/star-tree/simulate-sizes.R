@@ -1,7 +1,8 @@
 library(foreach)
 library(doParallel)
 library(Rfast)  #rmvnorm
-source("tests.R")
+library(Rcpp)
+#source("tests.R")
 
 
 
@@ -12,14 +13,14 @@ source("tests.R")
 m = 20
 n = 500
 setup = 2
-test_strategy = "calculate-Y"  
+test_strategy = "1-dependent"  
 # "half-and-half", "1-dependent" or "calculate-Y"
 
 B = 3  # just for "1-dependent"
 E = 1000
 alphas = seq(0.01, 0.99, 0.01)
 
-nr_exp = 500
+nr_exp = 1000
 save=TRUE
 
 
@@ -32,8 +33,11 @@ cores = 20#detectCores()
 cl <- makeCluster(cores, outfile = "")
 registerDoParallel(cl)
 
-sizes <- foreach(nr = 1:nr_exp, .combine=rbind, .packages=c("Rfast", "CombMSC")) %dopar% {
+sizes <- foreach(nr = 1:nr_exp, .combine=rbind, .packages=c("Rfast", "CombMSC", "Rcpp")) %dopar% {
   
+  # Load needed functions to each worker    
+  source("tests.R")
+                   
   if((nr%%10) == 0){
     print(nr)
   }
@@ -95,3 +99,4 @@ abline(coef = c(0,1))
 if (save){
   dev.off() # close pdf file
 }
+

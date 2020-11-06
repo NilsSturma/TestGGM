@@ -1,13 +1,13 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
+
+
+
 // [[Rcpp::export]]
-NumericMatrix calculate_Y(IntegerMatrix indices, NumericMatrix X) {
+NumericMatrix calculate_Y(IntegerMatrix indices, NumericMatrix X1, NumericMatrix X2) {
   int nr_cols = indices.nrow();
-  int N = X.nrow();
-  int n = N/2;
-  NumericMatrix X1 = X(Range(0,n-1),_);
-  NumericMatrix X2 = X(Range(n,N-1),_);
+  int n = X1.nrow();
   int p = 0;
   int q = 0;
   int r = 0;
@@ -24,12 +24,71 @@ NumericMatrix calculate_Y(IntegerMatrix indices, NumericMatrix X) {
 }
 
 
+
+
+// [[Rcpp::export]]
+NumericVector bootstrap_independent(int E, NumericVector standardizer, NumericMatrix Y_centered){
+  
+  int n = Y_centered.nrow();
+  int p = Y_centered.ncol();
+  NumericVector epsilons(n);
+  NumericVector colsums(p);
+  NumericVector res(E);
+  
+  for (int i = 0; i < E; i++){
+    epsilons = rnorm(n,0,1);
+    for (int j = 0; j < p; j++){
+      colsums[j] = sum(Y_centered(_,j) * epsilons);
+    }
+    res[i] = (1/sqrt(n)) * max(abs(standardizer * colsums));
+  }
+  
+  return res;
+}
+
+
+
+
+// [[Rcpp::export]]
+NumericVector bootstrap_dependent(int E, int B, int omega, NumericVector standardizer, NumericMatrix Y_centered){
+  
+  int p = Y_centered.ncol();
+  NumericVector epsilons(omega);
+  double batchsum = 0;
+  NumericVector sums(p);
+  IntegerVector L(B);
+  NumericVector res(E);
+  
+  for (int i = 0; i < E; i++){
+    epsilons = rnorm(omega,0,1);
+    sums.fill(0);
+    for (int j = 0; j < p; j++){
+      for (int b = 0; b < omega; b++){
+        L = seq((b-1)*B, b*B-1);
+        batchsum = 0;
+        for (int l = 0; l < B; l++){
+          batchsum = batchsum + Y_centered(L[l],j);
+        }
+        sums[j] = sums[j] + batchsum * epsilons[b];
+      }
+    }
+    res[i] = (1/sqrt(B * omega)) * max(abs(standardizer * sums));
+  }
+  
+  return res;
+}
+
+
+
+
 // [[Rcpp::export]]
 double fourth_mom(NumericMatrix S, int a, int b, int c, int d) {
   double out;
   out = S(a,b) * S(c,d) + S(a,c) * S(b,d) + S(a,d) * S(b,c);
   return out;
 }
+
+
 
 
 // [[Rcpp::export]]
