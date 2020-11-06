@@ -1,6 +1,6 @@
 library(foreach)
 library(doParallel)
-library(MASS)
+library(Rfast)  #rmvnorm
 source("tests.R")
 
 
@@ -12,10 +12,10 @@ source("tests.R")
 m = 20
 n = 500
 setup = 2
-test_strategy = "half-and-half"  
+test_strategy = "calculate-Y"  
 # "half-and-half", "1-dependent" or "calculate-Y"
 
-#B = 3  # just for "1-dependent"
+B = 3  # just for "1-dependent"
 E = 1000
 alphas = seq(0.01, 0.99, 0.01)
 
@@ -32,7 +32,7 @@ cores = 20#detectCores()
 cl <- makeCluster(cores, outfile = "")
 registerDoParallel(cl)
 
-sizes <- foreach(nr = 1:nr_exp, .combine=rbind, .packages=c("MASS", "CombMSC")) %dopar% {
+sizes <- foreach(nr = 1:nr_exp, .combine=rbind, .packages=c("Rfast", "CombMSC")) %dopar% {
   
   if((nr%%10) == 0){
     print(nr)
@@ -47,7 +47,7 @@ sizes <- foreach(nr = 1:nr_exp, .combine=rbind, .packages=c("MASS", "CombMSC")) 
     beta = c(10,10, rnorm((m-2),0,0.2))
     Sigma = beta %*% t(beta) + diag(rep(1/3,m))
   } 
-  X = mvrnorm(n, mu=rep(0,m), Sigma=Sigma)
+  X = rmvnorm(n, mu=rep(0,m), sigma=Sigma)
   
   
   # Call the test
@@ -59,6 +59,7 @@ sizes <- foreach(nr = 1:nr_exp, .combine=rbind, .packages=c("MASS", "CombMSC")) 
     
   } else if (test_strategy=="calculate-Y"){
     res = test_calculate_Y(X, E=E, alphas=alphas)
+    
   } else {
     print("ERROR")
   }
