@@ -22,6 +22,7 @@ test_half_and_half <- function(X, E=1000, alphas=seq(0.01, 0.99, 0.01)){
   indices = matrix(0, nrow=nr_cols, 4)
   indices[1:(nr_cols/2),] = sub_sets
   indices[((nr_cols/2)+1):(2*(nr_cols/2)),] = sub_sets[,c(1,3,2,4)]
+  mode(indices) = "integer"
   
   # Compute Y
   Y = calculate_Y(indices, X1, X2) # each column is one polynom
@@ -38,11 +39,7 @@ test_half_and_half <- function(X, E=1000, alphas=seq(0.01, 0.99, 0.01)){
   test_stat = sqrt(n/2) * max(abs(standardizer * Y_mean))  # We need absolute values here to have a two sided test
   
   # Bootstrapping 
-  results = rep(0, E)
-  for (i in 1:E){
-    epsilons = Rnorm((n/2), m=0, s=1)
-    results[i] = (1/sqrt((n/2))) * max(abs(standardizer * colsums(Y_centered*epsilons)))  # We need absolute values here to have a two sided tes
-  }
+  results = bootstrap_independent(E, standardizer, Y_centered)
   
   # Critical values
   critical_values = quantile(results, probs=1-alphas)
@@ -71,13 +68,14 @@ test_1_dependent <- function(X, B=3, E=1000, alphas=seq(0.01, 0.99, 0.01)){
   indices = matrix(0, nrow=nr_cols, 4)
   indices[1:(nr_cols/2),] = sub_sets
   indices[((nr_cols/2)+1):(2*(nr_cols/2)),] = sub_sets[,c(1,3,2,4)]
+  mode(indices) = "integer"
   
   # Compute Y
   Y = calculate_Y(indices, X1, X2) # each column is one polynom
   Y_mean = colmeans(Y)
   Y_centered = transpose(transpose(Y) - Y_mean) # Centering: Y_i = (Y_i - Y_mean)
   
-  # Compute the diagonal of the batched mean estimator cov(Y)
+  # Compute the diagonal of the batched mean estimator cov(Y) # could do this in C++ as well (marginal effect)
   cov_Y_diag = rep(0, length(Y_mean))
   for (b in 1:omega){
     L = seq(1+(b-1)*B, b*B)
@@ -92,16 +90,7 @@ test_1_dependent <- function(X, B=3, E=1000, alphas=seq(0.01, 0.99, 0.01)){
   test_stat = sqrt(n-1) * max(abs(standardizer * Y_mean))
 
   # Bootstrapping
-  results = rep(0, E)
-  for (i in 1:E){
-    epsilons = Rnorm(omega, m=0, s=1)
-    sum = rep(0, length(Y_mean))
-    for (b in 1:omega){
-      L = seq(1+(b-1)*B, b*B)
-      sum = sum + epsilons[b] * colsums(Y_centered[L,])
-    }
-    results[i] = (1/sqrt(B*omega)) * max(abs(standardizer * sum))
-  }
+  results = bootstrap_dependent(E, B, omega, standardizer, Y_centered)
   
   # Critical values
   critical_values = quantile(results, probs=1-alphas)
@@ -134,6 +123,7 @@ test_calculate_Y <- function(X, E=1000, alphas=seq(0.01, 0.99, 0.01)){
   indices = matrix(0, nrow=nr_cols, 4)
   indices[1:(nr_cols/2),] = sub_sets
   indices[((nr_cols/2)+1):(2*(nr_cols/2)),] = sub_sets[,c(1,3,2,4)]
+  mode(indices) = "integer"
   
   # Call functions to calculate Y and its estimated covariance
   Y = calculate_Y(indices, X1, X2)

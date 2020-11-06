@@ -8,56 +8,6 @@ library(Rcpp)
 sourceCpp('rcpp-functions.cpp')
 
 
-
-###############
-# R functions #
-###############
-
-fourth_momR = function(S, ind){
-  S[ind[1],ind[2]] * S[ind[3],ind[4]] + S[ind[1],ind[3]] * S[ind[2],ind[4]] + S[ind[1],ind[4]] * S[ind[2],ind[3]]
-}
-
-compute_cov_YR = function(S, indices){
-  nr_cols = nrow(indices)
-  # calculate covariance of Y
-  cov = matrix(0, nrow=nr_cols, ncol=nr_cols)
-  for (i in 1:nr_cols){
-    p = indices[i,1]
-    q = indices[i,2]
-    r = indices[i,3]
-    s = indices[i,4]
-    for (j in i:nr_cols){
-      u = indices[j,1]
-      v = indices[j,2]
-      w = indices[j,3]
-      z = indices[j,4]
-
-      cov[i,j] = 
-        fourth_momR(S, c(p,r,u,w)) * fourth_momR(S, c(q,s,v,z)) - 
-        fourth_momR(S, c(p,r,u,z)) * fourth_momR(S, c(q,s,v,w)) -
-        fourth_momR(S, c(p,s,u,w)) * fourth_momR(S, c(q,r,v,z)) +
-        fourth_momR(S, c(p,s,u,z)) * fourth_momR(S, c(q,r,v,w)) +
-        (
-          S[p,r] * fourth_momR(S, c(q,s,u,w)) * S[v,z] -
-            S[p,r] * fourth_momR(S, c(q,s,u,z)) * S[v,w] -
-            S[p,s] * fourth_momR(S, c(q,r,u,w)) * S[v,z] +
-            S[p,s] * fourth_momR(S, c(q,r,u,z)) * S[v,w]
-        ) +
-        (
-          S[u,w] * fourth_momR(S, c(p,r,v,z)) * S[q,s] -
-            S[u,z] * fourth_momR(S, c(p,r,v,w)) * S[q,s] -
-            S[u,w] * fourth_momR(S, c(p,s,v,z)) * S[q,r] +
-            S[u,z] * fourth_momR(S, c(p,s,v,w)) * S[q,r]
-        ) - 
-        3 * (
-          (S[p,r]*S[q,s] - S[p,s]*S[q,r]) * (S[u,w]*S[v,z] - S[u,z]*S[v,w])
-        )
-      cov[j,i] = cov[i,j]
-    }
-  }
-  return(cov)
-}
-
 ################
 # benchmarking #
 ################
@@ -65,13 +15,18 @@ compute_cov_YR = function(S, indices){
 # generate data
 n = 500
 m = 10
+E = 1000
+B = 3
+
 beta = rep(1,m)
 Sigma = beta %*% t(beta) + diag(rep(1,m))
 X = mvrnorm(n, mu=rep(0,m), Sigma=Sigma)
 
-X1 = X[1:(n/2),]
-X2 = X[((n/2)+1):n, ]
+omega = floor((n-1)/B)
+X1 = X[1:(n-1),]
+X2 = X[2:n,]
 
+# Create indices
 sub_sets = subsets(m,4,1:m)
 nr_cols = 2*nrow(sub_sets)
 indices = matrix(0, nrow=nr_cols, 4)
@@ -79,17 +34,46 @@ indices[1:(nr_cols/2),] = sub_sets
 indices[((nr_cols/2)+1):(2*(nr_cols/2)),] = sub_sets[,c(1,3,2,4)]
 mode(indices) = "integer"
 
+# Compute Y
+Y = calculate_Y(indices, X1, X2) # each column is one polynom
+Y_mean = colmeans(Y)
+Y_centered = transpose(transpose(Y) - Y_mean) # Centering: Y_i = (Y_i - Y_mean)
 
-# Sample covariance 
-S = matrix(0, nrow=m, ncol=m)
-for (i in 1:n){
-  S = S + X[i,] %*% t(X[i,])
+# Compute the diagonal of the batched mean estimator cov(Y)
+cov_Y_diag = rep(0, length(Y_mean))
+for (b in 1:omega){
+  L = seq(1+(b-1)*B, b*B)
+  cov_Y_diag = cov_Y_diag + colsums(Y_centered[L,])**2
 }
-S = S/n
+cov_Y_diag = cov_Y_diag / (B*omega)
 
-resR = compute_cov_YR(S, indices)
-res = compute_cov_Y(S,indices)
+# Vector for standardizing
+standardizer = cov_Y_diag**(-1/2)
 
-microbenchmark(compute_cov_YR(S, indices),
-               compute_cov_Y(S,indices),
+# Test statistic
+test_stat = sqrt(n-1) * max(abs(standardizer * Y_mean))
+
+
+# Bootstrapping 
+bootstrapR = function(E, B, omega, standardizer, Y_centered){
+  results = rep(0, E)
+  for (i in 1:E){
+    epsilons = Rnorm(omega, m=0, s=1)
+    sum = rep(0, length(Y_mean))
+    for (b in 1:omega){
+      L = seq(1+(b-1)*B, b*B)
+      sum = sum + epsilons[b] * colsums(Y_centered[L,])
+    }
+    results[i] = (1/sqrt(B*omega)) * max(abs(standardizer * sum))
+  }
+  return(results)
+}
+
+resR = bootstrapR(E, B, omega, standardizer, Y_centered)
+res = bootstrap_dependent(E, B, omega, standardizer, Y_centered)
+  
+
+
+microbenchmark(resR = bootstrapR(E, B, omega, standardizer, Y_centered),
+               res = bootstrap_dependent(E, B, omega, standardizer, Y_centered),
                times=10L)

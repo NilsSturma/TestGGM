@@ -10,9 +10,9 @@ library(Rcpp)
 # Set variables #
 #################
 
-m = 10
+m = 20
 n = 500
-setup = 2
+setup = 1
 test_strategy = "1-dependent"  
 # "half-and-half", "1-dependent" or "calculate-Y"
 
@@ -20,7 +20,7 @@ B = 3  # just for "1-dependent"
 E = 1000
 alphas = seq(0.01, 0.99, 0.01)
 
-nr_exp = 500
+nr_exp = 1000
 save=TRUE
 
 
