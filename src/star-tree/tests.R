@@ -1,6 +1,6 @@
-library(CombMSC) #subsets
-library(Rfast) #Rnorm, transpose, colmeans, rmvnorm
-library(Rcpp)
+library(CombMSC) # subsets
+library(Rfast) # Rnorm, transpose, colmeans, rmvnorm
+library(Rcpp)  # https://teuder.github.io/rcpp4everyone_en/
 sourceCpp('rcpp-functions.cpp')
 
 
@@ -21,7 +21,7 @@ test_half_and_half <- function(X, E=1000, alphas=seq(0.01, 0.99, 0.01)){
   nr_cols = 2*nrow(sub_sets)
   indices = matrix(0, nrow=nr_cols, 4)
   indices[1:(nr_cols/2),] = sub_sets
-  indices[((nr_cols/2)+1):(2*(nr_cols/2)),] = sub_sets[,c(1,3,2,4)]
+  indices[((nr_cols/2)+1):nr_cols,] = sub_sets[,c(1,3,2,4)]
   mode(indices) = "integer"
   
   # Compute Y
@@ -67,7 +67,7 @@ test_1_dependent <- function(X, B=3, E=1000, alphas=seq(0.01, 0.99, 0.01)){
   nr_cols = 2*nrow(sub_sets)
   indices = matrix(0, nrow=nr_cols, 4)
   indices[1:(nr_cols/2),] = sub_sets
-  indices[((nr_cols/2)+1):(2*(nr_cols/2)),] = sub_sets[,c(1,3,2,4)]
+  indices[((nr_cols/2)+1):nr_cols,] = sub_sets[,c(1,3,2,4)]
   mode(indices) = "integer"
   
   # Compute Y
@@ -122,7 +122,7 @@ test_calculate_Y <- function(X, E=1000, alphas=seq(0.01, 0.99, 0.01)){
   nr_cols = 2*nrow(sub_sets)
   indices = matrix(0, nrow=nr_cols, 4)
   indices[1:(nr_cols/2),] = sub_sets
-  indices[((nr_cols/2)+1):(2*(nr_cols/2)),] = sub_sets[,c(1,3,2,4)]
+  indices[((nr_cols/2)+1):nr_cols,] = sub_sets[,c(1,3,2,4)]
   mode(indices) = "integer"
   
   # Call functions to calculate Y and its estimated covariance

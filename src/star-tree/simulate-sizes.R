@@ -12,7 +12,7 @@ library(Rcpp)
 
 m = 20
 n = 500
-setup = 1
+setup = 2
 test_strategy = "1-dependent"  
 # "half-and-half", "1-dependent" or "calculate-Y"
 
