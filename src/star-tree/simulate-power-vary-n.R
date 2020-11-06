@@ -13,52 +13,49 @@ setup = 1
 B = 3 
 E = 1000
 alpha = 0.05
-n_range = seq(100,1000,50)
+n_range = seq(100,2000,100)
 nr_exp = 500
+
+# alternative
+beta_2 = c(1,1, rep(0,(m-2)))
+h = 1
 
 save=TRUE
 name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_", "fixed-alternative_alpha=", alpha, "_vary-n", sep="")
 
-
-###################
-# Fix alternative #
-###################
-
-# Generate covariance matrix depending on the setup
-if (setup==1){
-  beta = rep(1,m)
-  Sigma = beta %*% t(beta) + diag(rep(1,m))
-} 
-if (setup==2){
-  beta = c(10,10, rnorm((m-2),0,0.2))
-  Sigma = beta %*% t(beta) + diag(rep(1/3,m))
-} 
-
-# Create noise
-a = -0.5
-b = 0.5
-shift_unif = function(x,a,b){a + (b-a) * x}
-
-A = matrix(shift_unif(runif(m**2), a, b), ncol=m)   # elements in (a,b)
-noise = t(A) %*% A # alwas pos. semidefinit
-
-# add noise to final covariance matric
-Sigma = Sigma + noise
 
 
 #############################
 # Simulate power for each n #
 #############################
 
-cores = detectCores()
+cores = 20  # detectCores()
 cl <- makeCluster(cores, outfile = "")
 registerDoParallel(cl)
 
 
 results <- foreach(n = n_range, .combine=rbind, .packages=c("MASS", "CombMSC")) %dopar% {
   
+  # Calculate covariance matrix for alternative
+  if (setup==1){
+    beta = rep(1,m)
+    Sigma = beta %*% t(beta) + diag(rep(1,m))
+  } 
+  if (setup==2){
+    beta = c(10,10, rnorm((m-2),0,0.2))
+    Sigma = beta %*% t(beta) + diag(rep(1/3,m))
+  } 
+  
+  # add noise to final covariance matrix
+  Sigma = Sigma + beta_2 %*% t(beta_2) * h 
+  
   powers = rep(0, nr_exp)
   for (nr in 1:nr_exp){
+    
+    if((nr%%10) == 0){
+      print(nr)
+    }
+    
     # Generate n independent data sets from the alternative
     X = mvrnorm(n, mu=rep(0,m), Sigma=Sigma)
     
@@ -78,7 +75,7 @@ stopCluster(cl)
 #########################
 
 title = paste("Emprical power for different n. (", nr_exp, " experiments each. Alpha = ", alpha, ")", sep="")
-subtitle = paste("Fixed alternative: Setup ", setup, " with noise created from Unif[", a, ",", b, "].", sep="")
+subtitle = paste("Deviations from setup ", setup, ", n = ", n, ", alpha = ", alpha, ", beta=rep(1,m)", sep="")
 
 if (save){
   # use "./img/name.png" to save in subdirectory

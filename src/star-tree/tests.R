@@ -1,6 +1,5 @@
-library(MASS) #mvrnorm
 library(CombMSC) #subsets
-
+library(Rfast) #Rnorm, transpose, colmeans, rmvnorm
 
 
 
@@ -15,10 +14,11 @@ test_half_and_half <- function(X, E=1000, alphas=seq(0.01, 0.99, 0.01)){
   X1 = X[1:(n/2),]
   X2 = X[((n/2)+1):n, ]
   
-  # Compute Y_i, i=1,...,(n-1) in  a matrix
+  # Compute Y_i, i=1,...,(n/2) in  a matrix
   sub_sets = subsets(m,4,1:m)
-  Y = matrix(0, nrow = n/2, ncol = 2 * choose(m,4))
-  for (j in 1:nrow(sub_sets)){
+  nr_cols = 2 * nrow(sub_sets)
+  Y = matrix(0, nrow = n/2, ncol = nr_cols)
+  for (j in 1:(nr_cols/2)){
     p = sub_sets[j,1]
     q = sub_sets[j,2]
     r = sub_sets[j,3]
@@ -27,14 +27,23 @@ test_half_and_half <- function(X, E=1000, alphas=seq(0.01, 0.99, 0.01)){
     Y[,j*2] = X1[,p] * X1[,q] * X2[,s] * X2[,r] - X1[,p] * X1[,r] * X2[,q] * X2[,s]
   }
   
+  Y_mean = colmeans(Y)
+  Y_centered = transpose(transpose(Y) - Y_mean) # Center each Y_i = (Y_i - Y_mean) and save it in a matrix
+  
+  # Diagonal of the sample covariance of Y
+  cov_Y_diag = colsums(Y_centered**2) / (n/2)
+  
+  # Vector for standardizing
+  standardizer = cov_Y_diag**(-1/2)
+  
   # Test statistic
-  test_stat = max(abs( (1/sqrt((n/2))) * colSums(Y) ))  # We need absolute values here to have a two sided test
+  test_stat = sqrt(n/2) * max(abs(standardizer * Y_mean))  # We need absolute values here to have a two sided test
   
   # Bootstrapping 
   results = rep(0, E)
   for (i in 1:E){
-    epsilons = rnorm((n/2), mean=0, sd=1)
-    results[i] = max(abs( (1/sqrt((n/2))) * colSums(Y*epsilons) ))  # We need absolute values here to have a two sided tes
+    epsilons = Rnorm((n/2), m=0, s=1)
+    results[i] = (1/sqrt((n/2))) * max(abs(standardizer * colsums(Y_centered*epsilons)))  # We need absolute values here to have a two sided tes
   }
   
   # Critical values
@@ -55,43 +64,49 @@ test_1_dependent <- function(X, B=3, E=1000, alphas=seq(0.01, 0.99, 0.01)){
   n = dim(X)[1]
   m = dim(X)[2]
   omega = floor((n-1)/B)
+  X1 = X[1:(n-1),]
+  X2 = X[2:n,]
   
   # Compute Y_i, i=1,...,(n-1) and Y_mean 
   sub_sets = subsets(m,4,1:m)
-  Y = matrix(0, nrow = n-1, ncol = 2 * choose(m,4))
-  for (j in 1:nrow(sub_sets)){
+  nr_cols = 2 * nrow(sub_sets)
+  Y = matrix(0, nrow = n-1, ncol = nr_cols)
+  for (j in 1:(nr_cols/2)){
     p = sub_sets[j,1]
     q = sub_sets[j,2]
     r = sub_sets[j,3]
     s = sub_sets[j,4]
-    Y[,j*2-1] = X[1:(n-1),p] * X[1:(n-1),s] * X[2:n,q] * X[2:n,r] - X[1:(n-1),p] * X[1:(n-1),r] * X[2:n,q] * X[2:n,s]
-    Y[,j*2] = X[1:(n-1),p] * X[1:(n-1),q] * X[2:n,s] * X[2:n,r] - X[1:(n-1),p] * X[1:(n-1),r] * X[2:n,q] * X[2:n,s]
+    Y[,j*2-1] = X1[,p] * X1[,s] * X2[,q] * X2[,r] - X1[,p] * X1[,r] * X2[,q] * X2[,s]
+    Y[,j*2] =  X1[,p] * X1[,q] * X2[,s] * X2[,r] - X1[,p] * X1[,r] * X2[,q] * X2[,s]
   }
   
-  Y_mean = colMeans(Y)
+  Y_mean = colmeans(Y)
+  Y_centered = transpose(transpose(Y) - Y_mean)  # Center each Y_i = (Y_i - Y_mean) and save it in a matrix
   
-  # Compute the batched mean estimator for diag(cov(Y))
+  # Compute the diagonal of the batched mean estimator cov(Y)
   cov_Y_diag = rep(0, length(Y_mean))
-  Y_stand = t(t(Y) - Y_mean)  # Standardize each Y_i (Y_i - Y_mean) and save it in a matrix
   for (b in 1:omega){
     L = seq(1+(b-1)*B, b*B)
-    cov_Y_diag = cov_Y_diag + colSums(Y_stand[L,])**2
+    cov_Y_diag = cov_Y_diag + colsums(Y_centered[L,])**2
   }
   cov_Y_diag = cov_Y_diag / (B*omega)
   
+  # Vector for standardizing
+  standardizer = cov_Y_diag**(-1/2)
+  
   # Test statistic
-  test_stat = sqrt(n-1) * max(abs( diag(cov_Y_diag**(-1/2)) %*% Y_mean ))
+  test_stat = sqrt(n-1) * max(abs(standardizer * Y_mean))
 
   # Bootstrapping
   results = rep(0, E)
   for (i in 1:E){
-    epsilons = rnorm(omega, mean=0, sd=1)
+    epsilons = Rnorm(omega, m=0, s=1)
     sum = rep(0, length(Y_mean))
     for (b in 1:omega){
       L = seq(1+(b-1)*B, b*B)
-      sum = sum + epsilons[b] * colSums(Y_stand[L,])
+      sum = sum + epsilons[b] * colsums(Y_centered[L,])
     }
-    results[i] = max(abs( (1/sqrt(B*omega)) * diag(cov_Y_diag**(-1/2)) %*% sum ))
+    results[i] = (1/sqrt(B*omega)) * max(abs(standardizer * sum))
   }
   
   # Critical values
@@ -101,6 +116,7 @@ test_1_dependent <- function(X, B=3, E=1000, alphas=seq(0.01, 0.99, 0.01)){
   is_rejected = test_stat > critical_values
   return(is_rejected)
 }
+
 
 
 
@@ -119,20 +135,16 @@ fourth_mom = function(S, ind){
 # Function to calculate Y: ((n-1)x(2*choose(m,4))-matrix)
 # 1-dependent unbiased estimators
 # Just for star tree!
-compute_Y = function(X){
+compute_Y = function(X, indices){
+  
   m = dim(X)[2]
   n = dim(X)[1]
-  
-  # create all indices in right order !!!different order than previously!!!
-  sub_sets = subsets(m,4,1:m)
-  indices = matrix(0, nrow=2*nrow(sub_sets), 4)
-  indices[1:nrow(sub_sets),] = sub_sets
-  indices[(nrow(sub_sets)+1):(2*nrow(sub_sets)),] = sub_sets[,c(1,3,2,4)]
+  nr_cols = nrow(indices)
   
   # Compute Y (unbiased estimate of the tetrads)
-  Y = matrix(0, nrow = n-1, ncol=(2*choose(m,4)))
+  Y = matrix(0, nrow = n-1, ncol=nr_cols)
   
-  for (i in 1:(2*choose(m,4))){
+  for (i in 1:nr_cols){
     p = indices[i,1]
     q = indices[i,2]
     r = indices[i,3]
@@ -147,25 +159,18 @@ compute_Y = function(X){
 
 # Function to calculate covariance of Y, using the theoretical or emprical covariance matrix S
 # Just for star tree!
-compute_cov_Y = function(X, S){
+compute_cov_Y = function(S, indices){
   
-  m = dim(X)[2]
-  n = dim(X)[1]
-  
-  # create all indices in right order !!!different order than previously!!!
-  sub_sets = subsets(m,4,1:m)
-  indices = matrix(0, nrow=2*nrow(sub_sets), 4)
-  indices[1:nrow(sub_sets),] = sub_sets
-  indices[(nrow(sub_sets)+1):(2*nrow(sub_sets)),] = sub_sets[,c(1,3,2,4)]
+  nr_cols = nrow(indices)
   
   # calculate covariance of Y
-  cov = matrix(0, nrow=(2*choose(m,4)), ncol=(2*choose(m,4)))
-  for (i in 1:(2*choose(m,4))){
+  cov = matrix(0, nrow=nr_cols, ncol=nr_cols)
+  for (i in 1:nr_cols){
     p = indices[i,1]
     q = indices[i,2]
     r = indices[i,3]
     s = indices[i,4]
-    for (j in i:(2*choose(m,4))){
+    for (j in i:nr_cols){
       u = indices[j,1]
       v = indices[j,2]
       w = indices[j,3]
@@ -211,15 +216,29 @@ test_calculate_Y <- function(X, E=1000, alphas=seq(0.01, 0.99, 0.01)){
   }
   S = S/n
   
-  Y = compute_Y(X)
-  cov = compute_cov_Y(X, S)
-  test_stat = sqrt(n-1) * max(abs((diag(diag(cov)**(-1/2))) %*% colMeans(Y)))
+  # create all indices in right order !!!different order than previously!!!
+  sub_sets = subsets(m,4,1:m)
+  nr_cols = 2*nrow(sub_sets)
+  indices = matrix(0, nrow=nr_cols, 4)
+  indices[1:(nr_cols/2),] = sub_sets
+  indices[((nr_cols/2)+1):(2*(nr_cols/2)),] = sub_sets[,c(1,3,2,4)]
+  
+  # call functions
+  Y = compute_Y(X, indices)
+  cov = compute_cov_Y(S, indices)
+  
+  # Standardizer
+  standardizer = diag(cov)**(-1/2)
+  
+  # Test statictic
+  test_stat = sqrt(n-1) * max(abs(standardizer * colmeans(Y)))
   
   # sample E sets from Z~N(0,cov)
-  Z = mvrnorm(E, mu=rep(0,nrow(cov)), Sigma=cov)
+  Z = rmvnorm(E, mu=rep(0,nrow(cov)), sigma=cov)
+  # Z is a matrix of dim=(E, nrow(cov))
   
   # Critical value
-  results = apply(abs((diag(diag(cov)**(-1/2))) %*% t(Z)), 2, max)
+  results = apply(abs(standardizer * transpose(Z)), 2, max)
   critical_values = quantile(results, probs=1-alphas)
   
   # reject or not
