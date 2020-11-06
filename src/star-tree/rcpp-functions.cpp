@@ -2,12 +2,9 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-NumericMatrix calculate_Y(IntegerMatrix indices, NumericMatrix X) {
+NumericMatrix calculate_Y(IntegerMatrix indices, NumericMatrix X1, NumericMatrix X2) {
   int nr_cols = indices.nrow();
-  int N = X.nrow();
-  int n = N/2;
-  NumericMatrix X1 = X(Range(0,n-1),_);
-  NumericMatrix X2 = X(Range(n,N-1),_);
+  int n = X1.nrow();
   int p = 0;
   int q = 0;
   int r = 0;

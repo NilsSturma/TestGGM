@@ -92,4 +92,4 @@ res = compute_cov_Y(S,indices)
 
 microbenchmark(compute_cov_YR(S, indices),
                compute_cov_Y(S,indices),
-               times=100L)
+               times=10L)
