@@ -3,11 +3,6 @@ library(Rfast) # transpose, colmeans, rmvnorm
 library(RcppHelpers)
 
 
-create_random_int <- function(seed, nr){
-  set.seed(seed)
-  return(sample.int(999999999,nr))
-}
-
 
 test_half_and_half <- function(X, E=1000, alphas=seq(0.01, 0.99, 0.01), seed){
   
@@ -43,8 +38,7 @@ test_half_and_half <- function(X, E=1000, alphas=seq(0.01, 0.99, 0.01), seed){
   test_stat = sqrt(n/2) * max(abs(standardizer * Y_mean))  # We need absolute values here to have a two sided test
   
   # Bootstrapping 
-  seeds = create_random_int(seed, E)
-  results = bootstrap_independent(E, standardizer, Y_centered, seeds)
+  results = bootstrap_independent(E, standardizer, Y_centered)
   
   # Critical values
   critical_values = quantile(results, probs=1-alphas)
@@ -141,7 +135,7 @@ test_calculate_Y <- function(X, E=1000, alphas=seq(0.01, 0.99, 0.01)){
   test_stat = sqrt(n-1) * max(abs(standardizer * colmeans(Y)))
   
   # Sample E sets from Z~N(0,cov)
-  Z = mvrnorm(E, mu=rep(0,nrow(cov)), sigma=cov)
+  Z = mvrnorm(E, mu=rep(0,nrow(cov)), Sigma=cov)
   # Z is a matrix of dim=(E, nrow(cov))
   
   # Critical value

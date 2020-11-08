@@ -2,14 +2,6 @@
 using namespace Rcpp;
 
 
-// [[Rcpp::export]]
-void set_seed(unsigned int seed) {
-  Rcpp::Environment base_env("package:base");
-  Rcpp::Function set_seed_r = base_env["set.seed"];
-  set_seed_r(seed);  
-}
-
-
 
 // [[Rcpp::export]]
 NumericMatrix calculate_Y(IntegerMatrix indices, NumericMatrix X1, NumericMatrix X2) {
@@ -34,7 +26,7 @@ NumericMatrix calculate_Y(IntegerMatrix indices, NumericMatrix X1, NumericMatrix
 
 
 // [[Rcpp::export]]
-NumericVector bootstrap_independent(int E, NumericVector standardizer, NumericMatrix Y_centered, IntegerVector seeds){
+NumericVector bootstrap_independent(int E, NumericVector standardizer, NumericMatrix Y_centered){
   
   int n = Y_centered.nrow();
   int p = Y_centered.ncol();
@@ -43,7 +35,6 @@ NumericVector bootstrap_independent(int E, NumericVector standardizer, NumericMa
   NumericVector res(E);
   
   for (int i = 0; i < E; i++){
-    set_seed(seeds[i]);
     epsilons = rnorm(n,0,1);
     for (int j = 0; j < p; j++){
       colsums[j] = sum(Y_centered(_,j) * epsilons);

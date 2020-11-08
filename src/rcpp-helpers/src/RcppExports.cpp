@@ -5,16 +5,6 @@
 
 using namespace Rcpp;
 
-// set_seed
-void set_seed(unsigned int seed);
-RcppExport SEXP _RcppHelpers_set_seed(SEXP seedSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< unsigned int >::type seed(seedSEXP);
-    set_seed(seed);
-    return R_NilValue;
-END_RCPP
-}
 // calculate_Y
 NumericMatrix calculate_Y(IntegerMatrix indices, NumericMatrix X1, NumericMatrix X2);
 RcppExport SEXP _RcppHelpers_calculate_Y(SEXP indicesSEXP, SEXP X1SEXP, SEXP X2SEXP) {
@@ -29,16 +19,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // bootstrap_independent
-NumericVector bootstrap_independent(int E, NumericVector standardizer, NumericMatrix Y_centered, IntegerVector seeds);
-RcppExport SEXP _RcppHelpers_bootstrap_independent(SEXP ESEXP, SEXP standardizerSEXP, SEXP Y_centeredSEXP, SEXP seedsSEXP) {
+NumericVector bootstrap_independent(int E, NumericVector standardizer, NumericMatrix Y_centered);
+RcppExport SEXP _RcppHelpers_bootstrap_independent(SEXP ESEXP, SEXP standardizerSEXP, SEXP Y_centeredSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type E(ESEXP);
     Rcpp::traits::input_parameter< NumericVector >::type standardizer(standardizerSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type Y_centered(Y_centeredSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type seeds(seedsSEXP);
-    rcpp_result_gen = Rcpp::wrap(bootstrap_independent(E, standardizer, Y_centered, seeds));
+    rcpp_result_gen = Rcpp::wrap(bootstrap_independent(E, standardizer, Y_centered));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -86,9 +75,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_RcppHelpers_set_seed", (DL_FUNC) &_RcppHelpers_set_seed, 1},
     {"_RcppHelpers_calculate_Y", (DL_FUNC) &_RcppHelpers_calculate_Y, 3},
-    {"_RcppHelpers_bootstrap_independent", (DL_FUNC) &_RcppHelpers_bootstrap_independent, 4},
+    {"_RcppHelpers_bootstrap_independent", (DL_FUNC) &_RcppHelpers_bootstrap_independent, 3},
     {"_RcppHelpers_bootstrap_dependent", (DL_FUNC) &_RcppHelpers_bootstrap_dependent, 5},
     {"_RcppHelpers_fourth_mom", (DL_FUNC) &_RcppHelpers_fourth_mom, 5},
     {"_RcppHelpers_compute_cov_Y", (DL_FUNC) &_RcppHelpers_compute_cov_Y, 2},
