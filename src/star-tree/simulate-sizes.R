@@ -9,10 +9,10 @@ source("tests.R")
 # Set variables #
 #################
 
-m = 10
+m = 20
 n = 500
-setup = 1
-test_strategy = "1-dependent"  
+setup = 2
+test_strategy = "half-and-half"  
 # "half-and-half", "1-dependent" or "calculate-Y"
 
 B = 3  # just for "1-dependent"
@@ -20,7 +20,7 @@ E = 1000
 alphas = seq(0.01, 0.99, 0.01)
 
 nr_exp = 500
-save=FALSE
+save=TRUE
 
 
 
@@ -56,7 +56,7 @@ results <- foreach(nr = 1:nr_exp, .combine=rbind, .packages=c("MASS", "Rfast", "
   
   # Call the test
   if (test_strategy=="half-and-half"){
-    res = test_half_and_half(X, E=E, alphas=alphas, seed=nr)
+    res = test_half_and_half(X, E=E, alphas=alphas)
     
   } else if (test_strategy=="1-dependent"){
     res = test_1_dependent(X, B=B, E=E, alphas=alphas)

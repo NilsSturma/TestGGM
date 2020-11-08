@@ -1,11 +1,9 @@
 library(MASS)
 library(CombMSC)
 library(microbenchmark)
+library(RcppHelpers)
 
-library(Rcpp)
-# https://teuder.github.io/rcpp4everyone_en/
-# Important: Indices start with 0 in C++.
-sourceCpp('rcpp-functions.cpp')
+
 
 
 ################
