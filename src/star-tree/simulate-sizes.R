@@ -1,18 +1,17 @@
 library(foreach)
 library(doParallel)
 library(Rfast)  #rmvnorm
-library(Rcpp)
-#source("tests.R")
-
-
+library(MASS)
+setwd("src/star-tree")
+source("tests.R")
 
 #################
 # Set variables #
 #################
 
-m = 20
+m = 10
 n = 500
-setup = 2
+setup = 1
 test_strategy = "1-dependent"  
 # "half-and-half", "1-dependent" or "calculate-Y"
 
@@ -20,8 +19,8 @@ B = 3  # just for "1-dependent"
 E = 1000
 alphas = seq(0.01, 0.99, 0.01)
 
-nr_exp = 1000
-save=TRUE
+nr_exp = 500
+save=FALSE
 
 
 
@@ -33,10 +32,9 @@ cores = 20#detectCores()
 cl <- makeCluster(cores, outfile = "")
 registerDoParallel(cl)
 
-sizes <- foreach(nr = 1:nr_exp, .combine=rbind, .packages=c("Rfast", "CombMSC", "Rcpp")) %dopar% {
+
+results <- foreach(nr = 1:nr_exp, .combine=rbind, .packages=c("MASS", "Rfast", "CombMSC", "RcppHelpers")) %dopar% {
   
-  # Load needed functions to each worker    
-  source("tests.R")
                    
   if((nr%%10) == 0){
     print(nr)
@@ -48,15 +46,17 @@ sizes <- foreach(nr = 1:nr_exp, .combine=rbind, .packages=c("Rfast", "CombMSC", 
     Sigma = beta %*% t(beta) + diag(rep(1,m))
   } 
   if (setup==2){
+    #set.seed(nr+nr_exp)
     beta = c(10,10, rnorm((m-2),0,0.2))
     Sigma = beta %*% t(beta) + diag(rep(1/3,m))
   } 
-  X = rmvnorm(n, mu=rep(0,m), sigma=Sigma)
+  #set.seed(nr)
+  X = mvrnorm(n, mu=rep(0,m), Sigma=Sigma)
   
   
   # Call the test
   if (test_strategy=="half-and-half"){
-    res = test_half_and_half(X, E=E, alphas=alphas)
+    res = test_half_and_half(X, E=E, alphas=alphas, seed=nr)
     
   } else if (test_strategy=="1-dependent"){
     res = test_1_dependent(X, B=B, E=E, alphas=alphas)
@@ -71,7 +71,7 @@ sizes <- foreach(nr = 1:nr_exp, .combine=rbind, .packages=c("Rfast", "CombMSC", 
 }
 
 
-sizes = colMeans(sizes)
+sizes = colMeans(results)
 stopCluster(cl)
 
 

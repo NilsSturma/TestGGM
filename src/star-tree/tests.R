@@ -1,11 +1,15 @@
 library(CombMSC) # subsets
-library(Rfast) # Rnorm, transpose, colmeans, rmvnorm
-library(Rcpp)  # https://teuder.github.io/rcpp4everyone_en/
-sourceCpp('rcpp-functions.cpp')
+library(Rfast) # transpose, colmeans, rmvnorm
+library(RcppHelpers)
 
 
+create_random_int <- function(seed, nr){
+  set.seed(seed)
+  return(sample.int(999999999,nr))
+}
 
-test_half_and_half <- function(X, E=1000, alphas=seq(0.01, 0.99, 0.01)){
+
+test_half_and_half <- function(X, E=1000, alphas=seq(0.01, 0.99, 0.01), seed){
   
   # Testing the star tree (method: dividing X into two datasets of size n/2)
   
@@ -39,7 +43,8 @@ test_half_and_half <- function(X, E=1000, alphas=seq(0.01, 0.99, 0.01)){
   test_stat = sqrt(n/2) * max(abs(standardizer * Y_mean))  # We need absolute values here to have a two sided test
   
   # Bootstrapping 
-  results = bootstrap_independent(E, standardizer, Y_centered)
+  seeds = create_random_int(seed, E)
+  results = bootstrap_independent(E, standardizer, Y_centered, seeds)
   
   # Critical values
   critical_values = quantile(results, probs=1-alphas)
@@ -136,7 +141,7 @@ test_calculate_Y <- function(X, E=1000, alphas=seq(0.01, 0.99, 0.01)){
   test_stat = sqrt(n-1) * max(abs(standardizer * colmeans(Y)))
   
   # Sample E sets from Z~N(0,cov)
-  Z = rmvnorm(E, mu=rep(0,nrow(cov)), sigma=cov)
+  Z = mvrnorm(E, mu=rep(0,nrow(cov)), sigma=cov)
   # Z is a matrix of dim=(E, nrow(cov))
   
   # Critical value
