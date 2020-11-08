@@ -1,3 +1,7 @@
+library(Rcpp)
+sourceCpp("rcpp-functions.cpp")
+
+
 test_equality_constraints = function(X, Q, not_Q, method="1-dependent", B=3, E=1000, alphas=seq(0.01, 0.99, 0.01)){
   
   # TODO: Add other methods
