@@ -3,12 +3,10 @@ library(CombMSC) # subsets
 
 
 
-findQ = function(g){
+findQ = function(g, m){
   
-  # g is a graph 
-  # V(g)$type indicates whether a node is observed or not (always first m oberseved)
-  
-  m = sum(V(g)$type==1)
+  # g is an igraph object (always first m nodes oberseved)
+
   sub_sets = subsets(m,4,1:m)
   
   Q = list()
@@ -41,6 +39,50 @@ findQ = function(g){
   }
   return(list(Q, not_Q))
 }
+
+
+
+
+collect_indices <- function(g){
+  
+  # Determine m (Requirement: First m nodes are always observed.)
+  m = sum(V(g)$type==1)
+  
+  res_findQ = findQ(g, m)
+  Q = res_findQ[[1]]
+  not_Q = res_findQ[[2]]
+  subsets3 = subsets(m,3,1:m)
+  
+  ind_eq = list()  # Equality constraints (2) (a) and (b)
+  ind_ineq1 = list()  # Inequality constraints (1) (a)
+  ind_ineq2 = list()  # Inequality constraints (1) (b), (c)
+  
+  for (i in seq_along(Q)){
+    p = Q[[i]][1]
+    q = Q[[i]][2]
+    r = Q[[i]][3]
+    s = Q[[i]][4]
+    ind_eq = c(ind_eq, list(c(p,r,q,s,p,s,q,r)))
+    ind_ineq2 = c(ind_ineq2, list(c(p,r,q,s,p,q,r,s)))
+  }
+  for (i in seq_along(not_Q)){
+    p = not_Q[[i]][1]
+    q = not_Q[[i]][2]
+    r = not_Q[[i]][3]
+    s = not_Q[[i]][4]
+    ind_eq = c(ind_eq, list(c(p,r,q,s,p,s,q,r)), list(c(p,r,q,s,p,q,r,s)))
+  }
+  for (i in 1:nrow(subsets3)){
+    p = subsets3[i,1]
+    q = subsets3[i,2]
+    r = subsets3[i,3]
+    ind_ineq1 = c(ind_ineq1, list(c(p,q,p,r,q,r)))
+    ind_ineq2 = c(ind_ineq2, list(c(p,q,q,r,q,q,p,r)), list(c(p,r,q,r,r,r,p,q)), list(c(p,q,p,r,p,p,q,r)))
+  }
+  
+  return(list(ind_eq, ind_ineq1, ind_ineq2))
+}
+
 
 
 
