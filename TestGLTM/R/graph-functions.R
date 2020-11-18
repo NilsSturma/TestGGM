@@ -1,13 +1,8 @@
-library(igraph)
-library(CombMSC) # subsets
-
-
-
 findQ = function(g, m){
   
   # g is an igraph object (always first m nodes oberseved)
 
-  sub_sets = subsets(m,4,1:m)
+  sub_sets = CombMSC::subsets(m,4,1:m)
   
   Q = list()
   not_Q = list()
@@ -19,8 +14,8 @@ findQ = function(g, m){
     count = 0
     # Find the pair that gives an empty set when the intersection of its component paths is taken
     for (i in 1:3){
-      path1 = shortest_paths(g, from=V(g)[name==p], to=V(g)[name==others[i]], output="epath", weight=NA)
-      path2 = shortest_paths(g, from=V(g)[name==others[-i][1]], to=V(g)[name==others[-i][2]], output="epath", weight=NA)  
+      path1 = igraph::shortest_paths(g, from=V(g)[name==p], to=V(g)[name==others[i]], output="epath", weight=NA)
+      path2 = igraph::shortest_paths(g, from=V(g)[name==others[-i][1]], to=V(g)[name==others[-i][2]], output="epath", weight=NA)  
       intersection = intersect(unlist(path1$epath), unlist(path2$epath))
       if (length(intersection)==0){
         res = c(p, others[i], others[-i])
@@ -51,7 +46,7 @@ collect_indices <- function(g){
   res_findQ = findQ(g, m)
   Q = res_findQ[[1]]
   not_Q = res_findQ[[2]]
-  subsets3 = subsets(m,3,1:m)
+  subsets3 = CombMSC::subsets(m,3,1:m)
   
   ind_eq = list()  # Equality constraints (2) (a) and (b)
   ind_ineq1 = list()  # Inequality constraints (1) (a)
@@ -99,7 +94,7 @@ cov_from_graph = function(g){
   corr = diag(rep(1,m))
   for (i in 1:m){
     for (j in min((i+1),m):m){
-      path = shortest_paths(g, from=V(g)[name==i], to=V(g)[name==j], output="epath", weight=NA)
+      path = igraph::shortest_paths(g, from=V(g)[name==i], to=V(g)[name==j], output="epath", weight=NA)
       corr[i,j] = prod(E(g)$corr[c(unlist(path$epath))])
       corr[j,i] = corr[i,j]
     }

@@ -1,10 +1,12 @@
 library(foreach)
 library(doParallel)
 library(MASS) #mvrnorm
+library(igraph)
+library(TestGLTM)
 
 setwd("src/general-setup")
-source("graph-functions.R")
-source("tests.R")
+#source("graph-functions.R")
+#source("tests.R")
 
 #################
 # Create a tree #
@@ -70,17 +72,17 @@ save=FALSE
 
 #############
 # Check power of one alternative
-beta_2 = c(1,1, rep(0,(m-2)))
-h = 1
-cov = cov + beta_2 %*% t(beta_2) * h 
+#beta_2 = c(1,1, rep(0,(m-2)))
+#h = 1
+#cov = cov + beta_2 %*% t(beta_2) * h 
 
 # Emprirical size for each alpha
 
-# cores = 20  # detectCores()
-# cl <- makeCluster(cores, outfile = "")
-# registerDoParallel(cl)
+cores = 20  # detectCores()
+cl <- makeCluster(cores, outfile = "")
+registerDoParallel(cl)
 
-results <- foreach(nr = 1:nr_exp, .combine=rbind, .packages=c("MASS", "Rfast")) %do% {
+results <- foreach(nr = 1:nr_exp, .combine=rbind, .packages=c("MASS", "TestGLTM")) %dopar% {
   
   if((nr%%10) == 0){
     print(nr)
@@ -96,7 +98,7 @@ results <- foreach(nr = 1:nr_exp, .combine=rbind, .packages=c("MASS", "Rfast")) 
 }
 
 sizes = colMeans(results)
-#stopCluster(cl)
+stopCluster(cl)
 
 
 

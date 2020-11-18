@@ -1,9 +1,3 @@
-library(Rfast)
-library(Rcpp)
-sourceCpp("rcpp-functions.cpp")
-
-
-
 test_independent <- function(X, ind_eq, ind_ineq1, ind_ineq2, E=1000, alphas=seq(0.01, 0.99, 0.01)){
   
   # Call function to calculate matrix Y
@@ -14,11 +8,11 @@ test_independent <- function(X, ind_eq, ind_ineq1, ind_ineq2, E=1000, alphas=seq
   p_eq = dim(ind_eq)[1]  # nr of equality constraints
   
   # Mean and centering
-  Y_mean = colmeans(Y)
-  Y_centered = transpose(transpose(Y) - Y_mean) # Centering: Y_i = (Y_i - Y_mean)
+  Y_mean = Rfast::colmeans(Y)
+  Y_centered = Rfast::transpose(Rfast::transpose(Y) - Y_mean) # Centering: Y_i = (Y_i - Y_mean)
   
   # Diagonal of the sample covariance of Y
-  cov_Y_diag = colsums(Y_centered**2) / n
+  cov_Y_diag = Rfast::colsums(Y_centered**2) / n
   
   # Vector for standardizing
   standardizer = cov_Y_diag**(-1/2)

@@ -1,0 +1,16 @@
+Package: TestGLTM
+Type: Package
+Title: Testing General Latent Tree Models
+Version: 1.0
+Date: 2020-11-18
+Author: Nils Sturma
+Maintainer: Nils Sturma <nils.sturma@tum.de>
+Description: Tbs.
+License: GPL (>= 2)
+Imports: 
+    Rcpp (>= 1.0.5),
+    igraph,
+    CombMSC,
+    Rfast
+LinkingTo: Rcpp
+RoxygenNote: 7.1.1
