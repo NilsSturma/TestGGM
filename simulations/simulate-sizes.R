@@ -4,7 +4,7 @@ library(MASS) #mvrnorm
 library(igraph)
 library(TestGLTM)
 
-setwd("src/general-setup")
+#setwd("src/general-setup")
 
 #################
 # Create a tree #
@@ -36,11 +36,11 @@ star_tree <- function(m=10){
 }
 
 # Sample covariance matrix from star tree depending on setup
-cov_from_star_tree <- function(g, setup=1){
+cov_from_star_tree <- function(g, setup=1, m=10){
   if (setup==1){
-    V(g)$var = rep(2,11)
+    V(g)$var = rep(2,m+1)
     # for unobserved node: variance does not matter
-    E(g)$corr = rep(sqrt(0.5),10)
+    E(g)$corr = rep(sqrt(0.5),m)
     cov = cov_from_graph(g)
   } else if (setup==2){
     beta = c(10,10, rnorm((m-2),0,0.2))
@@ -63,15 +63,16 @@ cov_from_star_tree <- function(g, setup=1){
 #################
 
 # Set variables
-n = 100000
-m = 10
+n = 1000
+m = 20
 E = 1000
-setup = 2
+setup = 1
 alphas = seq(0.01, 0.99, 0.01)
 nr_exp = 500
 
-test_strategy="run-over"  # "run-over", "grouping"
+test_strategy="symmetric"  # "run-over", "grouping", "two-step", "symmetric"
 B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doing some experiments)
+beta = 0.001  # just for test_strategy=="two-step"
 
 save=FALSE
 name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_", "quinted-tree_", method, "_n=", n, sep="")
@@ -80,7 +81,7 @@ name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_", "quinted-tree_", method,
 # Create graph #
 ################
 g = star_tree(m)
-plot(g)
+#plot(g)
 # g = quinted_tree()
 # plot(g)
 # V(g)$var = rep(2,8)
@@ -120,9 +121,10 @@ results <- foreach(nr = 1:nr_exp, .combine=rbind, .packages=c("MASS", "TestGLTM"
   if((nr%%10) == 0){
     print(nr)
   }
+  warnings()
   
   # Generate n independent data sets depending on setup
-  cov = cov_from_star_tree(g, setup=setup)
+  cov = cov_from_star_tree(g, setup=setup, m=m)
   X = mvrnorm(n, mu=rep(0,nrow(cov)), Sigma=cov)
   
   # Call the test
@@ -130,6 +132,10 @@ results <- foreach(nr = 1:nr_exp, .combine=rbind, .packages=c("MASS", "TestGLTM"
     result = test_independent(X, ind_eq, ind_ineq1, ind_ineq2, E=E, alphas=alphas)
   } else if (test_strategy=="run-over"){
     result = test_m_dep(X, ind_eq, ind_ineq1, ind_ineq2, B=B, E=E, alphas=alphas)
+  } else if (test_strategy=="two-step"){
+    result = test_two_step(X, ind_eq, ind_ineq1, ind_ineq2, E=E, beta=beta, alphas=alphas)
+  } else if (test_strategy=="symmetric"){
+    result = test_symmetric(X, ind_eq, ind_ineq1, ind_ineq2, E=E, alphas=alphas)
   }
   result = as.numeric(result)
 }

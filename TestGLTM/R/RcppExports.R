@@ -9,6 +9,10 @@ calculate_Y_independent <- function(X, ind_eq, ind_ineq1, ind_ineq2) {
     .Call(`_TestGLTM_calculate_Y_independent`, X, ind_eq, ind_ineq1, ind_ineq2)
 }
 
+calculate_Y_symmetric <- function(X, ind_eq, ind_ineq1, ind_ineq2, perm) {
+    .Call(`_TestGLTM_calculate_Y_symmetric`, X, ind_eq, ind_ineq1, ind_ineq2, perm)
+}
+
 bootstrap_independent <- function(E, standardizer, Y_centered, p_eq) {
     .Call(`_TestGLTM_bootstrap_independent`, E, standardizer, Y_centered, p_eq)
 }
