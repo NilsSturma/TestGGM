@@ -33,6 +33,46 @@ test_independent <- function(X, ind_eq, ind_ineq1, ind_ineq2, E=1000, alphas=seq
 
 
 
+test_m_dep <- function(X, ind_eq, ind_ineq1, ind_ineq2, B=5, E=1000, alphas=seq(0.01, 0.99, 0.01)){
+  
+  # Call function to calculate matrix Y
+  Y = calculate_Y_m_dep(X, ind_eq, ind_ineq1, ind_ineq2)
+  
+  n = dim(Y)[1]  # nr of samples
+  p = dim(Y)[2]  # total nr of constraints
+  p_eq = dim(ind_eq)[1]  # nr of equality constraints
+  omega = floor(n/B)
+  
+  # Mean and centering
+  Y_mean = Rfast::colmeans(Y)
+  Y_centered = Rfast::transpose(Rfast::transpose(Y) - Y_mean) # Centering: Y_i = (Y_i - Y_mean)
+  
+  # Diagonal of the batched mean estimator of the covariance of Y
+  cov_Y_diag = rep(0, p)
+  for (b in 1:omega){
+    L = seq(1+(b-1)*B, b*B)
+    cov_Y_diag = cov_Y_diag + Rfast::colsums(Y_centered[L,])**2
+  }
+  cov_Y_diag = cov_Y_diag / (B*omega)
+  
+  
+  # Vector for standardizing
+  standardizer = cov_Y_diag**(-1/2)
+  
+  # Test statistic
+  test_stat = sqrt(n) * max(abs(standardizer[1:p_eq] * Y_mean[1:p_eq]), standardizer[(p_eq+1):p] * Y_mean[(p_eq+1):p])
+  
+  # Bootstrapping 
+  results = bootstrap_m_dep(E, B, omega, standardizer, Y_centered, p_eq)
+  
+  # Critical values
+  critical_values = quantile(results, probs=1-alphas)
+  
+  # Reject if test_stat > critical_value
+  is_rejected = test_stat > critical_values
+  return(is_rejected)
+}
+
 
 
 

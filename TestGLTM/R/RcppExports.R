@@ -13,3 +13,11 @@ bootstrap_independent <- function(E, standardizer, Y_centered, p_eq) {
     .Call(`_TestGLTM_bootstrap_independent`, E, standardizer, Y_centered, p_eq)
 }
 
+calculate_Y_m_dep <- function(X, ind_eq, ind_ineq1, ind_ineq2) {
+    .Call(`_TestGLTM_calculate_Y_m_dep`, X, ind_eq, ind_ineq1, ind_ineq2)
+}
+
+bootstrap_m_dep <- function(E, B, omega, standardizer, Y_centered, p_eq) {
+    .Call(`_TestGLTM_bootstrap_m_dep`, E, B, omega, standardizer, Y_centered, p_eq)
+}
+

@@ -45,11 +45,43 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// calculate_Y_m_dep
+NumericMatrix calculate_Y_m_dep(NumericMatrix X, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2);
+RcppExport SEXP _TestGLTM_calculate_Y_m_dep(SEXP XSEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_eq(ind_eqSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq1(ind_ineq1SEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq2(ind_ineq2SEXP);
+    rcpp_result_gen = Rcpp::wrap(calculate_Y_m_dep(X, ind_eq, ind_ineq1, ind_ineq2));
+    return rcpp_result_gen;
+END_RCPP
+}
+// bootstrap_m_dep
+NumericVector bootstrap_m_dep(int E, int B, int omega, NumericVector standardizer, NumericMatrix Y_centered, int p_eq);
+RcppExport SEXP _TestGLTM_bootstrap_m_dep(SEXP ESEXP, SEXP BSEXP, SEXP omegaSEXP, SEXP standardizerSEXP, SEXP Y_centeredSEXP, SEXP p_eqSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type E(ESEXP);
+    Rcpp::traits::input_parameter< int >::type B(BSEXP);
+    Rcpp::traits::input_parameter< int >::type omega(omegaSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type standardizer(standardizerSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type Y_centered(Y_centeredSEXP);
+    Rcpp::traits::input_parameter< int >::type p_eq(p_eqSEXP);
+    rcpp_result_gen = Rcpp::wrap(bootstrap_m_dep(E, B, omega, standardizer, Y_centered, p_eq));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_TestGLTM_findn", (DL_FUNC) &_TestGLTM_findn, 2},
     {"_TestGLTM_calculate_Y_independent", (DL_FUNC) &_TestGLTM_calculate_Y_independent, 4},
     {"_TestGLTM_bootstrap_independent", (DL_FUNC) &_TestGLTM_bootstrap_independent, 4},
+    {"_TestGLTM_calculate_Y_m_dep", (DL_FUNC) &_TestGLTM_calculate_Y_m_dep, 4},
+    {"_TestGLTM_bootstrap_m_dep", (DL_FUNC) &_TestGLTM_bootstrap_m_dep, 6},
     {NULL, NULL, 0}
 };
 
