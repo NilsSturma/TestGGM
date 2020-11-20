@@ -144,7 +144,7 @@ test_U_stat <- function(X, ind_eq, ind_ineq1, ind_ineq2, N=NULL, E=1000, alphas=
   } # very unlikely that we get the same indices twice
   
   # Compute matrix H
-  H = calculate_H(X, indices_U, ind_eq, ind_ineq1, ind_ineq2)
+  H = calculate_H(X, indices_U, ind_eq, ind_ineq1, ind_ineq2, permutations)
   p = dim(H)[2]  # total nr of constraints
   p_eq = dim(ind_eq)[1]  # equality constraints
   
@@ -152,12 +152,19 @@ test_U_stat <- function(X, ind_eq, ind_ineq1, ind_ineq2, N=NULL, E=1000, alphas=
   H_mean = Rfast::colmeans(H)
   H_centered = Rfast::transpose(Rfast::transpose(H) - H_mean)
   
+  # Diagonal of the sample covariance of H
+  cov_H_diag = Rfast::colsums(H_centered**2) / N_hat
+  
+  # Vector for standardizing
+  standardizer = cov_H_diag**(-1/2)
+  
   # Test statistic
   marginal_stats = sqrt(n) * H_mean
-  test_stat =  max(abs(marginal_stats[1:p_eq]), marginal_stats[(p_eq+1):p])
+  marginal_stats[1:p_eq] = abs(marginal_stats[1:p_eq])
+  test_stat =  max(standardizer * marginal_stats)
   
   # Compute matrix G
-  G = calculate_G(X,L=3, ind_eq, ind_ineq1, ind_ineq2)
+  G = calculate_G(X,L=3, ind_eq, ind_ineq1, ind_ineq2, permutations, compute_S)
   G_mean = Rfast::colmeans(G)
   G_centered = Rfast::transpose(Rfast::transpose(G) - G_mean)
   
@@ -167,7 +174,8 @@ test_U_stat <- function(X, ind_eq, ind_ineq1, ind_ineq2, N=NULL, E=1000, alphas=
   U_B = bootstrap_res[[2]]
   U = U_A + sqrt(n/N) * U_B
   U[,1:p_eq] = abs(U[,1:p_eq])
-  results = rowMaxs(U)
+  U_standardized = Rfast::transpose(Rfast::transpose(U) * standardizer)
+  results = Rfast::rowMaxs(U_standardized, value = TRUE)
   
   # Critical values
   critical_values = quantile(results, probs=1-alphas)

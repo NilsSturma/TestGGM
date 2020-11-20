@@ -4,8 +4,8 @@ library(MASS) #mvrnorm
 library(igraph)
 library(TestGLTM)
 
-setwd("../simulations")
-source("utils.R") # TOSO: add these functions to package
+#setwd("../simulations")
+source("../simulations/utils.R") # TOSO: add these functions to package
 
 #################
 # Set variables #
@@ -19,9 +19,10 @@ alphas = seq(0.01, 0.99, 0.01)
 
 
 # Test strategy
-test_strategy="symmetric"  # "run-over", "grouping", "two-step", "symmetric"
+test_strategy="U-stat"  # "run-over", "grouping", "two-step", "symmetric", "U-stat"
 B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doing some experiments)
 beta = 0.001  # just for test_strategy=="two-step"
+N = 2*n  # just for test_strategy=="U-stat"
 
 # Tree
 tree = "star_tree"  # "star_tree", "quinted_tree", "binary_rooted"
@@ -106,6 +107,8 @@ results <- foreach(nr = 1:nr_exp, .combine=rbind, .packages=c("MASS", "TestGLTM"
     result = test_two_step(X, ind_eq, ind_ineq1, ind_ineq2, E=E, beta=beta, alphas=alphas)
   } else if (test_strategy=="symmetric"){
     result = test_symmetric(X, ind_eq, ind_ineq1, ind_ineq2, E=E, alphas=alphas)
+  } else if (test_strategy=="U-stat"){
+    result = test_U_stat(X, ind_eq, ind_ineq1, ind_ineq2, N=N, E=E, alphas=alphas)
   }
   result = as.numeric(result)
 }
@@ -139,3 +142,4 @@ abline(coef = c(0,1))
 if (save){
   dev.off() # close pdf file
 }
+

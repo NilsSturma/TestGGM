@@ -39,17 +39,15 @@ NumericVector h_tilde(NumericVector X1,
 NumericVector h(List L, 
                 IntegerMatrix ind_eq, 
                 IntegerMatrix ind_ineq1, 
-                IntegerMatrix ind_ineq2){
+                IntegerMatrix ind_ineq2,
+                Function permutations){
   
   const int nr_ind_eq = ind_eq.nrow();
   const int nr_ind_ineq1 = ind_ineq1.nrow();
   const int nr_ind_ineq2 = ind_ineq2.nrow();
   NumericVector h(nr_ind_eq+nr_ind_ineq1+nr_ind_ineq2);
   
-  Environment myEnv = Environment::global_env();
-  Function perms = myEnv["permutations"];
-  IntegerMatrix perm = as<IntegerMatrix>(perms(Rcpp::Named("n", L.length())));
-  
+  IntegerMatrix perm = permutations(L.length());
   perm = perm - 1;
   
   for (int per = 0; per < perm.nrow(); per++){
@@ -64,14 +62,15 @@ NumericMatrix calculate_H(NumericMatrix X,
                 IntegerMatrix indices_U, 
                 IntegerMatrix ind_eq, 
                 IntegerMatrix ind_ineq1, 
-                IntegerMatrix ind_ineq2){
+                IntegerMatrix ind_ineq2,
+                Function permutations){
   
   NumericMatrix H(indices_U.nrow(), ind_eq.nrow()+ind_ineq1.nrow()+ind_ineq2.nrow());
   indices_U = indices_U - 1;
 
   for (int i = 0; i < indices_U.nrow(); i++){
     List L = List::create(X(indices_U(i,0),_), X(indices_U(i,1),_), X(indices_U(i,2),_), X(indices_U(i,3),_));
-    H(i,_) = h(L, ind_eq, ind_ineq1, ind_ineq2);
+    H(i,_) = h(L, ind_eq, ind_ineq1, ind_ineq2, permutations);
   }
   return(H);
 }
@@ -85,20 +84,20 @@ NumericVector g(NumericMatrix X,
                 int L,
                 IntegerMatrix ind_eq, 
                 IntegerMatrix ind_ineq1, 
-                IntegerMatrix ind_ineq2){
+                IntegerMatrix ind_ineq2,
+                Function permutations,
+                Function compute_S){
   
   int n = X.nrow();
   NumericVector g(ind_eq.nrow()+ind_ineq1.nrow()+ind_ineq2.nrow());
   int K = floor((n-1)/L);
   
-  Environment myEnv = Environment::global_env();
-  Function comp_S = myEnv["compute_S"];
-  IntegerMatrix perm = as<IntegerMatrix>(comp_S(Rcpp::Named("n", n), Rcpp::Named("i", i), Rcpp::Named("L", L)));
-  IntegerMatrix S = comp_S(n,i,L);
+  IntegerMatrix S = compute_S(n,i,L);
+  S = S - 1;
   
   for (int k = 0; k < K; k++){
     List L = List::create(X(i,_), X(S(k,0),_), X(S(k,1),_), X(S(k,2),_));
-    g = g + h(L, ind_eq, ind_ineq1, ind_ineq2);
+    g = g + h(L, ind_eq, ind_ineq1, ind_ineq2, permutations);
   }
   return(g/K);
 }
@@ -109,13 +108,15 @@ NumericMatrix calculate_G(NumericMatrix X,
                           int L,
                           IntegerMatrix ind_eq, 
                           IntegerMatrix ind_ineq1, 
-                          IntegerMatrix ind_ineq2){
+                          IntegerMatrix ind_ineq2,
+                          Function permutations,
+                          Function compute_S){
   
   int n = X.nrow();
   NumericMatrix G(n, ind_eq.nrow()+ind_ineq1.nrow()+ind_ineq2.nrow());
 
   for (int i = 0; i < n; i++){
-    G(i,_) = g(X, i, L, ind_eq, ind_ineq1, ind_ineq2);
+    G(i,_) = g(X, i, L, ind_eq, ind_ineq1, ind_ineq2, permutations, compute_S);
   }
   return(G);
 }

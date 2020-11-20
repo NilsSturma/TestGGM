@@ -5,20 +5,20 @@ h_tilde <- function(X1, X2, X3, X4, ind_eq, ind_ineq1, ind_ineq2) {
     .Call(`_TestGLTM_h_tilde`, X1, X2, X3, X4, ind_eq, ind_ineq1, ind_ineq2)
 }
 
-h <- function(L, ind_eq, ind_ineq1, ind_ineq2) {
-    .Call(`_TestGLTM_h`, L, ind_eq, ind_ineq1, ind_ineq2)
+h <- function(L, ind_eq, ind_ineq1, ind_ineq2, permutations) {
+    .Call(`_TestGLTM_h`, L, ind_eq, ind_ineq1, ind_ineq2, permutations)
 }
 
-calculate_H <- function(X, indices_U, ind_eq, ind_ineq1, ind_ineq2) {
-    .Call(`_TestGLTM_calculate_H`, X, indices_U, ind_eq, ind_ineq1, ind_ineq2)
+calculate_H <- function(X, indices_U, ind_eq, ind_ineq1, ind_ineq2, permutations) {
+    .Call(`_TestGLTM_calculate_H`, X, indices_U, ind_eq, ind_ineq1, ind_ineq2, permutations)
 }
 
-g <- function(X, i, L, ind_eq, ind_ineq1, ind_ineq2) {
-    .Call(`_TestGLTM_g`, X, i, L, ind_eq, ind_ineq1, ind_ineq2)
+g <- function(X, i, L, ind_eq, ind_ineq1, ind_ineq2, permutations, compute_S) {
+    .Call(`_TestGLTM_g`, X, i, L, ind_eq, ind_ineq1, ind_ineq2, permutations, compute_S)
 }
 
-calculate_G <- function(X, L, ind_eq, ind_ineq1, ind_ineq2) {
-    .Call(`_TestGLTM_calculate_G`, X, L, ind_eq, ind_ineq1, ind_ineq2)
+calculate_G <- function(X, L, ind_eq, ind_ineq1, ind_ineq2, permutations, compute_S) {
+    .Call(`_TestGLTM_calculate_G`, X, L, ind_eq, ind_ineq1, ind_ineq2, permutations, compute_S)
 }
 
 findn <- function(N, D) {

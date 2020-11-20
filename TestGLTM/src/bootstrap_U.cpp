@@ -21,7 +21,7 @@ List bootstrap_U(int E, NumericMatrix H_centered, NumericMatrix G_centered, int 
     }
     U_B(i,_) = (1/sqrt(N_hat)) * colsums_B;
     for (int j = 0; j < p; j++){
-      colsums_A[j] = sum(G_centered(_,j) * epsilons[Range(N_hat, (n-1))]);
+      colsums_A[j] = sum(G_centered(_,j) * epsilons[Range(N_hat, ((N_hat+n)-1))]);
     }
     U_A(i,_) = (4/sqrt(n)) * colsums_A;
   }

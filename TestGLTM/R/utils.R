@@ -6,6 +6,9 @@ permutations <- function(n){
 compute_S <- function(n,i,L){
   K = floor((n-1)/L)
   integer_set = setdiff(1:n, i)
+  len = length(integer_set)
+  len = len - (len %% L)
+  integer_set = integer_set[1:len]
   S = matrix(integer_set, nrow=K, ncol=3, byrow=TRUE)
   return(S)
 }
