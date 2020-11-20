@@ -26,7 +26,7 @@ beta = 0.001  # just for test_strategy=="two-step"
 # Tree
 tree = "star_tree"  # "star_tree", "quinted_tree", "binary_rooted"
 m = 10  # (star_tree)
-setup = 2  # (star_tree)
+setup = 1  # (star_tree)
 
 
 

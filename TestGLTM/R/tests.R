@@ -123,6 +123,36 @@ test_symmetric <- function(X, ind_eq, ind_ineq1, ind_ineq2, E=1000, alphas=seq(0
 
 
 
+test_U_stat <- function(X, ind_eq, ind_ineq1, ind_ineq2, N=NULL, E=1000, alphas=seq(0.01, 0.99, 0.01)){
+  
+  
+  n = dim(X)[1]  # nr of samples
+  if (is.null(N)){
+    N = 2*n
+  }
+  
+  # determine N_hat by Bernoulli sampling
+  
+  # Choose randomly N_hat subsets with cardinality 4 of {1,...,n}
+  # sort(sample(1:100, 4, replace=FALSE), decreasing=FALSE)
+  indices_U = matrix(1:1000, ncol=4)  # REMOVE THIS !!!
+  
+  # Compute matrix H
+  H = calculate_H(X, indices_U, ind_eq, ind_ineq1, ind_ineq2)
+  
+  return(H)
+}
+
+
+
+
+
+
+
+
+
+
+
 test_m_dep <- function(X, ind_eq, ind_ineq1, ind_ineq2, B=5, E=1000, alphas=seq(0.01, 0.99, 0.01)){
   
   # Call function to calculate matrix Y

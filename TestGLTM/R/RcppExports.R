@@ -9,6 +9,10 @@ h <- function(L, ind_eq, ind_ineq1, ind_ineq2) {
     .Call(`_TestGLTM_h`, L, ind_eq, ind_ineq1, ind_ineq2)
 }
 
+calculate_H <- function(X, indices_U, ind_eq, ind_ineq1, ind_ineq2) {
+    .Call(`_TestGLTM_calculate_H`, X, indices_U, ind_eq, ind_ineq1, ind_ineq2)
+}
+
 findn <- function(N, D) {
     .Call(`_TestGLTM_findn`, N, D)
 }

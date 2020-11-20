@@ -33,6 +33,13 @@ NumericVector h_tile(NumericVector X1,
   return(h_tile);
 }
 
+// [[Rcpp::export]]
+int check_perm(List L){
+  Environment myEnv = Environment::global_env();
+  Function perms = myEnv["permutations"];
+  IntegerMatrix perm = as<IntegerMatrix>(perms(Rcpp::Named("n", L.length())));
+  return(perm)
+}
 
 
 // [[Rcpp::export]]
@@ -58,8 +65,8 @@ NumericVector h(List L,
   return(h/perm.nrow());
 }
 
-
-NumericMatrix H(NumericMatrix X,
+// [[Rcpp::export]]
+NumericMatrix calculate_H(NumericMatrix X,
                 IntegerMatrix indices_U, 
                 IntegerMatrix ind_eq, 
                 IntegerMatrix ind_ineq1, 

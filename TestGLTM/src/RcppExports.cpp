@@ -36,6 +36,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// calculate_H
+NumericMatrix calculate_H(NumericMatrix X, IntegerMatrix indices_U, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2);
+RcppExport SEXP _TestGLTM_calculate_H(SEXP XSEXP, SEXP indices_USEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type indices_U(indices_USEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_eq(ind_eqSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq1(ind_ineq1SEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq2(ind_ineq2SEXP);
+    rcpp_result_gen = Rcpp::wrap(calculate_H(X, indices_U, ind_eq, ind_ineq1, ind_ineq2));
+    return rcpp_result_gen;
+END_RCPP
+}
 // findn
 int findn(int N, int D);
 RcppExport SEXP _TestGLTM_findn(SEXP NSEXP, SEXP DSEXP) {
@@ -125,6 +140,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_TestGLTM_h_tile", (DL_FUNC) &_TestGLTM_h_tile, 7},
     {"_TestGLTM_h", (DL_FUNC) &_TestGLTM_h, 4},
+    {"_TestGLTM_calculate_H", (DL_FUNC) &_TestGLTM_calculate_H, 5},
     {"_TestGLTM_findn", (DL_FUNC) &_TestGLTM_findn, 2},
     {"_TestGLTM_calculate_Y_independent", (DL_FUNC) &_TestGLTM_calculate_Y_independent, 4},
     {"_TestGLTM_calculate_Y_symmetric", (DL_FUNC) &_TestGLTM_calculate_Y_symmetric, 5},
