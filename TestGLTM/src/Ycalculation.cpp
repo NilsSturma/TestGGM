@@ -88,13 +88,13 @@ NumericMatrix calculate_Y_symmetric(NumericMatrix X,
     }
     
     for (int j = 0; j < nr_ind_ineq1; j++) {
-      Y(_,nr_ind_eq + j) = Y(_,j) - X1(_,ind_ineq1(j,0)-1) *  X1(_,ind_ineq1(j,1)-1) 
+      Y(_,nr_ind_eq + j) = Y(_,nr_ind_eq + j) - X1(_,ind_ineq1(j,0)-1) *  X1(_,ind_ineq1(j,1)-1) 
       * X2(_,ind_ineq1(j,2)-1) * X2(_,ind_ineq1(j,3)-1) 
       * X3(_,ind_ineq1(j,4)-1) * X3(_,ind_ineq1(j,5)-1);
     }
     
     for (int j = 0; j < nr_ind_ineq2; j++) {
-      Y(_,nr_ind_eq + nr_ind_ineq1 + j) = Y(_,j) + X1(_,ind_ineq2(j,0)-1) * X1(_,ind_ineq2(j,1)-1) * X2(_,ind_ineq2(j,0)-1) * X2(_,ind_ineq2(j,1)-1) 
+      Y(_,nr_ind_eq + nr_ind_ineq1 + j) = Y(_,nr_ind_eq + nr_ind_ineq1 + j) + X1(_,ind_ineq2(j,0)-1) * X1(_,ind_ineq2(j,1)-1) * X2(_,ind_ineq2(j,0)-1) * X2(_,ind_ineq2(j,1)-1) 
       * X3(_,ind_ineq2(j,2)-1) * X3(_,ind_ineq2(j,3)-1) * X4(_,ind_ineq2(j,2)-1) * X4(_,ind_ineq2(j,3)-1) 
       - X1(_,ind_ineq2(j,4)-1) * X1(_,ind_ineq2(j,5)-1) * X2(_,ind_ineq2(j,4)-1) * X2(_,ind_ineq2(j,5)-1) 
       * X3(_,ind_ineq2(j,6)-1) * X3(_,ind_ineq2(j,7)-1) * X4(_,ind_ineq2(j,6)-1) * X4(_,ind_ineq2(j,7)-1);

@@ -5,9 +5,9 @@
 
 using namespace Rcpp;
 
-// h_tile
-NumericVector h_tile(NumericVector X1, NumericVector X2, NumericVector X3, NumericVector X4, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2);
-RcppExport SEXP _TestGLTM_h_tile(SEXP X1SEXP, SEXP X2SEXP, SEXP X3SEXP, SEXP X4SEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP) {
+// h_tilde
+NumericVector h_tilde(NumericVector X1, NumericVector X2, NumericVector X3, NumericVector X4, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2);
+RcppExport SEXP _TestGLTM_h_tilde(SEXP X1SEXP, SEXP X2SEXP, SEXP X3SEXP, SEXP X4SEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -18,7 +18,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< IntegerMatrix >::type ind_eq(ind_eqSEXP);
     Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq1(ind_ineq1SEXP);
     Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq2(ind_ineq2SEXP);
-    rcpp_result_gen = Rcpp::wrap(h_tile(X1, X2, X3, X4, ind_eq, ind_ineq1, ind_ineq2));
+    rcpp_result_gen = Rcpp::wrap(h_tilde(X1, X2, X3, X4, ind_eq, ind_ineq1, ind_ineq2));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -138,7 +138,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_TestGLTM_h_tile", (DL_FUNC) &_TestGLTM_h_tile, 7},
+    {"_TestGLTM_h_tilde", (DL_FUNC) &_TestGLTM_h_tilde, 7},
     {"_TestGLTM_h", (DL_FUNC) &_TestGLTM_h, 4},
     {"_TestGLTM_calculate_H", (DL_FUNC) &_TestGLTM_calculate_H, 5},
     {"_TestGLTM_findn", (DL_FUNC) &_TestGLTM_findn, 2},
