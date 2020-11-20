@@ -51,6 +51,37 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// g
+NumericVector g(NumericMatrix X, int i, int L, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2);
+RcppExport SEXP _TestGLTM_g(SEXP XSEXP, SEXP iSEXP, SEXP LSEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
+    Rcpp::traits::input_parameter< int >::type i(iSEXP);
+    Rcpp::traits::input_parameter< int >::type L(LSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_eq(ind_eqSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq1(ind_ineq1SEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq2(ind_ineq2SEXP);
+    rcpp_result_gen = Rcpp::wrap(g(X, i, L, ind_eq, ind_ineq1, ind_ineq2));
+    return rcpp_result_gen;
+END_RCPP
+}
+// calculate_G
+NumericMatrix calculate_G(NumericMatrix X, int L, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2);
+RcppExport SEXP _TestGLTM_calculate_G(SEXP XSEXP, SEXP LSEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
+    Rcpp::traits::input_parameter< int >::type L(LSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_eq(ind_eqSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq1(ind_ineq1SEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq2(ind_ineq2SEXP);
+    rcpp_result_gen = Rcpp::wrap(calculate_G(X, L, ind_eq, ind_ineq1, ind_ineq2));
+    return rcpp_result_gen;
+END_RCPP
+}
 // findn
 int findn(int N, int D);
 RcppExport SEXP _TestGLTM_findn(SEXP NSEXP, SEXP DSEXP) {
@@ -136,17 +167,34 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// bootstrap_U
+List bootstrap_U(int E, NumericMatrix H_centered, NumericMatrix G_centered, int N);
+RcppExport SEXP _TestGLTM_bootstrap_U(SEXP ESEXP, SEXP H_centeredSEXP, SEXP G_centeredSEXP, SEXP NSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type E(ESEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type H_centered(H_centeredSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type G_centered(G_centeredSEXP);
+    Rcpp::traits::input_parameter< int >::type N(NSEXP);
+    rcpp_result_gen = Rcpp::wrap(bootstrap_U(E, H_centered, G_centered, N));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_TestGLTM_h_tilde", (DL_FUNC) &_TestGLTM_h_tilde, 7},
     {"_TestGLTM_h", (DL_FUNC) &_TestGLTM_h, 4},
     {"_TestGLTM_calculate_H", (DL_FUNC) &_TestGLTM_calculate_H, 5},
+    {"_TestGLTM_g", (DL_FUNC) &_TestGLTM_g, 6},
+    {"_TestGLTM_calculate_G", (DL_FUNC) &_TestGLTM_calculate_G, 5},
     {"_TestGLTM_findn", (DL_FUNC) &_TestGLTM_findn, 2},
     {"_TestGLTM_calculate_Y_independent", (DL_FUNC) &_TestGLTM_calculate_Y_independent, 4},
     {"_TestGLTM_calculate_Y_symmetric", (DL_FUNC) &_TestGLTM_calculate_Y_symmetric, 5},
     {"_TestGLTM_calculate_Y_m_dep", (DL_FUNC) &_TestGLTM_calculate_Y_m_dep, 4},
     {"_TestGLTM_bootstrap_independent", (DL_FUNC) &_TestGLTM_bootstrap_independent, 4},
     {"_TestGLTM_bootstrap_m_dep", (DL_FUNC) &_TestGLTM_bootstrap_m_dep, 6},
+    {"_TestGLTM_bootstrap_U", (DL_FUNC) &_TestGLTM_bootstrap_U, 4},
     {NULL, NULL, 0}
 };
 

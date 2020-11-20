@@ -13,6 +13,14 @@ calculate_H <- function(X, indices_U, ind_eq, ind_ineq1, ind_ineq2) {
     .Call(`_TestGLTM_calculate_H`, X, indices_U, ind_eq, ind_ineq1, ind_ineq2)
 }
 
+g <- function(X, i, L, ind_eq, ind_ineq1, ind_ineq2) {
+    .Call(`_TestGLTM_g`, X, i, L, ind_eq, ind_ineq1, ind_ineq2)
+}
+
+calculate_G <- function(X, L, ind_eq, ind_ineq1, ind_ineq2) {
+    .Call(`_TestGLTM_calculate_G`, X, L, ind_eq, ind_ineq1, ind_ineq2)
+}
+
 findn <- function(N, D) {
     .Call(`_TestGLTM_findn`, N, D)
 }
@@ -35,5 +43,9 @@ bootstrap_independent <- function(E, standardizer, Y_centered, p_eq) {
 
 bootstrap_m_dep <- function(E, B, omega, standardizer, Y_centered, p_eq) {
     .Call(`_TestGLTM_bootstrap_m_dep`, E, B, omega, standardizer, Y_centered, p_eq)
+}
+
+bootstrap_U <- function(E, H_centered, G_centered, N) {
+    .Call(`_TestGLTM_bootstrap_U`, E, H_centered, G_centered, N)
 }
 

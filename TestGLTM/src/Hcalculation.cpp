@@ -58,6 +58,7 @@ NumericVector h(List L,
   return(h/perm.nrow());
 }
 
+
 // [[Rcpp::export]]
 NumericMatrix calculate_H(NumericMatrix X,
                 IntegerMatrix indices_U, 
@@ -76,4 +77,46 @@ NumericMatrix calculate_H(NumericMatrix X,
 }
 
 
+// Calculation of g_i(X_i)
+
+// [[Rcpp::export]]
+NumericVector g(NumericMatrix X,
+                int i,
+                int L,
+                IntegerMatrix ind_eq, 
+                IntegerMatrix ind_ineq1, 
+                IntegerMatrix ind_ineq2){
+  
+  int n = X.nrow();
+  NumericVector g(ind_eq.nrow()+ind_ineq1.nrow()+ind_ineq2.nrow());
+  int K = floor((n-1)/L);
+  
+  Environment myEnv = Environment::global_env();
+  Function comp_S = myEnv["compute_S"];
+  IntegerMatrix perm = as<IntegerMatrix>(comp_S(Rcpp::Named("n", n), Rcpp::Named("i", i), Rcpp::Named("L", L)));
+  IntegerMatrix S = comp_S(n,i,L);
+  
+  for (int k = 0; k < K; k++){
+    List L = List::create(X(i,_), X(S(k,0),_), X(S(k,1),_), X(S(k,2),_));
+    g = g + h(L, ind_eq, ind_ineq1, ind_ineq2);
+  }
+  return(g/K);
+}
+
+// Save all g_i(X_i) in matrix G
+// [[Rcpp::export]]
+NumericMatrix calculate_G(NumericMatrix X,
+                          int L,
+                          IntegerMatrix ind_eq, 
+                          IntegerMatrix ind_ineq1, 
+                          IntegerMatrix ind_ineq2){
+  
+  int n = X.nrow();
+  NumericMatrix G(n, ind_eq.nrow()+ind_ineq1.nrow()+ind_ineq2.nrow());
+
+  for (int i = 0; i < n; i++){
+    G(i,_) = g(X, i, L, ind_eq, ind_ineq1, ind_ineq2);
+  }
+  return(G);
+}
 

@@ -5,7 +5,7 @@ library(igraph)
 library(TestGLTM)
 
 setwd("../simulations")
-source("utils.R")
+source("utils.R") # TOSO: add these functions to package
 
 #################
 # Set variables #

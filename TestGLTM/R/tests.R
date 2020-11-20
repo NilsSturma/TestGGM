@@ -90,6 +90,9 @@ test_symmetric <- function(X, ind_eq, ind_ineq1, ind_ineq2, E=1000, alphas=seq(0
   
   # Call function to calculate matrix Y
   Y = calculate_Y_symmetric(X, ind_eq, ind_ineq1, ind_ineq2, perm)
+  # Alternative (equal)
+  # indices_U = matrix(1:X.nrow(), ncol=4) # could do byrow=TRUE
+  # Y = calculate_H(X, indices_U, ind_eq, ind_ineq1, ind_ineq2)
   
   n = dim(Y)[1]  # nr of samples
   p = dim(Y)[2]  # total nr of constraints
@@ -132,18 +135,47 @@ test_U_stat <- function(X, ind_eq, ind_ineq1, ind_ineq2, N=NULL, E=1000, alphas=
   }
   
   # determine N_hat by Bernoulli sampling
+  N_hat = rbinom(1, choose(n,4), (N / choose(n,4)))
   
   # Choose randomly N_hat subsets with cardinality 4 of {1,...,n}
-  # sort(sample(1:100, 4, replace=FALSE), decreasing=FALSE)
-  indices_U = matrix(1:1000, ncol=4)  # REMOVE THIS !!!
+  indices_U = matrix(ncol=4, nrow=N_hat) 
+  for (i in 1:N_hat){
+    indices_U[i,] = sort(sample(1:n, 4, replace=FALSE), decreasing=FALSE)
+  } # very unlikely that we get the same indices twice
   
   # Compute matrix H
   H = calculate_H(X, indices_U, ind_eq, ind_ineq1, ind_ineq2)
+  p = dim(H)[2]  # total nr of constraints
+  p_eq = dim(ind_eq)[1]  # equality constraints
   
-  return(H)
+  # Mean and centering
+  H_mean = Rfast::colmeans(H)
+  H_centered = Rfast::transpose(Rfast::transpose(H) - H_mean)
+  
+  # Test statistic
+  marginal_stats = sqrt(n) * H_mean
+  test_stat =  max(abs(marginal_stats[1:p_eq]), marginal_stats[(p_eq+1):p])
+  
+  # Compute matrix G
+  G = calculate_G(X,L=3, ind_eq, ind_ineq1, ind_ineq2)
+  G_mean = Rfast::colmeans(G)
+  G_centered = Rfast::transpose(Rfast::transpose(G) - G_mean)
+  
+  # Bootstrap
+  bootstrap_res = bootstrap_U(E, H_centered, G_centered, N)
+  U_A = bootstrap_res[[1]]
+  U_B = bootstrap_res[[2]]
+  U = U_A + sqrt(n/N) * U_B
+  U[,1:p_eq] = abs(U[,1:p_eq])
+  results = rowMaxs(U)
+  
+  # Critical values
+  critical_values = quantile(results, probs=1-alphas)
+  
+  # Reject if test_stat > critical_value
+  is_rejected = test_stat > critical_values
+  return(is_rejected)
 }
-
-
 
 
 
