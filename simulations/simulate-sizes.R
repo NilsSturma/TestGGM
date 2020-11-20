@@ -24,8 +24,8 @@ B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doin
 beta = 0.001  # just for test_strategy=="two-step"
 
 # Tree
-tree = "binary_rooted"  # "star_tree", "quinted_tree", "binary_rooted"
-m = 20  # (star_tree)
+tree = "star_tree"  # "star_tree", "quinted_tree", "binary_rooted"
+m = 10  # (star_tree)
 setup = 2  # (star_tree)
 
 
