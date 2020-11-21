@@ -5,7 +5,7 @@ library(igraph)
 library(TestGLTM)
 
 
-source("../simulations/utils.R") # TOSO: add these functions to package
+source("../simulations/utils.R") # TODO: add these functions to package
 
 #################
 # Set variables #

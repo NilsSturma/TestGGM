@@ -33,7 +33,7 @@ NumericVector bootstrap_independent(int E, NumericVector standardizer, NumericMa
 
 
 // [[Rcpp::export]]
-NumericMatrix bootstrap_m_dep(int E, int B, int omega, NumericVector standardizer, NumericMatrix Y_centered, int p_eq){
+NumericVector bootstrap_m_dep(int E, int B, int omega, NumericVector standardizer, NumericMatrix Y_centered, int p_eq){
   
   const int n = Y_centered.nrow();
   const int p = Y_centered.ncol();
@@ -43,14 +43,14 @@ NumericMatrix bootstrap_m_dep(int E, int B, int omega, NumericVector standardize
   NumericVector sums(p);
   IntegerVector L(B);
   NumericVector m(p);
-  NumericMatrix res(E,p);
+  NumericVector res(E);
   
   for (int i = 0; i < E; i++){
     epsilons = rnorm(omega,0,1);
     sums.fill(0);
     for (int j = 0; j < p; j++){
       for (int b = 0; b < omega; b++){
-        L = seq((b-1)*B, b*B-1);
+        L = seq((b*B), (((b+1)*B)-1));
         batchsum = 0;
         for (int l = 0; l < B; l++){
           batchsum = batchsum + Y_centered(L[l],j);
@@ -60,8 +60,10 @@ NumericMatrix bootstrap_m_dep(int E, int B, int omega, NumericVector standardize
     }
     m[Range(0, (p_eq-1))] = abs(standardizer[Range(0, (p_eq-1))] * sums[Range(0, (p_eq-1))]);
     m[Range(p_eq, (p-1))] = standardizer[Range(p_eq, (p-1))] * sums[Range(p_eq, (p-1))];
-    res(i,_) = (1/sqrt(B * omega)) * m;
+    res[i] = (1/sqrt(B * omega)) * max(m);
   }
   
   return res;
 }
+
+

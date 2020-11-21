@@ -5,6 +5,30 @@
 
 using namespace Rcpp;
 
+// compute_S
+IntegerMatrix compute_S(int n, int i, int L);
+RcppExport SEXP _TestGLTM_compute_S(SEXP nSEXP, SEXP iSEXP, SEXP LSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type i(iSEXP);
+    Rcpp::traits::input_parameter< int >::type L(LSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_S(n, i, L));
+    return rcpp_result_gen;
+END_RCPP
+}
+// permutations
+IntegerMatrix permutations(int n);
+RcppExport SEXP _TestGLTM_permutations(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(permutations(n));
+    return rcpp_result_gen;
+END_RCPP
+}
 // h_tilde
 NumericVector h_tilde(NumericVector X1, NumericVector X2, NumericVector X3, NumericVector X4, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2);
 RcppExport SEXP _TestGLTM_h_tilde(SEXP X1SEXP, SEXP X2SEXP, SEXP X3SEXP, SEXP X4SEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP) {
@@ -23,8 +47,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // h
-NumericVector h(List L, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2, Function permutations);
-RcppExport SEXP _TestGLTM_h(SEXP LSEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP, SEXP permutationsSEXP) {
+NumericVector h(List L, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2, IntegerMatrix perm);
+RcppExport SEXP _TestGLTM_h(SEXP LSEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP, SEXP permSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -32,14 +56,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< IntegerMatrix >::type ind_eq(ind_eqSEXP);
     Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq1(ind_ineq1SEXP);
     Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq2(ind_ineq2SEXP);
-    Rcpp::traits::input_parameter< Function >::type permutations(permutationsSEXP);
-    rcpp_result_gen = Rcpp::wrap(h(L, ind_eq, ind_ineq1, ind_ineq2, permutations));
+    Rcpp::traits::input_parameter< IntegerMatrix >::type perm(permSEXP);
+    rcpp_result_gen = Rcpp::wrap(h(L, ind_eq, ind_ineq1, ind_ineq2, perm));
     return rcpp_result_gen;
 END_RCPP
 }
 // calculate_H
-NumericMatrix calculate_H(NumericMatrix X, IntegerMatrix indices_U, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2, Function permutations);
-RcppExport SEXP _TestGLTM_calculate_H(SEXP XSEXP, SEXP indices_USEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP, SEXP permutationsSEXP) {
+NumericMatrix calculate_H(NumericMatrix X, IntegerMatrix indices_U, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2);
+RcppExport SEXP _TestGLTM_calculate_H(SEXP XSEXP, SEXP indices_USEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -48,14 +72,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< IntegerMatrix >::type ind_eq(ind_eqSEXP);
     Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq1(ind_ineq1SEXP);
     Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq2(ind_ineq2SEXP);
-    Rcpp::traits::input_parameter< Function >::type permutations(permutationsSEXP);
-    rcpp_result_gen = Rcpp::wrap(calculate_H(X, indices_U, ind_eq, ind_ineq1, ind_ineq2, permutations));
+    rcpp_result_gen = Rcpp::wrap(calculate_H(X, indices_U, ind_eq, ind_ineq1, ind_ineq2));
     return rcpp_result_gen;
 END_RCPP
 }
 // g
-NumericVector g(NumericMatrix X, int i, int L, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2, Function permutations, Function compute_S);
-RcppExport SEXP _TestGLTM_g(SEXP XSEXP, SEXP iSEXP, SEXP LSEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP, SEXP permutationsSEXP, SEXP compute_SSEXP) {
+NumericVector g(NumericMatrix X, int i, int L, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2, IntegerMatrix perm);
+RcppExport SEXP _TestGLTM_g(SEXP XSEXP, SEXP iSEXP, SEXP LSEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP, SEXP permSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -65,15 +88,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< IntegerMatrix >::type ind_eq(ind_eqSEXP);
     Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq1(ind_ineq1SEXP);
     Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq2(ind_ineq2SEXP);
-    Rcpp::traits::input_parameter< Function >::type permutations(permutationsSEXP);
-    Rcpp::traits::input_parameter< Function >::type compute_S(compute_SSEXP);
-    rcpp_result_gen = Rcpp::wrap(g(X, i, L, ind_eq, ind_ineq1, ind_ineq2, permutations, compute_S));
+    Rcpp::traits::input_parameter< IntegerMatrix >::type perm(permSEXP);
+    rcpp_result_gen = Rcpp::wrap(g(X, i, L, ind_eq, ind_ineq1, ind_ineq2, perm));
     return rcpp_result_gen;
 END_RCPP
 }
 // calculate_G
-NumericMatrix calculate_G(NumericMatrix X, int L, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2, Function permutations, Function compute_S);
-RcppExport SEXP _TestGLTM_calculate_G(SEXP XSEXP, SEXP LSEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP, SEXP permutationsSEXP, SEXP compute_SSEXP) {
+NumericMatrix calculate_G(NumericMatrix X, int L, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2);
+RcppExport SEXP _TestGLTM_calculate_G(SEXP XSEXP, SEXP LSEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -82,9 +104,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< IntegerMatrix >::type ind_eq(ind_eqSEXP);
     Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq1(ind_ineq1SEXP);
     Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq2(ind_ineq2SEXP);
-    Rcpp::traits::input_parameter< Function >::type permutations(permutationsSEXP);
-    Rcpp::traits::input_parameter< Function >::type compute_S(compute_SSEXP);
-    rcpp_result_gen = Rcpp::wrap(calculate_G(X, L, ind_eq, ind_ineq1, ind_ineq2, permutations, compute_S));
+    rcpp_result_gen = Rcpp::wrap(calculate_G(X, L, ind_eq, ind_ineq1, ind_ineq2));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -158,7 +178,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // bootstrap_m_dep
-NumericMatrix bootstrap_m_dep(int E, int B, int omega, NumericVector standardizer, NumericMatrix Y_centered, int p_eq);
+NumericVector bootstrap_m_dep(int E, int B, int omega, NumericVector standardizer, NumericMatrix Y_centered, int p_eq);
 RcppExport SEXP _TestGLTM_bootstrap_m_dep(SEXP ESEXP, SEXP BSEXP, SEXP omegaSEXP, SEXP standardizerSEXP, SEXP Y_centeredSEXP, SEXP p_eqSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -189,11 +209,13 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_TestGLTM_compute_S", (DL_FUNC) &_TestGLTM_compute_S, 3},
+    {"_TestGLTM_permutations", (DL_FUNC) &_TestGLTM_permutations, 1},
     {"_TestGLTM_h_tilde", (DL_FUNC) &_TestGLTM_h_tilde, 7},
     {"_TestGLTM_h", (DL_FUNC) &_TestGLTM_h, 5},
-    {"_TestGLTM_calculate_H", (DL_FUNC) &_TestGLTM_calculate_H, 6},
-    {"_TestGLTM_g", (DL_FUNC) &_TestGLTM_g, 8},
-    {"_TestGLTM_calculate_G", (DL_FUNC) &_TestGLTM_calculate_G, 7},
+    {"_TestGLTM_calculate_H", (DL_FUNC) &_TestGLTM_calculate_H, 5},
+    {"_TestGLTM_g", (DL_FUNC) &_TestGLTM_g, 7},
+    {"_TestGLTM_calculate_G", (DL_FUNC) &_TestGLTM_calculate_G, 5},
     {"_TestGLTM_findn", (DL_FUNC) &_TestGLTM_findn, 2},
     {"_TestGLTM_calculate_Y_independent", (DL_FUNC) &_TestGLTM_calculate_Y_independent, 4},
     {"_TestGLTM_calculate_Y_symmetric", (DL_FUNC) &_TestGLTM_calculate_Y_symmetric, 5},
