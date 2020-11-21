@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
+
 //////////////////////
 // helper functions //
 //////////////////////
@@ -29,6 +30,7 @@ IntegerMatrix compute_S(int n, int i, int L){
   return res;
 }
 
+
 // [[Rcpp::export]]
 IntegerMatrix permutations(int n){
   
@@ -54,7 +56,6 @@ IntegerMatrix permutations(int n){
 ////////////////////
 // main functions //
 ////////////////////
-
 
 // [[Rcpp::export]]
 NumericVector h_tilde(NumericVector X1,
@@ -87,7 +88,6 @@ NumericVector h_tilde(NumericVector X1,
   }
   return(h_tilde);
 }
-
 
 
 // [[Rcpp::export]]
@@ -131,7 +131,6 @@ NumericMatrix calculate_H(NumericMatrix X,
 
 
 // Calculation of g_i(X_i)
-
 // [[Rcpp::export]]
 NumericVector g(NumericMatrix X,
                 int i,
@@ -147,7 +146,6 @@ NumericVector g(NumericMatrix X,
   
   IntegerMatrix S = compute_S(n,i,L);
   S = S - 1;
-  
   
   for (int k = 0; k < K; k++){
     List L = List::create(X(i,_), X(S(k,0),_), X(S(k,1),_), X(S(k,2),_));
@@ -176,5 +174,4 @@ NumericMatrix calculate_G(NumericMatrix X,
   }
   return(G);
 }
-
 

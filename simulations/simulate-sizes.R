@@ -19,7 +19,7 @@ alphas = seq(0.01, 0.99, 0.01)
 
 
 # Test strategy
-test_strategy="symmetric"  # "two-step", "symmetric", "run-over", "grouping", "U-stat"
+test_strategy="U-stat"  # "two-step", "symmetric", "run-over", "grouping", "U-stat"
 B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doing some experiments)
 beta = 0.001  # just for test_strategy=="two-step"
 N = 2*n  # just for test_strategy=="U-stat"
