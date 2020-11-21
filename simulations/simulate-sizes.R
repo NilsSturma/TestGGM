@@ -4,7 +4,7 @@ library(MASS) #mvrnorm
 library(igraph)
 library(TestGLTM)
 
-#setwd("../simulations")
+
 source("../simulations/utils.R") # TOSO: add these functions to package
 
 #################
@@ -19,21 +19,24 @@ alphas = seq(0.01, 0.99, 0.01)
 
 
 # Test strategy
-test_strategy="U-stat"  # "run-over", "grouping", "two-step", "symmetric", "U-stat"
+test_strategy="symmetric"  # "two-step", "symmetric", "run-over", "grouping", "U-stat"
 B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doing some experiments)
 beta = 0.001  # just for test_strategy=="two-step"
 N = 2*n  # just for test_strategy=="U-stat"
 
 # Tree
 tree = "star_tree"  # "star_tree", "quinted_tree", "binary_rooted"
-m = 10  # (star_tree)
+m = 20  # (star_tree)
 setup = 1  # (star_tree)
 
 
 
 # Saving
-save=FALSE
-name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_", "quinted-tree_", method, "_n=", n, sep="")
+save=TRUE
+if (save){
+  setwd("../results")
+}
+name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_", "star-tree_setup=", setup, "_n=", n, "_m=", m, sep="")
 
 
 
@@ -122,14 +125,14 @@ stopCluster(cl)
 # Plot and save results #
 #########################
 
-subtitle = paste("Quinted tree - n=", n, sep="")
+subtitle = paste("Star tree n=", n, " m=", m," strategy=", test_strategy, sep="")
 title = paste("Emprical test sizes vs. nominal test levels based on ", nr_exp, " experiments", sep="")
 
 # Plot
 if (save){
   # use "./img/name.png" to save in subdirectory
-  name_pdf = paste(name, ".pdf", sep="")
-  name_rds = paste(name, ".rds", sep="")
+  name_pdf = paste("./star-tree-general/", test_strategy, "/", name, ".pdf", sep="")
+  name_rds = paste("./star-tree-general/", test_strategy, "/", name, ".rds", sep="")
   saveRDS(sizes, file = name_rds) # read with readRDS()
   pdf(name_pdf) # create pdf file
 }
