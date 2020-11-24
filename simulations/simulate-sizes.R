@@ -138,10 +138,9 @@ if (save){
 }
 
 plot(alphas, sizes, 
-     xlab="Nominal level", ylab="Emprical test size", main=title, #sub=subtitle,
+     xlab="Nominal level", ylab="Emprical test size", main=title, sub=subtitle,
      type="p", pch=1)
 abline(coef = c(0,1))
-
 if (save){
   dev.off() # close pdf file
 }
