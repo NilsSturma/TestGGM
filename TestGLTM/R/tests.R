@@ -144,7 +144,7 @@ test_U_stat <- function(X, ind_eq, ind_ineq1, ind_ineq2, N=NULL, E=1000, alphas=
   } # very unlikely that we get the same indices twice
   
   # Compute matrix H
-  H = calculate_H(X, indices_U, ind_eq, ind_ineq1, ind_ineq2, permutations)
+  H = calculate_H(X, indices_U, ind_eq, ind_ineq1, ind_ineq2)
   p = dim(H)[2]  # total nr of constraints
   p_eq = dim(ind_eq)[1]  # equality constraints
   
@@ -164,7 +164,7 @@ test_U_stat <- function(X, ind_eq, ind_ineq1, ind_ineq2, N=NULL, E=1000, alphas=
   test_stat =  max(standardizer * marginal_stats)
   
   # Compute matrix G
-  G = calculate_G(X,L=3, ind_eq, ind_ineq1, ind_ineq2, permutations, compute_S)
+  G = calculate_G(X,L=3, ind_eq, ind_ineq1, ind_ineq2)
   G_mean = Rfast::colmeans(G)
   G_centered = Rfast::transpose(Rfast::transpose(G) - G_mean)
   
