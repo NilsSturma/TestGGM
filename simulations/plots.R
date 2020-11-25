@@ -48,9 +48,10 @@ if (save){
 name = paste("results/star-tree-general/", date, "_star-tree_setup-2_n=1000_m=20.pdf", sep="")
 
 # Load data
-s1_grouping = readRDS("results/star-tree-general/grouping/2020-11-21-13-23_star-tree_setup=2_n=1000_m=20.rds")
-s1_run_over = readRDS("results/star-tree-general/run-over/2020-11-21-14-26_star-tree_setup=2_n=1000_m=20.rds")
-s1_symmetric = readRDS("results/star-tree-general/symmetric/2020-11-21-13-29_star-tree_setup=2_n=1000_m=20.rds")
+s2_grouping = readRDS("results/star-tree-general/grouping/2020-11-21-13-23_star-tree_setup=2_n=1000_m=20.rds")
+s2_run_over = readRDS("results/star-tree-general/run-over/2020-11-21-14-26_star-tree_setup=2_n=1000_m=20.rds")
+s2_U_stat= readRDS("results/star-tree-general/U-stat/2020-11-24-09-52_star-tree_setup=2_n=1000_m=20.rds")
+s2_symmetric = readRDS("results/star-tree-general/symmetric/2020-11-21-13-29_star-tree_setup=2_n=1000_m=20.rds")
 
 # Set variables
 title = "Emprical test sizes vs. nominal test levels for different test strategies. \n Star tree - setup 2"
@@ -64,14 +65,15 @@ if (save){
 }
 
 # plot (TODO: add incomplete U-stat)
-plot(alphas, s1_grouping, 
+plot(alphas, s2_grouping, 
      xlab="Nominal level", ylab="Emprical test size", main=title, sub=subtitle,
      type="p", pch=1)
-points(alphas, s1_run_over, type="p", pch=16)
-points(alphas, s1_symmetric, type="p", pch=18)
+points(alphas, s2_run_over, type="p", pch=16)
+points(alphas, s2_U_stat, type="p", pch=3)
+points(alphas, s2_symmetric, type="p", pch=18)
 abline(coef = c(0,1))
-legend("topleft", legend = c("grouping", "run-over", "symmetric"), bty = "n", lwd = 1, 
-       cex = 1.2, lty = c(NA, NA, NA), pch = c(1, 16, 18))
+legend("topleft", legend = c("grouping", "run-over", "incomplete U-statistic", "symmetric"), bty = "n", lwd = 1, 
+       cex = 1.2, lty = c(NA, NA, NA, NA), pch = c(1, 16, 3, 18))
 
 # close pdf file
 if (save){
