@@ -27,7 +27,7 @@ N = 2*n  # just for test_strategy=="U-stat"
 # Tree
 tree = "star_tree"  # "star_tree", "quinted_tree", "binary_rooted"
 m = 20  # (star_tree)
-setup = 2  # (star_tree)
+setup = 1  # (star_tree)
 
 
 
