@@ -5,7 +5,7 @@ library(igraph)
 library(TestGLTM)
 
 
-source("../simulations/utils.R") # TODO: add these functions to package
+source("simulations/utils.R") # TODO: add these functions to package
 
 #################
 # Set variables #
@@ -19,20 +19,20 @@ alphas = seq(0.01, 0.99, 0.01)
 
 
 # Test strategy
-test_strategy="U-stat"  # "two-step", "symmetric", "run-over", "grouping", "U-stat"
+test_strategy="run-over"  # "two-step", "symmetric", "run-over", "grouping", "U-stat"
 B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doing some experiments)
 beta = 0.001  # just for test_strategy=="two-step"
 N = 2*n  # just for test_strategy=="U-stat"
 
 # Tree
-tree = "star_tree"  # "star_tree", "quinted_tree", "binary_rooted"
+tree = "cat1"  # "star_tree", "quinted_tree", "binary_rooted", "cat1"
 m = 20  # (star_tree)
 setup = 1  # (star_tree)
 
 
 
 # Saving
-save=TRUE
+save=FALSE
 if (save){
   setwd("../results")
 }
@@ -50,6 +50,8 @@ if (tree=="star_tree"){
   g = binary_rooted()
 } else if (tree=="quinted_tree"){
   g = quinted_tree()
+} else if (tree=="cat1"){
+  g = cat1()
 }
 
 plot(g)
@@ -92,6 +94,10 @@ results <- foreach(nr = 1:nr_exp, .combine=rbind, .packages=c("MASS", "TestGLTM"
   } else if (tree=="binary_rooted"){
     V(g)$var = rep(2,22)
     E(g)$corr = rep(0.5,21)
+    cov = cov_from_graph(g)
+  } else if (tree=="cat1"){
+    V(g)$var = rep(2,38)
+    E(g)$corr = rep(0.8,37)
     cov = cov_from_graph(g)
   } else if (tree=="quinted_tree"){
     V(g)$var = rep(2,8)
