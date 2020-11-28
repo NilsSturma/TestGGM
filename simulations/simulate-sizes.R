@@ -22,7 +22,9 @@ alphas = seq(0.01, 0.99, 0.01)
 test_strategy="symmetric"  # "symmetric", "run-over", "U-stat", "factanal"
 B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doing some experiments)
 #beta = 0.001  # just for test_strategy=="two-step"
-N = 2*n  # just for test_strategy=="U-stat"
+
+######## !!! uncomment this again
+#N = 2*n  # just for test_strategy=="U-stat"
 
 # Tree
 tree = "star_tree"  # "star_tree", "quinted_tree", "binary_rooted", "cat1"
