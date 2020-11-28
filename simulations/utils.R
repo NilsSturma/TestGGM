@@ -1,5 +1,5 @@
 library(TestGLTM)
-
+library(igraph)
 
 
 # Create an igraph object that is the quinted tree
@@ -28,6 +28,33 @@ binary_rooted <- function(){
   g <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
   return(g)
 }
+
+cat1 <- function(){
+  colors <- c("tomato", "gray50")
+  name = seq(1,38)
+  type = c(rep(1,20), rep(2,18))
+  vertices <- data.frame(name=name, 
+                         type=type, # 1=observed, 2=latent -> always first m nodes should be observed (=leaves)
+                         color=colors[type])
+  edges <- data.frame(from=c(seq(21,38),21,38,seq(21,37)),
+                      to=c(seq(1,18),19,20,seq(22,38)))
+  g <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+  return(g)
+}
+
+cat2 <- function(){
+  colors <- c("tomato", "gray50")
+  name = seq(1,29)
+  type = c(rep(1,20), rep(2,9))
+  vertices <- data.frame(name=name, 
+                         type=type, # 1=observed, 2=latent -> always first m nodes should be observed (=leaves)
+                         color=colors[type])
+  edges <- data.frame(from=c(1,2,seq(3,11),seq(12,20),seq(21,28)),
+                      to=c(21,29,seq(21,29),seq(21,29),seq(22,29)))
+  g <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+  return(g)
+}
+
 
 
 
@@ -61,3 +88,4 @@ cov_from_star_tree <- function(g, setup=1, m=10){
   }
   return(cov)
 }
+
