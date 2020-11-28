@@ -11,15 +11,15 @@ source("simulations/utils.R") # TODO: add these functions to package
 #################
 
 # General
-n = 1000
+n_range = seq(50,1000, len=20)
 E = 1000
 nr_exp = 500
 alpha = 0.05
 m = 10  
-setup = 1
+setup = 2
 
 beta_2 = c(rep(0,(m-2)),1,1)
-H = seq(0.5,10,len=20)
+h = 2
 
 
 # Test strategy
@@ -31,16 +31,10 @@ N = 2*n  # just for test_strategy=="U-stat"
 
   
 
-if (test_strategy=="run-over"){
-  n_tilde = n-3
-} else if (test_strategy=="symmetric"){
-  n_tilde = n/4
-} else if (test_strategy=="U-stat"){
-  n_tilde = N
-}
 
-# Saving
-save=TRUE
+
+# save
+save=FALSE
 name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_", "star-tree_setup=", setup, "_n=", n, "_m=", m, sep="")
 
 
@@ -70,13 +64,9 @@ cores = 20  # detectCores()
 cl <- makeCluster(cores, outfile = "")
 registerDoParallel(cl)
 
-results <- foreach(h = H, .combine=rbind, .packages=c("MASS", "TestGLTM", "igraph")) %dopar% {
+results <- foreach(n = n_range, .combine=rbind, .packages=c("MASS", "TestGLTM", "igraph")) %dopar% {
   
   warnings()
-  
-  # Calculate covariance matric of alternative
-  cov = cov_from_star_tree(g, setup=setup, m=m)
-  cov = cov +  beta_2 %*% t(beta_2) * (h / sqrt(n_tilde))
   
   
   # Simulate power
@@ -86,8 +76,14 @@ results <- foreach(h = H, .combine=rbind, .packages=c("MASS", "TestGLTM", "igrap
     if((nr%%100) == 0){
       print(nr)
     }
+    
+    #Calculate covariance matric of alternative (depends on h)
+    cov = cov_from_star_tree(g, setup=setup, m=m)
+    cov = cov +  beta_2 %*% t(beta_2) * (h / sqrt(n))
+    
     # Generate n indep datasets from the alternative
     X = mvrnorm(n, mu=rep(0,nrow(cov)), Sigma=cov)
+    
     # Call the test
     if (test_strategy=="run-over"){
       powers[nr] = test_m_dep(X, ind_eq, ind_ineq1, ind_ineq2, B=B, E=E, alphas=alpha)
@@ -106,23 +102,22 @@ stopCluster(cl)
 # Plot
 if (save){
   # use "./img/name.png" to save in subdirectory
-  name_pdf = paste("results/star-tree-general/", test_strategy, "/power-fixed-n/", name, ".pdf", sep="")
-  name_rds = paste("results/star-tree-general/", test_strategy, "/power-fixed-n/", name, ".rds", sep="")
+  name_pdf = paste("results/star-tree-general/", test_strategy, "/power-fixed-alternative/", name, ".pdf", sep="")
+  name_rds = paste("results/star-tree-general/", test_strategy, "/power-fixed-alternative/", name, ".rds", sep="")
   saveRDS(results, file = name_rds) # read with readRDS()
   pdf(name_pdf) # create pdf file
 }
 
 
-title = paste("Emprical power for different local alternatives. \nStar tree - setup ", setup, sep="")
-subtitle = "local alternative = psi + b*t(b) + c*c(b)*h/sqrt(n) with c=(rep(0,m-2),1,1)."
-plot(H, results, 
-     xlab="h", ylab="Emprical power", main=title, sub=subtitle,
+title = paste("Emprical power for different n on a fixed alternative. \nStar tree - setup ", setup, sep="")
+subtitle = paste("Local alternative = psi + b*t(b) + c*t(c) *", h, "/sqrt(n) with c=(rep(0,m-2),1,1).", sep="")
+plot(n_range, results, 
+     xlab="n", ylab="Emprical power", main=title, sub=subtitle,
      type="p", pch=1)
 legend = c(paste("test-strategy = ", test_strategy, sep=""), 
            paste(nr_exp, " experiments", sep=""), 
-           paste("N = ", n, sep=""), 
            paste("m = ", m, sep=""))
-legend("topleft", legend =legend, bty = "n", lwd=0.1,
+legend("bottomright", legend =legend, bty = "n", lwd=0.1,
        cex = 1, lty = c(NA, NA, NA, NA))
 
 if (save){
