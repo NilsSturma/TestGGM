@@ -29,7 +29,7 @@ B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doin
 # Tree
 tree = "star_tree"  # "star_tree", "quinted_tree", "binary_rooted", "cat1"
 m = 20  # (star_tree)
-setup = 1  # (star_tree)
+setup = 2  # (star_tree)
 
 
 
