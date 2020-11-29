@@ -19,12 +19,8 @@ alphas = seq(0.01, 0.99, 0.01)
 
 
 # Test strategy
-test_strategy="run-over"  # "symmetric", "run-over", "U-stat", "factanal"
+test_strategy="U-stat"  # "symmetric", "run-over", "U-stat", "factanal"
 B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doing some experiments)
-#beta = 0.001  # just for test_strategy=="two-step"
-
-######## !!! uncomment this again
-#N = 2*n  # just for test_strategy=="U-stat"
 
 # Tree
 tree = "star_tree"  # "star_tree", "quinted_tree", "binary_rooted", "cat1"
@@ -115,6 +111,7 @@ for (n in n_range){
     } else if (test_strategy=="symmetric"){
       result = test_symmetric(X, ind_eq, ind_ineq1, ind_ineq2, E=E, alphas=alphas)
     } else if (test_strategy=="U-stat"){
+      N = 2*n
       result = test_U_stat(X, ind_eq, ind_ineq1, ind_ineq2, N=N, E=E, alphas=alphas)
     }
     result = as.numeric(result)
