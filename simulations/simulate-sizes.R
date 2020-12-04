@@ -19,13 +19,13 @@ alphas = seq(0.01, 0.99, 0.01)
 
 
 # Test strategy
-test_strategy="U-stat"  # "symmetric", "run-over", "U-stat", "factanal"
+test_strategy="symmetric"  # "symmetric", "run-over", "U-stat", "factanal"
 B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doing some experiments)
 
 # Tree
-tree = "star_tree"  # "star_tree", "quinted_tree", "binary_rooted", "cat1"
-m = 20  # (star_tree)
-setup = 1  # (star_tree)
+tree = "cat2"  # "star_tree", "quinted_tree", "binary_rooted", "cat1"
+#m = 20  # (star_tree)
+#setup = 1  # (star_tree)
 
 
 
@@ -46,6 +46,8 @@ if (tree=="star_tree"){
   g = quinted_tree()
 } else if (tree=="cat1"){
   g = cat1()
+} else if (tree=="cat2"){
+  g = cat2()
 }
 
 plot(g)
@@ -54,8 +56,8 @@ res = collect_indices(g)
 ind_eq = matrix(unlist(res[[1]]), ncol = 8, byrow = TRUE)
 ind_ineq1 = matrix(unlist(res[[2]]), ncol = 6, byrow = TRUE)
 ind_ineq2 = matrix(unlist(res[[3]]), ncol = 8, byrow = TRUE)
-
-
+p = dim(ind_eq)[1] + dim(ind_ineq1)[1] + dim(ind_ineq2)[1]
+print(p)
 
 
 #######################################
@@ -94,7 +96,11 @@ for (n in n_range){
       V(g)$var = rep(2,38)
       E(g)$corr = rep(0.8,37)
       cov = cov_from_graph(g)
-    } else if (tree=="quinted_tree"){
+    } else if (tree=="cat2"){
+      V(g)$var = rep(2,29)
+      E(g)$corr = rep(0.7,28)
+      cov = cov_from_graph(g)
+    }else if (tree=="quinted_tree"){
       V(g)$var = rep(2,8)
       E(g)$corr = rep(0.5,7)
       cov = cov_from_graph(g)
@@ -125,14 +131,18 @@ for (n in n_range){
   #########################
   # Plot and save results #
   #########################
-  name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_", "star-tree_setup=", setup, "_n=", n, "_m=", m, sep="")
-  subtitle = paste("Star tree n=", n, " m=", m," strategy=", test_strategy, sep="")
-  title = paste("Emprical test sizes vs. nominal test levels based on ", nr_exp, " experiments. \n Star tree - setup ", setup, sep="")
+  #name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_", "star-tree_setup=", setup, "_n=", n, "_m=", m, sep="")
+  #subtitle = paste("Star tree n=", n, " m=", m," strategy=", test_strategy, sep="")
+  #title = paste("Emprical test sizes vs. nominal test levels based on ", nr_exp, " experiments. \n Star tree - setup ", setup, sep="")
+  name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_", "cat2", "_n=", n,  sep="")
+  subtitle = paste("Caterpillar tree n=", n, " m=20 strategy=", test_strategy, sep="")
+  title = paste("Emprical test sizes vs. nominal test levels based on ", nr_exp, " experiments. \n Caterpillar tree", sep="")
+  
   # Plot
   if (save){
     # use "./img/name.png" to save in subdirectory
-    name_pdf = paste("./results/", test_strategy, "/sizes/", name, ".pdf", sep="")
-    name_rds = paste("./results/", test_strategy, "/sizes/", name, ".rds", sep="")
+    name_pdf = paste("./results/", test_strategy, "/sizes-cat/", name, ".pdf", sep="")
+    name_rds = paste("./results/", test_strategy, "/sizes-cat/", name, ".rds", sep="")
     saveRDS(sizes, file = name_rds) # read with readRDS()
     pdf(name_pdf) # create pdf file
   }
