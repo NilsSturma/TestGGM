@@ -31,6 +31,8 @@ IntegerMatrix compute_S(int n, int i, int L){
 }
 
 
+
+
 // [[Rcpp::export]]
 IntegerMatrix permutations(int n){
   
@@ -190,3 +192,95 @@ NumericMatrix calculate_G(NumericMatrix X,
   }
   return(G);
 }
+
+
+////////////////////////
+// calculate G faster //
+////////////////////////
+// [[Rcpp::export]]
+int test123(){
+  int s =  min(IntegerVector::create(32, 33));
+  return s;
+}
+
+
+// [[Rcpp::export]]
+IntegerMatrix compute_S_small(int n, int i, int L, int K){
+  
+  IntegerVector v(n-1);
+  for (int j = 1; j < (n+1); ++j){
+    if (j < i){
+      v[j-1] = j;
+    } else if (j==i) {
+      continue;
+    } else {
+      v[j-2] = j;
+    }
+  }
+  // Only use n1 sets S
+  int K_max = floor((n-1)/L);
+  IntegerVector K_sets = sample(K_max,K)-1;
+  IntegerVector sequence(L);
+  IntegerMatrix res(K,L);
+  
+  for (int k = 0; k < K; ++k){
+    sequence = seq((K_sets[k]*L), (((K_sets[k]+1)*L)-1));
+    for (int l = 0; l < L; l++){
+      res(k,l)=v[sequence[l]];
+    }
+  }
+  return res;
+}
+
+// [[Rcpp::export]]
+NumericVector g_small(NumericMatrix X,
+                int i,
+                int L,
+                int n1,
+                IntegerMatrix ind_eq, 
+                IntegerMatrix ind_ineq1, 
+                IntegerMatrix ind_ineq2,
+                IntegerMatrix perm){
+  
+  int n = X.nrow();
+  NumericVector g(ind_eq.nrow()+ind_ineq1.nrow()+ind_ineq2.nrow());
+  
+  int K_max = floor((n-1)/L);
+  int K =  min(IntegerVector::create(n1, K_max));
+  
+  IntegerMatrix S = compute_S_small(n,i,L,K);
+  S = S - 1;
+  
+  for (int k = 0; k < K; k++){
+    List L = List::create(X(i,_), X(S(k,0),_), X(S(k,1),_), X(S(k,2),_));
+    g = g + h(L, ind_eq, ind_ineq1, ind_ineq2, perm);
+  }
+  return(g/K);
+}
+
+
+
+// [[Rcpp::export]]
+NumericMatrix calculate_G_small(NumericMatrix X,
+                          int L,
+                          int n1,
+                          IntegerMatrix ind_eq, 
+                          IntegerMatrix ind_ineq1, 
+                          IntegerMatrix ind_ineq2){
+  
+  int n = X.nrow();
+  NumericMatrix G(n1, ind_eq.nrow()+ind_ineq1.nrow()+ind_ineq2.nrow());
+  
+  IntegerMatrix perm = permutations(4);
+  perm = perm - 1;
+  
+  IntegerVector I = sample(n,n1)-1;
+  
+  for (int i = 0; i < n1; i++){
+    G(i,_) = g_small(X, I[i], L, n1, ind_eq, ind_ineq1, ind_ineq2, perm);
+  }
+  return(G);
+}
+
+
+

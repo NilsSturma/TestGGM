@@ -120,7 +120,7 @@ test_grouping <- function(X, ind_eq, ind_ineq1, ind_ineq2, E=1000, alphas=seq(0.
 
 
 
-test_U_stat <- function(X, ind_eq, ind_ineq1, ind_ineq2, N=NULL, E=1000, alphas=seq(0.01, 0.99, 0.01)){
+test_U_stat <- function(X, ind_eq, ind_ineq1, ind_ineq2, N=NULL, n1, E=1000, alphas=seq(0.01, 0.99, 0.01)){
   
   
   n = dim(X)[1]  # nr of samples
@@ -145,7 +145,7 @@ test_U_stat <- function(X, ind_eq, ind_ineq1, ind_ineq2, N=NULL, E=1000, alphas=
   p_eq = dim(ind_eq)[1]  # equality constraints
   
   # Compute matrix G
-  G = calculate_G(X,L=3, ind_eq, ind_ineq1, ind_ineq2)
+  G = calculate_G_small(X,L=3, n1=n1,ind_eq, ind_ineq1, ind_ineq2)
   G_mean = Rfast::colmeans(G)
   G_centered = Rfast::transpose(Rfast::transpose(G) - G_mean)
   

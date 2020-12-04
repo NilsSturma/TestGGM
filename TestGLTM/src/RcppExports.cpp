@@ -123,6 +123,64 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// test123
+int test123();
+RcppExport SEXP _TestGLTM_test123() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(test123());
+    return rcpp_result_gen;
+END_RCPP
+}
+// compute_S_small
+IntegerMatrix compute_S_small(int n, int i, int L, int K);
+RcppExport SEXP _TestGLTM_compute_S_small(SEXP nSEXP, SEXP iSEXP, SEXP LSEXP, SEXP KSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type i(iSEXP);
+    Rcpp::traits::input_parameter< int >::type L(LSEXP);
+    Rcpp::traits::input_parameter< int >::type K(KSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_S_small(n, i, L, K));
+    return rcpp_result_gen;
+END_RCPP
+}
+// g_small
+NumericVector g_small(NumericMatrix X, int i, int L, int n1, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2, IntegerMatrix perm);
+RcppExport SEXP _TestGLTM_g_small(SEXP XSEXP, SEXP iSEXP, SEXP LSEXP, SEXP n1SEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP, SEXP permSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
+    Rcpp::traits::input_parameter< int >::type i(iSEXP);
+    Rcpp::traits::input_parameter< int >::type L(LSEXP);
+    Rcpp::traits::input_parameter< int >::type n1(n1SEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_eq(ind_eqSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq1(ind_ineq1SEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq2(ind_ineq2SEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type perm(permSEXP);
+    rcpp_result_gen = Rcpp::wrap(g_small(X, i, L, n1, ind_eq, ind_ineq1, ind_ineq2, perm));
+    return rcpp_result_gen;
+END_RCPP
+}
+// calculate_G_small
+NumericMatrix calculate_G_small(NumericMatrix X, int L, int n1, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2);
+RcppExport SEXP _TestGLTM_calculate_G_small(SEXP XSEXP, SEXP LSEXP, SEXP n1SEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
+    Rcpp::traits::input_parameter< int >::type L(LSEXP);
+    Rcpp::traits::input_parameter< int >::type n1(n1SEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_eq(ind_eqSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq1(ind_ineq1SEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq2(ind_ineq2SEXP);
+    rcpp_result_gen = Rcpp::wrap(calculate_G_small(X, L, n1, ind_eq, ind_ineq1, ind_ineq2));
+    return rcpp_result_gen;
+END_RCPP
+}
 // bootstrap_independent
 NumericVector bootstrap_independent(int E, NumericVector standardizer, NumericMatrix Y_centered, int p_eq);
 RcppExport SEXP _TestGLTM_bootstrap_independent(SEXP ESEXP, SEXP standardizerSEXP, SEXP Y_centeredSEXP, SEXP p_eqSEXP) {
@@ -177,6 +235,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_TestGLTM_calculate_H_not_symmetric", (DL_FUNC) &_TestGLTM_calculate_H_not_symmetric, 5},
     {"_TestGLTM_g", (DL_FUNC) &_TestGLTM_g, 7},
     {"_TestGLTM_calculate_G", (DL_FUNC) &_TestGLTM_calculate_G, 5},
+    {"_TestGLTM_test123", (DL_FUNC) &_TestGLTM_test123, 0},
+    {"_TestGLTM_compute_S_small", (DL_FUNC) &_TestGLTM_compute_S_small, 4},
+    {"_TestGLTM_g_small", (DL_FUNC) &_TestGLTM_g_small, 8},
+    {"_TestGLTM_calculate_G_small", (DL_FUNC) &_TestGLTM_calculate_G_small, 6},
     {"_TestGLTM_bootstrap_independent", (DL_FUNC) &_TestGLTM_bootstrap_independent, 4},
     {"_TestGLTM_bootstrap_m_dep", (DL_FUNC) &_TestGLTM_bootstrap_m_dep, 6},
     {"_TestGLTM_bootstrap_U", (DL_FUNC) &_TestGLTM_bootstrap_U, 4},

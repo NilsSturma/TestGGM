@@ -33,6 +33,22 @@ calculate_G <- function(X, L, ind_eq, ind_ineq1, ind_ineq2) {
     .Call(`_TestGLTM_calculate_G`, X, L, ind_eq, ind_ineq1, ind_ineq2)
 }
 
+test123 <- function() {
+    .Call(`_TestGLTM_test123`)
+}
+
+compute_S_small <- function(n, i, L, K) {
+    .Call(`_TestGLTM_compute_S_small`, n, i, L, K)
+}
+
+g_small <- function(X, i, L, n1, ind_eq, ind_ineq1, ind_ineq2, perm) {
+    .Call(`_TestGLTM_g_small`, X, i, L, n1, ind_eq, ind_ineq1, ind_ineq2, perm)
+}
+
+calculate_G_small <- function(X, L, n1, ind_eq, ind_ineq1, ind_ineq2) {
+    .Call(`_TestGLTM_calculate_G_small`, X, L, n1, ind_eq, ind_ineq1, ind_ineq2)
+}
+
 bootstrap_independent <- function(E, standardizer, Y_centered, p_eq) {
     .Call(`_TestGLTM_bootstrap_independent`, E, standardizer, Y_centered, p_eq)
 }
