@@ -76,6 +76,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// calculate_H_not_symmetric
+NumericMatrix calculate_H_not_symmetric(NumericMatrix X, IntegerMatrix indices_U, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2);
+RcppExport SEXP _TestGLTM_calculate_H_not_symmetric(SEXP XSEXP, SEXP indices_USEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type indices_U(indices_USEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_eq(ind_eqSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq1(ind_ineq1SEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq2(ind_ineq2SEXP);
+    rcpp_result_gen = Rcpp::wrap(calculate_H_not_symmetric(X, indices_U, ind_eq, ind_ineq1, ind_ineq2));
+    return rcpp_result_gen;
+END_RCPP
+}
 // g
 NumericVector g(NumericMatrix X, int i, int L, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2, IntegerMatrix perm);
 RcppExport SEXP _TestGLTM_g(SEXP XSEXP, SEXP iSEXP, SEXP LSEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP, SEXP permSEXP) {
@@ -105,61 +120,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq1(ind_ineq1SEXP);
     Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq2(ind_ineq2SEXP);
     rcpp_result_gen = Rcpp::wrap(calculate_G(X, L, ind_eq, ind_ineq1, ind_ineq2));
-    return rcpp_result_gen;
-END_RCPP
-}
-// findn
-int findn(int N, int D);
-RcppExport SEXP _TestGLTM_findn(SEXP NSEXP, SEXP DSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type N(NSEXP);
-    Rcpp::traits::input_parameter< int >::type D(DSEXP);
-    rcpp_result_gen = Rcpp::wrap(findn(N, D));
-    return rcpp_result_gen;
-END_RCPP
-}
-// calculate_Y_independent
-NumericMatrix calculate_Y_independent(NumericMatrix X, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2);
-RcppExport SEXP _TestGLTM_calculate_Y_independent(SEXP XSEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
-    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_eq(ind_eqSEXP);
-    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq1(ind_ineq1SEXP);
-    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq2(ind_ineq2SEXP);
-    rcpp_result_gen = Rcpp::wrap(calculate_Y_independent(X, ind_eq, ind_ineq1, ind_ineq2));
-    return rcpp_result_gen;
-END_RCPP
-}
-// calculate_Y_symmetric
-NumericMatrix calculate_Y_symmetric(NumericMatrix X, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2, IntegerMatrix perm);
-RcppExport SEXP _TestGLTM_calculate_Y_symmetric(SEXP XSEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP, SEXP permSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
-    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_eq(ind_eqSEXP);
-    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq1(ind_ineq1SEXP);
-    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq2(ind_ineq2SEXP);
-    Rcpp::traits::input_parameter< IntegerMatrix >::type perm(permSEXP);
-    rcpp_result_gen = Rcpp::wrap(calculate_Y_symmetric(X, ind_eq, ind_ineq1, ind_ineq2, perm));
-    return rcpp_result_gen;
-END_RCPP
-}
-// calculate_Y_m_dep
-NumericMatrix calculate_Y_m_dep(NumericMatrix X, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2);
-RcppExport SEXP _TestGLTM_calculate_Y_m_dep(SEXP XSEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
-    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_eq(ind_eqSEXP);
-    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq1(ind_ineq1SEXP);
-    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq2(ind_ineq2SEXP);
-    rcpp_result_gen = Rcpp::wrap(calculate_Y_m_dep(X, ind_eq, ind_ineq1, ind_ineq2));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -214,12 +174,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_TestGLTM_h_tilde", (DL_FUNC) &_TestGLTM_h_tilde, 7},
     {"_TestGLTM_h", (DL_FUNC) &_TestGLTM_h, 5},
     {"_TestGLTM_calculate_H", (DL_FUNC) &_TestGLTM_calculate_H, 5},
+    {"_TestGLTM_calculate_H_not_symmetric", (DL_FUNC) &_TestGLTM_calculate_H_not_symmetric, 5},
     {"_TestGLTM_g", (DL_FUNC) &_TestGLTM_g, 7},
     {"_TestGLTM_calculate_G", (DL_FUNC) &_TestGLTM_calculate_G, 5},
-    {"_TestGLTM_findn", (DL_FUNC) &_TestGLTM_findn, 2},
-    {"_TestGLTM_calculate_Y_independent", (DL_FUNC) &_TestGLTM_calculate_Y_independent, 4},
-    {"_TestGLTM_calculate_Y_symmetric", (DL_FUNC) &_TestGLTM_calculate_Y_symmetric, 5},
-    {"_TestGLTM_calculate_Y_m_dep", (DL_FUNC) &_TestGLTM_calculate_Y_m_dep, 4},
     {"_TestGLTM_bootstrap_independent", (DL_FUNC) &_TestGLTM_bootstrap_independent, 4},
     {"_TestGLTM_bootstrap_m_dep", (DL_FUNC) &_TestGLTM_bootstrap_m_dep, 6},
     {"_TestGLTM_bootstrap_U", (DL_FUNC) &_TestGLTM_bootstrap_U, 4},

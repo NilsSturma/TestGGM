@@ -130,6 +130,22 @@ NumericMatrix calculate_H(NumericMatrix X,
 }
 
 
+// [[Rcpp::export]]
+NumericMatrix calculate_H_not_symmetric(NumericMatrix X,
+                          IntegerMatrix indices_U, 
+                          IntegerMatrix ind_eq, 
+                          IntegerMatrix ind_ineq1, 
+                          IntegerMatrix ind_ineq2){
+  
+  NumericMatrix H(indices_U.nrow(), ind_eq.nrow()+ind_ineq1.nrow()+ind_ineq2.nrow());
+  indices_U = indices_U - 1;
+  for (int i = 0; i < indices_U.nrow(); i++){
+    H(i,_) = h_tilde(X(indices_U(i,0),_), X(indices_U(i,1),_), X(indices_U(i,2),_), X(indices_U(i,3),_), ind_eq, ind_ineq1, ind_ineq2);
+  }
+  return(H);
+}
+
+
 // Calculation of g_i(X_i)
 // [[Rcpp::export]]
 NumericVector g(NumericMatrix X,
@@ -174,4 +190,3 @@ NumericMatrix calculate_G(NumericMatrix X,
   }
   return(G);
 }
-

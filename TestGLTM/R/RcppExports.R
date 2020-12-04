@@ -21,28 +21,16 @@ calculate_H <- function(X, indices_U, ind_eq, ind_ineq1, ind_ineq2) {
     .Call(`_TestGLTM_calculate_H`, X, indices_U, ind_eq, ind_ineq1, ind_ineq2)
 }
 
+calculate_H_not_symmetric <- function(X, indices_U, ind_eq, ind_ineq1, ind_ineq2) {
+    .Call(`_TestGLTM_calculate_H_not_symmetric`, X, indices_U, ind_eq, ind_ineq1, ind_ineq2)
+}
+
 g <- function(X, i, L, ind_eq, ind_ineq1, ind_ineq2, perm) {
     .Call(`_TestGLTM_g`, X, i, L, ind_eq, ind_ineq1, ind_ineq2, perm)
 }
 
 calculate_G <- function(X, L, ind_eq, ind_ineq1, ind_ineq2) {
     .Call(`_TestGLTM_calculate_G`, X, L, ind_eq, ind_ineq1, ind_ineq2)
-}
-
-findn <- function(N, D) {
-    .Call(`_TestGLTM_findn`, N, D)
-}
-
-calculate_Y_independent <- function(X, ind_eq, ind_ineq1, ind_ineq2) {
-    .Call(`_TestGLTM_calculate_Y_independent`, X, ind_eq, ind_ineq1, ind_ineq2)
-}
-
-calculate_Y_symmetric <- function(X, ind_eq, ind_ineq1, ind_ineq2, perm) {
-    .Call(`_TestGLTM_calculate_Y_symmetric`, X, ind_eq, ind_ineq1, ind_ineq2, perm)
-}
-
-calculate_Y_m_dep <- function(X, ind_eq, ind_ineq1, ind_ineq2) {
-    .Call(`_TestGLTM_calculate_Y_m_dep`, X, ind_eq, ind_ineq1, ind_ineq2)
 }
 
 bootstrap_independent <- function(E, standardizer, Y_centered, p_eq) {
