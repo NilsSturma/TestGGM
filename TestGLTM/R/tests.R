@@ -145,7 +145,7 @@ test_U_stat <- function(X, ind_eq, ind_ineq1, ind_ineq2, N=NULL, n1, E=1000, alp
   p_eq = dim(ind_eq)[1]  # equality constraints
   
   # Compute matrix G
-  G = calculate_G_small(X,L=3, n1=n1,ind_eq, ind_ineq1, ind_ineq2)
+  G = calculate_G_small(X,L=3, n1=n1, ind_eq, ind_ineq1, ind_ineq2)
   G_mean = Rfast::colmeans(G)
   G_centered = Rfast::transpose(Rfast::transpose(G) - G_mean)
   
