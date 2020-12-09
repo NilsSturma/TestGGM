@@ -12,8 +12,8 @@ source("simulations/utils.R") # TODO: add these functions to package
 #################
 
 # General
-#n_range = c(500)
-n = 500
+n_range = c(100,1000,2000)
+#n = 500
 E = 1000
 nr_exp = 500
 alphas = seq(0.01, 0.99, 0.01)
@@ -27,7 +27,7 @@ tree = "star_tree"  # "star_tree", "quinted_tree", "binary_rooted", "cat1"
 m = 20  # (star_tree)
 setup = 2  # (star_tree)
 
-N_range = c(2*n, 5*n, round(n**1.5), round(n**1.8), round(n**2))
+#N_range = c(2*n, 5*n, round(n**1.5), round(n**1.8), round(n**2))
 
 # Saving
 save=TRUE
@@ -67,8 +67,8 @@ print(p)
 # bootstrap_test(X, g, alpha=0.05, method="run-over", B=5)
 
 
-for (N in N_range){
-  
+for (n in n_range){
+  print(paste("n=",n ,sep=""))
   ###############################################
   # Compute empirical test sizes for all alphas #
   ###############################################
@@ -116,7 +116,7 @@ for (N in N_range){
     } else if (test_strategy=="grouping"){
       result = test_grouping(X, ind_eq, ind_ineq1, ind_ineq2, E=E, alphas=alphas)
     } else if (test_strategy=="U-stat"){
-      #N = 2*n
+      N = round(n**1.5)
       n1 = round(n**(3/4))
       result = test_U_stat(X, ind_eq, ind_ineq1, ind_ineq2, N=N, n1=n1, E=E, alphas=alphas)
     }
@@ -131,8 +131,8 @@ for (N in N_range){
   #########################
   # Plot and save results #
   #########################
-  #name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_", "star-tree_setup=", setup, "_n=", n, "_m=", m, sep="")
-  name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_", "star-tree_setup=", setup, "_N=", N, sep="")
+  name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_", "star-tree_setup=", setup, "_n=", n, "_m=", m, sep="")
+  #name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_", "star-tree_setup=", setup, "_N=", N, sep="")
   subtitle = paste("Star tree n=", n, " m=", m," strategy=", test_strategy, sep="")
   title = paste("Emprical test sizes vs. nominal test levels based on ", nr_exp, " experiments. \n Star tree - setup ", setup, sep="")
   # name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_", "cat2", "_n=", n,  sep="")
@@ -142,8 +142,8 @@ for (N in N_range){
   # Plot
   if (save){
     # use "./img/name.png" to save in subdirectory
-    name_pdf = paste("./results/", test_strategy, "/vary-N/", name, ".pdf", sep="")
-    name_rds = paste("./results/", test_strategy, "/vary-N/", name, ".rds", sep="")
+    name_pdf = paste("./results/", test_strategy, "/sizes/", name, ".pdf", sep="")
+    name_rds = paste("./results/", test_strategy, "/sizes/", name, ".rds", sep="")
     saveRDS(sizes, file = name_rds) # read with readRDS()
     pdf(name_pdf) # create pdf file
   }
