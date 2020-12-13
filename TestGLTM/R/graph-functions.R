@@ -84,7 +84,7 @@ collect_indices <- function(g){
 cov_from_graph = function(g){
   
   # g is an igraph object with the following attributes
-  # type: 1= observes, 2=unobserved
+  # type: 1= observed, 2=unobserved
   # var: variances for all nodes
   # corr: correlation for all edges in (-1,1)
   
@@ -102,3 +102,9 @@ cov_from_graph = function(g){
   cov = (diag(std) %*% corr %*% diag(std))
   return(cov)
 }
+
+
+
+
+
+

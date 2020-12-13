@@ -19,11 +19,11 @@ nr_exp = 500
 alphas = seq(0.01, 0.99, 0.01)
 
 # Test strategy
-test_strategy="U-stat"  # "grouping", "run-over", "U-stat", "factanal"
+test_strategy="U-stat"  # "grouping", "run-over", "U-stat", "LR"
 B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doing some experiments)
 
 # Tree
-tree = "star_tree"  # "star_tree", "quinted_tree", "binary_rooted", "cat1"
+tree = "cat_binary"  # "star_tree", "cat_binary"
 m = 20  # (star_tree)
 setup = 2  # (star_tree)
 
@@ -39,15 +39,9 @@ save=TRUE
 
 if (tree=="star_tree"){
   g = star_tree(m)
-} else if (tree=="binary_rooted"){
-  g = binary_rooted()
-} else if (tree=="quinted_tree"){
-  g = quinted_tree()
-} else if (tree=="cat1"){
-  g = cat1()
-} else if (tree=="cat2"){
-  g = cat2()
-}
+} else if (tree=="cat_binary"){
+  g = cat_binary()
+} 
 
 plot(g)
 
@@ -87,34 +81,26 @@ for (n in n_range){
     # Generate n independent data sets depending on setup
     if (tree=="star_tree"){
       cov = cov_from_star_tree(g, setup=setup, m=m)
-    } else if (tree=="binary_rooted"){
-      V(g)$var = rep(2,22)
-      E(g)$corr = rep(0.5,21)
-      cov = cov_from_graph(g)
-    } else if (tree=="cat1"){
-      V(g)$var = rep(2,38)
-      E(g)$corr = rep(0.8,37)
-      cov = cov_from_graph(g)
-    } else if (tree=="cat2"){
-      V(g)$var = rep(2,29)
-      E(g)$corr = rep(0.7,28)
-      cov = cov_from_graph(g)
-    }else if (tree=="quinted_tree"){
-      V(g)$var = rep(2,8)
-      E(g)$corr = rep(0.5,7)
+    } else if (tree=="cat_binary"){
+      V(g)$var = rep(1,38)
+      E(g)$corr = rep(0.7,37)
       cov = cov_from_graph(g)
     }
     
     X = mvrnorm(n, mu=rep(0,nrow(cov)), Sigma=cov)
     
     # Call the test
-    if (test_strategy=="run-over"){
-      result = test_run_over(X, ind_eq, ind_ineq1, ind_ineq2, B=B, E=E, alphas=alphas)
-    } else if (test_strategy=="factanal"){
-      res = factanal(X, 1)
-      result = res[["PVAL"]] <= alphas # result: TRUE = rejected
+    if (test_strategy=="LR"){
+      if (tree=="star_tree"){
+        res = factanal(X, 1)
+        result = res[["PVAL"]] <= alphas # result: TRUE = rejected
+      } else (tree=="cat_binary"){
+        result = LR_test(X,g) <= alphas # result: TRUE = rejected
+      }
     } else if (test_strategy=="grouping"){
       result = test_grouping(X, ind_eq, ind_ineq1, ind_ineq2, E=E, alphas=alphas)
+    } else if (test_strategy=="run-over"){
+      result = test_run_over(X, ind_eq, ind_ineq1, ind_ineq2, B=B, E=E, alphas=alphas)
     } else if (test_strategy=="U-stat"){
       N = round(n**1.5)
       n1 = round(n**(3/4))

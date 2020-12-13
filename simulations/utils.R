@@ -29,7 +29,7 @@ binary_rooted <- function(){
   return(g)
 }
 
-cat1 <- function(){
+cat_binary <- function(){
   colors <- c("tomato", "gray50")
   name = seq(1,38)
   type = c(rep(1,20), rep(2,18))
@@ -42,7 +42,7 @@ cat1 <- function(){
   return(g)
 }
 
-cat2 <- function(){
+cat <- function(){
   colors <- c("tomato", "gray50")
   name = seq(1,29)
   type = c(rep(1,20), rep(2,9))
