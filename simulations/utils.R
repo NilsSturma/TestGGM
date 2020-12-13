@@ -76,8 +76,7 @@ star_tree <- function(m=10){
 # Sample covariance matrix from star tree depending on setup
 cov_from_star_tree <- function(g, setup=1, m=10){
   if (setup==1){
-    V(g)$var = rep(2,m+1)
-    # for unobserved node: variance does not matter
+    V(g)$var = c(rep(2,m),1)
     E(g)$corr = rep(sqrt(0.5),m)
     cov = cov_from_graph(g)
   } else if (setup==2){
@@ -86,6 +85,6 @@ cov_from_star_tree <- function(g, setup=1, m=10){
     E(g)$corr = beta / sqrt(beta**2+rep(1/3,m))
     cov = cov_from_graph(g)
   }
-  return(list(cov, g))
+  return(cov)
 }
 

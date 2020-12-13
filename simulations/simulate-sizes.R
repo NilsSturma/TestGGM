@@ -19,18 +19,18 @@ nr_exp = 500
 alphas = seq(0.01, 0.99, 0.01)
 
 # Test strategy
-test_strategy="LR"  # "grouping", "run-over", "U-stat", "LR"
+test_strategy="grouping"  # "grouping", "run-over", "U-stat", "LR"
 B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doing some experiments)
 
 # Tree
-tree = "star_tree"  # "star_tree", "cat_binary"
-m = 10  # (star_tree)
+tree = "cat_binary"  # "star_tree", "cat_binary"
+m = 20  # (star_tree)
 setup = 2  # (star_tree)
 
 #N_range = c(2*n, 5*n, round(n**1.5), round(n**1.8), round(n**2))
 
 # Saving
-save=FALSE
+save=TRUE
 
 
 ###################################
@@ -71,7 +71,10 @@ cores = 20  # detectCores()
 cl <- makeCluster(cores, outfile = "")
 registerDoParallel(cl)
 
-results <- foreach(nr = 1:nr_exp, .combine=rbind, .packages=c("MASS", "TestGLTM", "igraph")) %dopar% {
+results <- foreach(nr = 1:nr_exp, 
+                   .combine=rbind, 
+                   .errorhandling="remove",   # "pass", "stop"
+                   .packages=c("MASS", "TestGLTM", "igraph")) %dopar% {
   
   if((nr%%10) == 0){
     print(nr)
@@ -80,9 +83,7 @@ results <- foreach(nr = 1:nr_exp, .combine=rbind, .packages=c("MASS", "TestGLTM"
   
   # Generate n independent data sets depending on setup
   if (tree=="star_tree"){
-    res = cov_from_star_tree(g, setup=setup, m=m)
-    cov = res[[1]]
-    g = res[[2]]
+    cov = cov_from_star_tree(g, setup=setup, m=m)
   } else if (tree=="cat_binary"){
     V(g)$var = rep(1,38)
     E(g)$corr = rep(0.7,37)
@@ -97,7 +98,12 @@ results <- foreach(nr = 1:nr_exp, .combine=rbind, .packages=c("MASS", "TestGLTM"
     #  res = factanal(X, 1)
     #  result = res[["PVAL"]] <= alphas # result: TRUE = rejected
     #} else if (tree=="cat_binary"){
+    
+    # start values
+    #V(g)$var = 1
+    #E(g)$corr = 0.5
     result = LR_test(X,g) <= alphas # result: TRUE = rejected
+    
     #}
   } else if (test_strategy=="grouping"){
     result = test_grouping(X, ind_eq, ind_ineq1, ind_ineq2, E=E, alphas=alphas)
@@ -111,6 +117,10 @@ results <- foreach(nr = 1:nr_exp, .combine=rbind, .packages=c("MASS", "TestGLTM"
   result = as.numeric(result)
 }
 
+if (dim(results)[1] != nr_exp){
+  print(paste("ERROR - ", (nr_exp-dim(results)[1]), " tasks where not succesful.", sep=""))
+}
+
 sizes = colMeans(results)
 stopCluster(cl)
 
@@ -119,13 +129,20 @@ stopCluster(cl)
 #########################
 # Plot and save results #
 #########################
-name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_", "star-tree_setup=", setup, "_n=", n, "_m=", m, sep="")
+
+if (tree=="star_tree"){
+  name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_", "star-tree_setup=", setup, "_n=", n, "_m=", m, sep="")
+  subtitle = paste("Star tree n=", n, " m=", m," strategy=", test_strategy, sep="")
+  title = paste("Emprical test sizes vs. nominal test levels based on ", nr_exp, " experiments. \n Star tree - setup ", setup, sep="")
+} else if (tree="cat_binary"){
+  name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_", "caterpillar", "_n=", n,  sep="")
+  subtitle = paste("Caterpillar tree n=", n, " m=20 strategy=", test_strategy, sep="")
+  title = paste("Emprical test sizes vs. nominal test levels based on ", nr_exp, " experiments. \n Caterpillar tree", sep="")
+}
+
 #name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_", "star-tree_setup=", setup, "_N=", N, sep="")
-subtitle = paste("Star tree n=", n, " m=", m," strategy=", test_strategy, sep="")
-title = paste("Emprical test sizes vs. nominal test levels based on ", nr_exp, " experiments. \n Star tree - setup ", setup, sep="")
-# name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_", "cat2", "_n=", n,  sep="")
-# subtitle = paste("Caterpillar tree n=", n, " m=20 strategy=", test_strategy, sep="")
-# title = paste("Emprical test sizes vs. nominal test levels based on ", nr_exp, " experiments. \n Caterpillar tree", sep="")
+
+
 
 # Plot
 if (save){

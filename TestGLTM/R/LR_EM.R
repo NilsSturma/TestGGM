@@ -61,9 +61,6 @@ loglik = function(cov, X){
   C <- (1/n)*t(X)%*%X
   ll <- - (n/2) * ( m * log(2*pi) + log(det(cov)) + sum(diag(C%*%solve(cov))) )
   
-  # The reason is that then the tolerance for the convergence
-  # of the EM algorithm can be set uniformly.
-  
   return(ll)
 }
 
