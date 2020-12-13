@@ -57,6 +57,7 @@ loglik = function(cov, X){
   # X: observed data
   
   n <- dim(X)[1]
+  m = dim(X)[2]
   C <- (1/n)*t(X)%*%X
   ll <- - (n/2) * ( m * log(2*pi) + log(det(cov)) + sum(diag(C%*%solve(cov))) )
   
@@ -125,7 +126,6 @@ EM = function(X,g,tol=1e-4){
     
     # Evaluate loglik 
     l_1 = loglik(S[1:m,1:m], X)
-    print(l_1)
     
     # Check stopping criteria
     if (abs(l_1-l_0) < tol){
@@ -154,9 +154,8 @@ mle = function(X){
 LR_test = function(X, g){
   
   # returns p value
-  
   LR_statistic = 2*( mle(X)$loglik - EM(X,g)$loglik )
-  df = choose(dim(X)[2],2) - ( length(E(g)) + sum(V(g)$type==1) )
+  df = choose((dim(X)[2]+1),2) - ( length(E(g)) + sum(V(g)$type==1) )
   p_value = 1 - stats::pchisq(LR_statistic, df)
   
   return(p_value)

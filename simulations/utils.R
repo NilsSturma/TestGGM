@@ -86,6 +86,6 @@ cov_from_star_tree <- function(g, setup=1, m=10){
     E(g)$corr = beta / sqrt(beta**2+rep(1/3,m))
     cov = cov_from_graph(g)
   }
-  return(cov)
+  return(list(cov, g))
 }
 
