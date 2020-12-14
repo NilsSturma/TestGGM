@@ -108,11 +108,12 @@ M_step = function(g, S){
 
 
 
-EM = function(X,g,tol=1e-4){
+EM = function(X,g,tol=1e-4, maxiter=200){
   m = dim(X)[2] # number of observed nodes
   S = cov_from_graph_large(g)
   l_0 = loglik(S[1:m,1:m], X)
-  while (TRUE){
+  i=0
+  while (i <= maxiter){
     
     # E-step
     S = E_step(X,S)
@@ -130,6 +131,7 @@ EM = function(X,g,tol=1e-4){
     }
     else {
       l_0 = l_1
+      i = i+1
     }
   }
   return(list(loglik = l_1, Sigma=S[1:m,1:m]))

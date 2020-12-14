@@ -12,7 +12,7 @@ source("simulations/utils.R") # TODO: add these functions to package
 #################
 
 # General
-n_range = c(100,250, 500, 1000,2000)
+n_range = c(250, 500, 1000,2000)
 #n = 1000
 E = 1000
 nr_exp = 500
@@ -73,8 +73,8 @@ for (n in n_range){
   
   results <- foreach(nr = 1:nr_exp, 
                      .combine=rbind, 
-                     .errorhandling="remove",   # "pass", "stop"
-                     .packages=c("MASS", "TestGLTM", "igraph")) %dopar% {
+                     .errorhandling="remove",   # "pass", "stop", "remove"
+                     .packages=c("MASS", "TestGLTM", "igraph", "stats")) %dopar% {
     
     if((nr%%10) == 0){
       print(nr)
@@ -112,6 +112,7 @@ for (n in n_range){
     result = as.numeric(result)
   }
   
+  # Check if every task was successful
   if (dim(results)[1] != nr_exp){
     print(paste("ERROR - ", (nr_exp-dim(results)[1]), " tasks where not succesful.", sep=""))
   }
@@ -156,4 +157,3 @@ for (n in n_range){
     dev.off() # close pdf file
   }
 }
-

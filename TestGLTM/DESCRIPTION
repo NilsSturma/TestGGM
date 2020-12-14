@@ -1,7 +1,7 @@
 Package: TestGLTM
 Type: Package
 Title: Testing General Latent Tree Models
-Version: 1.0
+Version: 1.1
 Date: 2020-11-18
 Author: Nils Sturma
 Maintainer: Nils Sturma <nils.sturma@tum.de>
