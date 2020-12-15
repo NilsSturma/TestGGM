@@ -12,22 +12,24 @@ source("simulations/utils.R") # TODO: add these functions to package
 #################
 
 # General
-n_range = c(250, 500, 1000,2000)
+n_range = c(100,250, 500, 1000,2000)
 #n = 1000
 E = 1000
-nr_exp = 500
+nr_exp = 200
 alphas = seq(0.01, 0.99, 0.01)
 
 # Test strategy
-test_strategy="LR"  # "grouping", "run-over", "U-stat", "LR"
+test_strategy="U-stat"  # "grouping", "run-over", "U-stat", "LR"
 B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doing some experiments)
+N = 2500
+#N_range = c(2*n, 5*n, round(n**1.5), round(n**1.8), round(n**2))
 
 # Tree
-tree = "cat_binary"  # "star_tree", "cat_binary"
-#m = 20  # (star_tree)
-#setup = 1  # (star_tree)
+tree = "star_tree"  # "star_tree", "cat_binary"
+m = 20  # (star_tree)
+setup = 1  # (star_tree)
 
-#N_range = c(2*n, 5*n, round(n**1.5), round(n**1.8), round(n**2))
+
 
 # Saving
 save=TRUE
@@ -105,9 +107,7 @@ for (n in n_range){
     } else if (test_strategy=="run-over"){
       result = test_run_over(X, ind_eq, ind_ineq1, ind_ineq2, B=B, E=E, alphas=alphas)
     } else if (test_strategy=="U-stat"){
-      N = round(n**1.5)
-      n1 = round(n**(3/4))
-      result = test_U_stat(X, ind_eq, ind_ineq1, ind_ineq2, N=N, n1=n1, E=E, alphas=alphas)
+      result = test_U_stat(X, ind_eq, ind_ineq1, ind_ineq2, N=N, E=E, alphas=alphas)
     }
     result = as.numeric(result)
   }
