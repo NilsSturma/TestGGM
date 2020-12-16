@@ -33,10 +33,6 @@ calculate_G <- function(X, L, ind_eq, ind_ineq1, ind_ineq2) {
     .Call(`_TestGLTM_calculate_G`, X, L, ind_eq, ind_ineq1, ind_ineq2)
 }
 
-test123 <- function() {
-    .Call(`_TestGLTM_test123`)
-}
-
 compute_S_small <- function(n, i, L, K) {
     .Call(`_TestGLTM_compute_S_small`, n, i, L, K)
 }
@@ -49,12 +45,36 @@ calculate_G_small <- function(X, L, n1, ind_eq, ind_ineq1, ind_ineq2) {
     .Call(`_TestGLTM_calculate_G_small`, X, L, n1, ind_eq, ind_ineq1, ind_ineq2)
 }
 
-bootstrap_independent <- function(E, standardizer, Y_centered, p_eq) {
-    .Call(`_TestGLTM_bootstrap_independent`, E, standardizer, Y_centered, p_eq)
+h_tilde_eq <- function(X1, X2, ind_eq) {
+    .Call(`_TestGLTM_h_tilde_eq`, X1, X2, ind_eq)
 }
 
-bootstrap_m_dep <- function(E, B, omega, standardizer, Y_centered, p_eq) {
-    .Call(`_TestGLTM_bootstrap_m_dep`, E, B, omega, standardizer, Y_centered, p_eq)
+h_eq <- function(L, ind_eq, perm) {
+    .Call(`_TestGLTM_h_eq`, L, ind_eq, perm)
+}
+
+calculate_H_eq <- function(X, indices_U, ind_eq) {
+    .Call(`_TestGLTM_calculate_H_eq`, X, indices_U, ind_eq)
+}
+
+calculate_H_not_symmetric_eq <- function(X, indices_U, ind_eq) {
+    .Call(`_TestGLTM_calculate_H_not_symmetric_eq`, X, indices_U, ind_eq)
+}
+
+g_eq <- function(X, i, L, ind_eq, perm) {
+    .Call(`_TestGLTM_g_eq`, X, i, L, ind_eq, perm)
+}
+
+calculate_G_eq <- function(X, L, ind_eq) {
+    .Call(`_TestGLTM_calculate_G_eq`, X, L, ind_eq)
+}
+
+bootstrap_independent <- function(E, Y_centered) {
+    .Call(`_TestGLTM_bootstrap_independent`, E, Y_centered)
+}
+
+bootstrap_m_dep <- function(E, B, omega, Y_centered) {
+    .Call(`_TestGLTM_bootstrap_m_dep`, E, B, omega, Y_centered)
 }
 
 bootstrap_U <- function(E, H_centered, G_centered, N) {
