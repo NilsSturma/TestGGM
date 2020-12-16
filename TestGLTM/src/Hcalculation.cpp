@@ -148,7 +148,7 @@ NumericMatrix calculate_H_not_symmetric(NumericMatrix X,
 }
 
 
-// Calculation of g_i(X_i)
+
 // [[Rcpp::export]]
 NumericVector g(NumericMatrix X,
                 int i,
@@ -166,14 +166,14 @@ NumericVector g(NumericMatrix X,
   S = S - 1;
   
   for (int k = 0; k < K; k++){
-    List L = List::create(X(i,_), X(S(k,0),_), X(S(k,1),_), X(S(k,2),_));
+    List L = List::create(X((i-1),_), X(S(k,0),_), X(S(k,1),_), X(S(k,2),_));
     g = g + h(L, ind_eq, ind_ineq1, ind_ineq2, perm);
   }
   return(g/K);
 }
 
 
-// Save all g_i(X_i) in matrix G
+
 // [[Rcpp::export]]
 NumericMatrix calculate_G(NumericMatrix X,
                           int L,
@@ -187,22 +187,20 @@ NumericMatrix calculate_G(NumericMatrix X,
   IntegerMatrix perm = permutations(4);
   perm = perm - 1;
 
-  for (int i = 0; i < n; i++){
-    G(i,_) = g(X, i, L, ind_eq, ind_ineq1, ind_ineq2, perm);
+  for (int i = 1; i <= n; i++){
+    G((i-1),_) = g(X, i, L, ind_eq, ind_ineq1, ind_ineq2, perm);
   }
   return(G);
 }
 
 
+
+
+
+
 /////////////////////////////////////////////////////
 // calculate G faster with n_1 = K < sample_size n //
 /////////////////////////////////////////////////////
-// [[Rcpp::export]]
-int test123(){
-  int s =  min(IntegerVector::create(32, 33));
-  return s;
-}
-
 
 // [[Rcpp::export]]
 IntegerMatrix compute_S_small(int n, int i, int L, int K){
@@ -252,7 +250,7 @@ NumericVector g_small(NumericMatrix X,
   S = S - 1;
   
   for (int k = 0; k < K; k++){
-    List L = List::create(X(i,_), X(S(k,0),_), X(S(k,1),_), X(S(k,2),_));
+    List L = List::create(X((i-1),_), X(S(k,0),_), X(S(k,1),_), X(S(k,2),_));
     g = g + h(L, ind_eq, ind_ineq1, ind_ineq2, perm);
   }
   return(g/K);
@@ -274,10 +272,130 @@ NumericMatrix calculate_G_small(NumericMatrix X,
   IntegerMatrix perm = permutations(4);
   perm = perm - 1;
   
-  IntegerVector I = sample(n,n1)-1;
+  IntegerVector I = sample(n,n1);
   
   for (int i = 0; i < n1; i++){
     G(i,_) = g_small(X, I[i], L, n1, ind_eq, ind_ineq1, ind_ineq2, perm);
+  }
+  return(G);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////
+// Testing just equalities //
+/////////////////////////////
+
+// [[Rcpp::export]]
+NumericVector h_tilde_eq(NumericVector X1,
+                         NumericVector X2,
+                         IntegerMatrix ind_eq){
+  
+  const int nr_ind_eq = ind_eq.nrow();
+  NumericVector h_tilde(nr_ind_eq);
+  
+  for (int j = 0; j < nr_ind_eq; j++) {
+    h_tilde[j] = X1[ind_eq(j,0)-1] *  X1[ind_eq(j,1)-1] * X2[ind_eq(j,2)-1] * X2[ind_eq(j,3)-1] 
+    - X1[ind_eq(j,4)-1] * X1[ind_eq(j,5)-1] * X2[ind_eq(j,6)-1] * X2[ind_eq(j,7)-1];
+  }
+  return(h_tilde);
+}
+
+
+// [[Rcpp::export]]
+NumericVector h_eq(List L, 
+                   IntegerMatrix ind_eq, 
+                   IntegerMatrix perm){
+  
+  const int nr_ind_eq = ind_eq.nrow();
+  NumericVector h(nr_ind_eq);
+  
+  for (int per = 0; per < perm.nrow(); per++){
+    h = h + h_tilde_eq(L[perm(per,0)], L[perm(per,1)], ind_eq);
+  }
+  return(h/perm.nrow());
+}
+
+
+// [[Rcpp::export]]
+NumericMatrix calculate_H_eq(NumericMatrix X,
+                             IntegerMatrix indices_U, 
+                             IntegerMatrix ind_eq){
+  
+  NumericMatrix H(indices_U.nrow(), ind_eq.nrow());
+  indices_U = indices_U - 1;
+  
+  IntegerMatrix perm = permutations(2);
+  perm = perm - 1;
+  
+  for (int i = 0; i < indices_U.nrow(); i++){
+    List L = List::create(X(indices_U(i,0),_), X(indices_U(i,1),_));
+    H(i,_) = h_eq(L, ind_eq, perm);
+  }
+  return(H);
+}
+
+
+// [[Rcpp::export]]
+NumericMatrix calculate_H_not_symmetric_eq(NumericMatrix X,
+                                           IntegerMatrix indices_U, 
+                                           IntegerMatrix ind_eq){
+  
+  NumericMatrix H(indices_U.nrow(), ind_eq.nrow());
+  indices_U = indices_U - 1;
+  for (int i = 0; i < indices_U.nrow(); i++){
+    H(i,_) = h_tilde_eq(X(indices_U(i,0),_), X(indices_U(i,1),_), ind_eq);
+  }
+  return(H);
+}
+
+
+
+// [[Rcpp::export]]
+NumericVector g_eq(NumericMatrix X,
+                   int i,
+                   int L,
+                   IntegerMatrix ind_eq, 
+                   IntegerMatrix perm){
+  
+  int n = X.nrow();
+  NumericVector g(ind_eq.nrow());
+  int K = floor((n-1)/L);
+  
+  IntegerMatrix S = compute_S(n,i,L);
+  S = S - 1;
+  
+  for (int k = 0; k < K; k++){
+    List L = List::create(X((i-1),_), X(S(k,0),_));
+    g = g + h_eq(L, ind_eq, perm);
+  }
+  return(g/K);
+}
+
+
+// [[Rcpp::export]]
+NumericMatrix calculate_G_eq(NumericMatrix X,
+                             int L,
+                             IntegerMatrix ind_eq){
+  
+  int n = X.nrow();
+  NumericMatrix G(n, ind_eq.nrow());
+  
+  IntegerMatrix perm = permutations(2);
+  perm = perm - 1;
+  
+  for (int i = 1; i <= n; i++){
+    G((i-1),_) = g_eq(X, i, L, ind_eq, perm);
   }
   return(G);
 }
