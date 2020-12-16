@@ -51,7 +51,7 @@ test_grouping <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000, alp
 
 
 
-test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=10000, E=1000, alphas=seq(0.01, 0.99, 0.01)){
+test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=1000, alphas=seq(0.01, 0.99, 0.01)){
   
   
   n = dim(X)[1]  # nr of samples
@@ -65,16 +65,16 @@ test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=10000, E=10
     m = 2
   } else {
     test_ineqs = TRUE
-    m = 4
+    r = 4
   }
   
   # determine N_hat by Bernoulli sampling
-  N_hat = rbinom(1, choose(n,m), (N / choose(n,m)))
+  N_hat = rbinom(1, choose(n,r), (N / choose(n,r)))
   
   # Choose randomly N_hat subsets with cardinality 4 of {1,...,n}
-  indices_U = matrix(ncol=m, nrow=N_hat) 
+  indices_U = matrix(ncol=r, nrow=N_hat) 
   for (i in 1:N_hat){
-    indices_U[i,] = sort(sample(1:n, m, replace=FALSE), decreasing=FALSE)
+    indices_U[i,] = sort(sample(1:n, r, replace=FALSE), decreasing=FALSE)
   } # very unlikely that we get the same indices twice
   
   # Compute matrix H
@@ -91,17 +91,17 @@ test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=10000, E=10
   
   # Compute matrix G
   if (test_ineqs){
-    G = calculate_G(X,L=(m-1), ind_eq, ind_ineq1, ind_ineq2)
+    G = calculate_G(X,L=(r-1), ind_eq, ind_ineq1, ind_ineq2)
   } else {
-    G = calculate_G_eq(X, L=(m-1), ind_eq)
+    G = calculate_G_eq(X, L=(r-1), ind_eq)
   }
   G_mean = Rfast::colmeans(G)
   G_centered = Rfast::transpose(Rfast::transpose(G) - G_mean)
   
   # Diagonal of the sample covariance of H
   cov_H_diag = Rfast::colsums(H_centered**2) / N_hat
-  cov_G_diag = Rfast::colsums(G_centered**2) / n
-  cov_diag = m**2 * cov_G_diag + (n/N) * cov_H_diag
+  cov_G_diag = Rfast::colsums(G_centered**2) / (n-1)
+  cov_diag = cov_H_diag  #(r**2) * cov_G_diag + (n/N) * cov_H_diag
   
   # Vector for standardizing
   standardizer = cov_diag**(-1/2)

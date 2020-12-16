@@ -78,7 +78,7 @@ List bootstrap_U(int E, NumericMatrix H_centered, NumericMatrix G_centered, int 
     for (int j = 0; j < p; j++){
       colsums_A[j] = sum(G_centered(_,j) * epsilons[Range(N_hat, ((N_hat+n)-1))]);
     }
-    U_A(i,_) = (4/sqrt(n)) * colsums_A;
+    U_A(i,_) = (4/sqrt(n-1)) * colsums_A;
   }
   List res = List::create(U_A, U_B);
   return res;
