@@ -3,29 +3,23 @@ using namespace Rcpp;
 
 
 // [[Rcpp::export]]
-NumericVector bootstrap_independent(int E, NumericVector standardizer, NumericMatrix Y_centered, int p_eq){
+NumericMatrix bootstrap_independent(int E, NumericMatrix Y_centered){
   
-  int n = Y_centered.nrow();
-  int p = Y_centered.ncol();
+  const int n = Y_centered.nrow();
+  const int p = Y_centered.ncol();
   
   NumericVector epsilons(n);
   NumericVector colsums(p);
-  NumericVector m(p);
-  NumericVector res(E);
+  NumericMatrix W(E,p);
   
   for (int i = 0; i < E; i++){
     epsilons = rnorm(n,0,1);
     for (int j = 0; j < p; j++){
       colsums[j] = sum(Y_centered(_,j) * epsilons);
     }
-    if (p_eq > 0){
-      m[Range(0, (p_eq-1))] = abs(standardizer[Range(0, (p_eq-1))] * colsums[Range(0, (p_eq-1))]);
-    }
-    m[Range(p_eq, (p-1))] = standardizer[Range(p_eq, (p-1))] * colsums[Range(p_eq, (p-1))];
-    res[i] = (1/sqrt(n)) * max(m);
+    W(i,_) = (1/sqrt(n)) * colsums;
   }
-  
-  return res;
+  return W;
 }
 
 
@@ -33,17 +27,15 @@ NumericVector bootstrap_independent(int E, NumericVector standardizer, NumericMa
 
 
 // [[Rcpp::export]]
-NumericVector bootstrap_m_dep(int E, int B, int omega, NumericVector standardizer, NumericMatrix Y_centered, int p_eq){
+NumericMatrix bootstrap_m_dep(int E, int B, int omega, NumericMatrix Y_centered){
   
-  const int n = Y_centered.nrow();
   const int p = Y_centered.ncol();
   
   NumericVector epsilons(omega);
   double batchsum = 0;
   NumericVector sums(p);
   IntegerVector L(B);
-  NumericVector m(p);
-  NumericVector res(E);
+  NumericMatrix W(E,p);
   
   for (int i = 0; i < E; i++){
     epsilons = rnorm(omega,0,1);
@@ -58,12 +50,9 @@ NumericVector bootstrap_m_dep(int E, int B, int omega, NumericVector standardize
         sums[j] = sums[j] + batchsum * epsilons[b];
       }
     }
-    m[Range(0, (p_eq-1))] = abs(standardizer[Range(0, (p_eq-1))] * sums[Range(0, (p_eq-1))]);
-    m[Range(p_eq, (p-1))] = standardizer[Range(p_eq, (p-1))] * sums[Range(p_eq, (p-1))];
-    res[i] = (1/sqrt(B * omega)) * max(m);
+    W(i,_) = (1/sqrt(B * omega)) * sums;
   }
-  
-  return res;
+  return W;
 }
 
 
