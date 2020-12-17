@@ -101,7 +101,7 @@ test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=100
   # Diagonal of the sample covariance of H
   cov_H_diag = Rfast::colsums(H_centered**2) / N_hat
   cov_G_diag = Rfast::colsums(G_centered**2) / n
-  cov_diag = (r**2) * cov_G_diag + (n/N) * cov_H_diag
+  cov_diag = cov_H_diag# (r**2) * cov_G_diag + (n/N) * cov_H_diag
   
   # Vector for standardizing
   standardizer = cov_diag**(-1/2)
@@ -178,7 +178,7 @@ test_U_stat_degenerate <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=
   standardizer = cov_H_diag**(-1/2)
   
   # Test statistic
-  marginal_stats = sqrt(N_hat) * H_mean
+  marginal_stats = sqrt(n) * H_mean  ## OR N_hat??
   marginal_stats[1:p_eq] = abs(marginal_stats[1:p_eq])
   test_stat =  max(standardizer * marginal_stats)
   

@@ -251,15 +251,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// bootstrap_independent
-NumericMatrix bootstrap_independent(int E, NumericMatrix Y_centered);
-RcppExport SEXP _TestGLTM_bootstrap_independent(SEXP ESEXP, SEXP Y_centeredSEXP) {
+// bootstrap
+NumericMatrix bootstrap(int E, NumericMatrix H_centered);
+RcppExport SEXP _TestGLTM_bootstrap(SEXP ESEXP, SEXP H_centeredSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type E(ESEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type Y_centered(Y_centeredSEXP);
-    rcpp_result_gen = Rcpp::wrap(bootstrap_independent(E, Y_centered));
+    Rcpp::traits::input_parameter< NumericMatrix >::type H_centered(H_centeredSEXP);
+    rcpp_result_gen = Rcpp::wrap(bootstrap(E, H_centered));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -310,7 +310,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_TestGLTM_calculate_H_not_symmetric_eq", (DL_FUNC) &_TestGLTM_calculate_H_not_symmetric_eq, 3},
     {"_TestGLTM_g_eq", (DL_FUNC) &_TestGLTM_g_eq, 5},
     {"_TestGLTM_calculate_G_eq", (DL_FUNC) &_TestGLTM_calculate_G_eq, 3},
-    {"_TestGLTM_bootstrap_independent", (DL_FUNC) &_TestGLTM_bootstrap_independent, 2},
+    {"_TestGLTM_bootstrap", (DL_FUNC) &_TestGLTM_bootstrap, 2},
     {"_TestGLTM_bootstrap_m_dep", (DL_FUNC) &_TestGLTM_bootstrap_m_dep, 4},
     {"_TestGLTM_bootstrap_U", (DL_FUNC) &_TestGLTM_bootstrap_U, 4},
     {NULL, NULL, 0}

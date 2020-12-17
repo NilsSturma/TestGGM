@@ -12,7 +12,7 @@ source("simulations/utils.R") # TODO: add these functions to package
 #################
 
 # General
-n_range = c(100, 250, 500, 1000)
+n_range = 250 #c(100, 250, 500, 1000)
 #n = 1000
 E = 1000
 nr_exp = 500
@@ -21,17 +21,17 @@ alphas = seq(0.01, 0.99, 0.01)
 # Test strategy
 test_strategy="U-stat-deg"  # "grouping", "run-over", "U-stat", "LR", "U-stat-deg"
 B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doing some experiments)
-N = 5000 # the more, the better but not feasible
+N = 500 # the more, the better but not feasible
 #N_range = c(2*n, 5*n, round(n**1.5), round(n**1.8), round(n**2))
 
 # Tree
-tree = "cat_binary"  # "star_tree", "cat_binary"
-m = 20  # (star_tree)
-setup = 1  # (star_tree)
+tree = "star_tree"  # "star_tree", "cat_binary"
+#m = 20  # (star_tree)
+#setup = 2  # (star_tree)
 
 
 # Saving
-save=TRUE
+save=FALSE
 
 
 ###################################
