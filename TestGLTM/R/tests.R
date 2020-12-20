@@ -243,7 +243,7 @@ test_run_over <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, B=5, E=1000
   test_stat =  max(standardizer * marginal_stats)
   
   # Bootstrapping 
-  W = bootstrap_independent(E, B, omega, H_centered)
+  W = bootstrap_m_dep(E, B, omega, H_centered)
   W[,1:p_eq] = abs(W[,1:p_eq])
   W_standardized = Rfast::transpose(Rfast::transpose(W) * standardizer)
   results = Rfast::rowMaxs(W_standardized, value = TRUE)

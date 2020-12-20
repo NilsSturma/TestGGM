@@ -4,6 +4,7 @@ library(MASS) #mvrnorm
 library(igraph)
 library(TestGLTM)
 
+setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
 source("simulations/utils.R") # TODO: add these functions to package
 
 #################
@@ -16,19 +17,21 @@ E = 1000
 nr_exp = 500
 alpha = 0.05
 
+# Tree
+tree = "cat_binary"  # "star_tree", "cat_binary"
+m = 20  
+#setup = 2  # (star_tree)
+
+
 beta_2 = c(rep(0,(m-2)),1,1)
-H = seq(0.5,10,len=20)
+H = seq(1.5,30,len=20)
 
 
 # Test strategy
-test_strategy="grouping" #"grouping", "run-over", "U-stat", "LR"
+test_strategy="run-over" #"grouping", "run-over", "U-stat", "LR"
 B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doing some experiments)
 N = 5000  # just for test_strategy=="U-stat"
 
-# Tree
-tree = "star_tree"  # "star_tree", "cat_binary"
-m = 20  # (star_tree)
-setup = 2  # (star_tree)
 
 
 # Saving
@@ -94,26 +97,23 @@ results <- foreach(h = H,
     
     # Generate n indep datasets from the alternative
     X = mvrnorm(n, mu=rep(0,nrow(cov)), Sigma=cov)
-
-    
-    # Call the test
     
     # Call the test
     if (test_strategy=="LR"){
       if (tree=="star_tree"){
         res = factanal(X, 1)
-        powers[nr] = res[["PVAL"]] <= alphas # result: TRUE = rejected
+        powers[nr] = res[["PVAL"]] <= alpha # result: TRUE = rejected
       } else if (tree=="cat_binary"){
-        powers[nr] = LR_test(X,g) <= alphas # result: TRUE = rejected
+        powers[nr] = LR_test(X,g) <= alpha # result: TRUE = rejected
       }
     } else if (test_strategy=="grouping"){
-      powers[nr] = test_grouping(X, ind_eq, ind_ineq1, ind_ineq2, E=E, alphas=alphas)
+      powers[nr] = test_grouping(X, ind_eq, ind_ineq1, ind_ineq2, E=E, alphas=alpha)
     } else if (test_strategy=="run-over"){
-      powers[nr] = test_run_over(X, ind_eq, ind_ineq1, ind_ineq2, B=B, E=E, alphas=alphas)
+      powers[nr] = test_run_over(X, ind_eq, ind_ineq1, ind_ineq2, B=B, E=E, alphas=alpha)
     } else if (test_strategy=="U-stat"){
-      powers[nr] = test_U_stat(X, ind_eq, ind_ineq1, ind_ineq2, N=N, E=E, alphas=alphas)
+      powers[nr] = test_U_stat(X, ind_eq, ind_ineq1, ind_ineq2, N=N, E=E, alphas=alpha)
     } else if (test_strategy=="U-stat-deg"){
-      powers[nr] = test_U_stat_degenerate(X, ind_eq, ind_ineq1, ind_ineq2, N=N, E=E, alphas=alphas)
+      powers[nr] = test_U_stat_degenerate(X, ind_eq, ind_ineq1, ind_ineq2, N=N, E=E, alphas=alpha)
     }
   }
   simulated_power = mean(powers)
