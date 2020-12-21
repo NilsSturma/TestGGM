@@ -69,8 +69,8 @@ calculate_G_eq <- function(X, L, ind_eq) {
     .Call(`_TestGLTM_calculate_G_eq`, X, L, ind_eq)
 }
 
-bootstrap_independent <- function(E, Y_centered) {
-    .Call(`_TestGLTM_bootstrap_independent`, E, Y_centered)
+bootstrap <- function(E, H_centered) {
+    .Call(`_TestGLTM_bootstrap`, E, H_centered)
 }
 
 bootstrap_m_dep <- function(E, B, omega, Y_centered) {

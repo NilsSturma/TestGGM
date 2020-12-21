@@ -35,7 +35,7 @@ test_grouping <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000, alp
   
   
   # Bootstrapping 
-  W = bootstrap_independent(E, H_centered)
+  W = bootstrap(E, H_centered)
   W[,1:p_eq] = abs(W[,1:p_eq])
   W_standardized = Rfast::transpose(Rfast::transpose(W) * standardizer)
   results = Rfast::rowMaxs(W_standardized, value = TRUE)
@@ -100,8 +100,8 @@ test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=100
   
   # Diagonal of the sample covariance of H
   cov_H_diag = Rfast::colsums(H_centered**2) / N_hat
-  cov_G_diag = Rfast::colsums(G_centered**2) / (n-1)
-  cov_diag = cov_H_diag  #(r**2) * cov_G_diag + (n/N) * cov_H_diag
+  cov_G_diag = Rfast::colsums(G_centered**2) / n
+  cov_diag = cov_H_diag #(r**2) * cov_G_diag + (n/N) * cov_H_diag
   
   # Vector for standardizing
   standardizer = cov_diag**(-1/2)
@@ -127,6 +127,75 @@ test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=100
   is_rejected = test_stat > critical_values
   return(is_rejected)
 }
+
+
+
+
+
+test_U_stat_degenerate <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=1000, alphas=seq(0.01, 0.99, 0.01)){
+  
+  
+  n = dim(X)[1]  # nr of samples
+  
+  
+  if (is.null(ind_ineq1) | is.null(ind_ineq2)){
+    if (!is.null(ind_ineq1) | !is.null(ind_ineq2)){
+      stop("ERROR - exactly one set of inequalities is missing. Cannot handle this.")
+    }
+    test_ineqs = FALSE
+    m = 2
+  } else {
+    test_ineqs = TRUE
+    r = 4
+  }
+  
+  # determine N_hat by Bernoulli sampling
+  N_hat = rbinom(1, choose(n,r), (N / choose(n,r)))
+  
+  # Choose randomly N_hat subsets with cardinality 4 of {1,...,n}
+  indices_U = matrix(ncol=r, nrow=N_hat) 
+  for (i in 1:N_hat){
+    indices_U[i,] = sort(sample(1:n, r, replace=FALSE), decreasing=FALSE)
+  } # very unlikely that we get the same indices twice
+  
+  # Compute matrix H
+  if (test_ineqs){
+    H = calculate_H(X, indices_U, ind_eq, ind_ineq1, ind_ineq2)
+  } else {
+    H = calculate_H_eq(X, indices_U, ind_eq)
+  }
+  
+  H_mean = Rfast::colmeans(H)
+  H_centered = Rfast::transpose(Rfast::transpose(H) - H_mean)
+  p = dim(H)[2]  # total nr of constraints
+  p_eq = dim(ind_eq)[1]  # equality constraints
+  
+  
+  # Diagonal of the sample covariance of H
+  cov_H_diag = Rfast::colsums(H_centered**2) / N_hat
+  
+  # Vector for standardizing
+  standardizer = cov_H_diag**(-1/2)
+  
+  # Test statistic
+  marginal_stats = sqrt(n) * H_mean  ## OR N_hat??
+  marginal_stats[1:p_eq] = abs(marginal_stats[1:p_eq])
+  test_stat =  max(standardizer * marginal_stats)
+  
+  # Bootstrap
+  W = bootstrap(E, H_centered)
+  W[,1:p_eq] = abs(W[,1:p_eq])
+  W_standardized = Rfast::transpose(Rfast::transpose(W) * standardizer)
+  results = Rfast::rowMaxs(W_standardized, value = TRUE)
+  
+  # Critical values
+  critical_values = quantile(results, probs=1-alphas)
+  
+  # Reject if test_stat > critical_value
+  is_rejected = test_stat > critical_values
+  return(is_rejected)
+}
+
 
 
 
@@ -174,7 +243,7 @@ test_run_over <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, B=5, E=1000
   test_stat =  max(standardizer * marginal_stats)
   
   # Bootstrapping 
-  W = bootstrap_independent(E, B, omega, H_centered)
+  W = bootstrap_m_dep(E, B, omega, H_centered)
   W[,1:p_eq] = abs(W[,1:p_eq])
   W_standardized = Rfast::transpose(Rfast::transpose(W) * standardizer)
   results = Rfast::rowMaxs(W_standardized, value = TRUE)

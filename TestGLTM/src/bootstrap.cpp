@@ -3,10 +3,10 @@ using namespace Rcpp;
 
 
 // [[Rcpp::export]]
-NumericMatrix bootstrap_independent(int E, NumericMatrix Y_centered){
+NumericMatrix bootstrap(int E, NumericMatrix H_centered){
   
-  const int n = Y_centered.nrow();
-  const int p = Y_centered.ncol();
+  const int n = H_centered.nrow();
+  const int p = H_centered.ncol();
   
   NumericVector epsilons(n);
   NumericVector colsums(p);
@@ -15,7 +15,7 @@ NumericMatrix bootstrap_independent(int E, NumericMatrix Y_centered){
   for (int i = 0; i < E; i++){
     epsilons = rnorm(n,0,1);
     for (int j = 0; j < p; j++){
-      colsums[j] = sum(Y_centered(_,j) * epsilons);
+      colsums[j] = sum(H_centered(_,j) * epsilons);
     }
     W(i,_) = (1/sqrt(n)) * colsums;
   }
