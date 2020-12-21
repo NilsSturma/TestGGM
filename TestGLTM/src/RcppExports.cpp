@@ -5,6 +5,18 @@
 
 using namespace Rcpp;
 
+// findn
+int findn(int N, int D);
+RcppExport SEXP _TestGLTM_findn(SEXP NSEXP, SEXP DSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type N(NSEXP);
+    Rcpp::traits::input_parameter< int >::type D(DSEXP);
+    rcpp_result_gen = Rcpp::wrap(findn(N, D));
+    return rcpp_result_gen;
+END_RCPP
+}
 // compute_S
 IntegerMatrix compute_S(int n, int i, int L);
 RcppExport SEXP _TestGLTM_compute_S(SEXP nSEXP, SEXP iSEXP, SEXP LSEXP) {
@@ -293,6 +305,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_TestGLTM_findn", (DL_FUNC) &_TestGLTM_findn, 2},
     {"_TestGLTM_compute_S", (DL_FUNC) &_TestGLTM_compute_S, 3},
     {"_TestGLTM_permutations", (DL_FUNC) &_TestGLTM_permutations, 1},
     {"_TestGLTM_h_tilde", (DL_FUNC) &_TestGLTM_h_tilde, 7},

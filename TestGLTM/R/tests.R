@@ -5,16 +5,17 @@ test_grouping <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000, alp
       stop("ERROR - exactly one set of inequalities is missing. Cannot handle this.")
     }
     test_ineqs = FALSE
-    indices_U = matrix(1:nrow(X), ncol=2)
+    N = findn(nrow(X),2) # nr of estimators
+    indices_U = matrix(1:N, ncol=2)
     H = calculate_H_eq(X, indices_U, ind_eq)
   } else {
     test_ineqs = TRUE
-    indices_U = matrix(1:nrow(X), ncol=4)
+    N = findn(nrow(X),4) # nr of estimators
+    indices_U = matrix(1:N, ncol=4)
     H = calculate_H(X, indices_U, ind_eq, ind_ineq1, ind_ineq2)
   }
   
-  
-  n = dim(H)[1]  # nr of samples
+  n = dim(H)[1]
   p = dim(H)[2]  # total nr of constraints
   p_eq = dim(ind_eq)[1]  # nr of equality constraints
   

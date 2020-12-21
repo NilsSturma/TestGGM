@@ -2,9 +2,25 @@
 using namespace Rcpp;
 
 
+
+
+
 //////////////////////
 // helper functions //
 //////////////////////
+
+
+// [[Rcpp::export]]
+int findn(int N, int D){ 
+  int rem = N % D; 
+  
+  if (rem == 0) 
+    return N; 
+  else
+    return N - rem; 
+} 
+
+
 
 // [[Rcpp::export]]
 IntegerMatrix compute_S(int n, int i, int L){
