@@ -73,9 +73,9 @@ collect_indices <- function(g, nr_4=NULL, nr_3=NULL){
   not_Q = res_findQ[[2]]
   
   if (is.null(nr_3)){
-    sub_sets = CombMSC::subsets(m,3,1:m)
+    sub_sets3 = CombMSC::subsets(m,3,1:m)
   } else {
-    sub_sets = random_combs(m,3,nr_3)
+    sub_sets3 = random_combs(m,3,nr_3)
   }
   
   ind_eq = list()  # Equality constraints (2) (a) and (b)
@@ -97,10 +97,10 @@ collect_indices <- function(g, nr_4=NULL, nr_3=NULL){
     s = not_Q[[i]][4]
     ind_eq = c(ind_eq, list(c(p,r,q,s,p,s,q,r)), list(c(p,r,q,s,p,q,r,s)))
   }
-  for (i in 1:nrow(subsets3)){
-    p = subsets3[i,1]
-    q = subsets3[i,2]
-    r = subsets3[i,3]
+  for (i in 1:nrow(sub_sets3)){
+    p = sub_sets3[i,1]
+    q = sub_sets3[i,2]
+    r = sub_sets3[i,3]
     ind_ineq1 = c(ind_ineq1, list(c(p,q,p,r,q,r)))
     ind_ineq2 = c(ind_ineq2, list(c(p,q,q,r,q,q,p,r)), list(c(p,r,q,r,r,r,p,q)), list(c(p,q,p,r,p,p,q,r)))
   }
