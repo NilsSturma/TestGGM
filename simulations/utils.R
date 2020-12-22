@@ -29,15 +29,15 @@ binary_rooted <- function(){
   return(g)
 }
 
-cat_binary <- function(){
+cat_binary <- function(m){
   colors <- c("tomato", "gray50")
-  name = seq(1,38)
-  type = c(rep(1,20), rep(2,18))
+  name = seq(1,(m+(m-2)))
+  type = c(rep(1,m), rep(2,(m-2)))
   vertices <- data.frame(name=name, 
                          type=type, # 1=observed, 2=latent -> always first m nodes should be observed (=leaves)
                          color=colors[type])
-  edges <- data.frame(from=c(seq(21,38),21,38,seq(21,37)),
-                      to=c(seq(1,18),19,20,seq(22,38)))
+  edges <- data.frame(from=c(seq((m+1),(m+(m-2))),(m+1),(m+(m-2)),seq((m+1),(m+(m-2)-1))),
+                      to=c(seq(1,(m-2)),(m-1),(m),seq((m+2),(m+(m-2)))) )
   g <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
   return(g)
 }

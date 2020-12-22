@@ -4,7 +4,7 @@ library(MASS) #mvrnorm
 library(igraph)
 library(TestGLTM)
 
-#setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
+setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
 source("simulations/utils.R") # TODO: add these functions to package
 
 #################
@@ -12,22 +12,23 @@ source("simulations/utils.R") # TODO: add these functions to package
 #################
 
 # General
-n_range = c(500)
-#n = 1000
+#n_range = c(500)
+n = 500
 E = 1000
 nr_exp = 200
 alphas = seq(0.01, 0.99, 0.01)
 
 # Test strategy
-test_strategy="run-over"  # "grouping", "run-over", "U-stat", "LR", "U-stat-deg"
+#test_strategy="U-stat"  # "grouping", "run-over", "U-stat", "LR", "U-stat-deg"
+strategies = c("grouping", "run-over", "U-stat")
 B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doing some experiments)
 N = 5000 # the more, the better but not feasible
 #N_range = c(2*n, 5*n, round(n**1.5), round(n**1.8), round(n**2))
 
 # Tree
-tree = "star_tree"  # "star_tree", "cat_binary"
-m = 200  # (star_tree)
-setup = 1  # (star_tree)
+tree = "cat_binary"  # "star_tree", "cat_binary"
+m = 200 
+#setup = 1  # (star_tree)
 
 
 # Saving
@@ -41,7 +42,7 @@ save=TRUE
 if (tree=="star_tree"){
   g = star_tree(m)
 } else if (tree=="cat_binary"){
-  g = cat_binary()
+  g = cat_binary(m)
 } 
 
 plot(g)
@@ -54,7 +55,17 @@ p = dim(ind_eq)[1] + dim(ind_ineq1)[1] + dim(ind_ineq2)[1]
 print(p)
 
 
-cov = cov_from_star_tree(g, setup=setup, m=m)
+
+
+
+#!!!!!!!!! remove !!!!!!!!!!!
+if (tree=="star_tree"){
+  cov = cov_from_star_tree(g, setup=setup, m=m)
+} else if (tree=="cat_binary"){
+  V(g)$var = rep(1,(m+(m-2)))
+  E(g)$corr = rep(0.7,(m+(m-3)))
+  cov = cov_from_graph(g)
+}
 
 #######################################
 # Test wrapper function (single test) #
@@ -64,13 +75,14 @@ cov = cov_from_star_tree(g, setup=setup, m=m)
 # bootstrap_test(X, g, alpha=0.05, method="run-over", B=5)
 
 
-for (n in n_range){
-  print(paste("n=",n ,sep=""))
+for (test_strategy in strategies){
+  print(paste("strategy=",test_strategy ,sep=""))
+  #print(paste("n=",n ,sep=""))
   ###############################################
   # Compute empirical test sizes for all alphas #
   ###############################################
   
-  cores = detectCores()
+  cores = 20 #detectCores()
   cl <- makeCluster(cores, outfile = "")
   registerDoParallel(cl)
   
@@ -84,7 +96,8 @@ for (n in n_range){
     }
     warnings()
     
-    # # Generate n independent data sets depending on setup
+    # Generate n independent data sets depending on setup
+    
     # if (tree=="star_tree"){
     #   cov = cov_from_star_tree(g, setup=setup, m=m)
     # } else if (tree=="cat_binary"){
@@ -92,7 +105,6 @@ for (n in n_range){
     #   E(g)$corr = rep(0.7,37)
     #   cov = cov_from_graph(g)
     # }
-    
     X = mvrnorm(n, mu=rep(0,nrow(cov)), Sigma=cov)
     
     # Call the test
@@ -162,3 +174,4 @@ for (n in n_range){
     dev.off() # close pdf file
   }
 }
+
