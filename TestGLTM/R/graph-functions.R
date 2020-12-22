@@ -1,8 +1,24 @@
-findQ = function(g, m){
+# Select nr random combinations of k elements from the set 1:n
+random_combs <- function(n, k, nr){
+  sub_sets = list()
+  while (length(sub_sets) < nr){
+    sub_sets = c(sub_sets, list(sort(sample(1:n, k, replace=FALSE))))
+    sub_sets = unique(sub_sets)
+  }
+  return(matrix(unlist(sub_sets), ncol = k, byrow = TRUE))
+}
+
+
+# Determine the set Q
+findQ = function(g, m, nr=NULL){
   
   # g is an igraph object (always first m nodes oberseved)
-
-  sub_sets = CombMSC::subsets(m,4,1:m)
+  
+  if (is.null(nr)){
+    sub_sets = CombMSC::subsets(m,4,1:m)
+  } else {
+    sub_sets = random_combs(m,4,nr)
+  }
   
   Q = list()
   not_Q = list()
@@ -38,15 +54,29 @@ findQ = function(g, m){
 
 
 
-collect_indices <- function(g){
+
+
+
+
+collect_indices <- function(g, nr_4=NULL, nr_3=NULL){
+  
+  # nr_rand is either NULL or a vector containing two integers. 
+  # nr_4 (integer): Nr of random elements chosen from subsets(m,4,1:m)
+  # nr_3 (integer): Nr of random elements chosen from subsets(m,3,1:m)
+  # If NULL, this is ignored and all elements are considered
   
   # Determine m (Requirement: First m nodes are always observed.)
   m = sum(V(g)$type==1)
   
-  res_findQ = findQ(g, m)
+  res_findQ = findQ(g, m, nr_4)
   Q = res_findQ[[1]]
   not_Q = res_findQ[[2]]
-  subsets3 = CombMSC::subsets(m,3,1:m)
+  
+  if (is.null(nr_3)){
+    sub_sets = CombMSC::subsets(m,3,1:m)
+  } else {
+    sub_sets = random_combs(m,3,nr_3)
+  }
   
   ind_eq = list()  # Equality constraints (2) (a) and (b)
   ind_ineq1 = list()  # Inequality constraints (1) (a)
