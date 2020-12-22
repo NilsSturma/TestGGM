@@ -20,7 +20,7 @@ alphas = seq(0.01, 0.99, 0.01)
 
 # Test strategy
 #test_strategy="U-stat"  # "grouping", "run-over", "U-stat", "LR", "U-stat-deg"
-strategies = c("grouping", "run-over", "U-stat")
+strategies = c("run-over")
 B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doing some experiments)
 N = 5000 # the more, the better but not feasible
 #N_range = c(2*n, 5*n, round(n**1.5), round(n**1.8), round(n**2))
@@ -148,7 +148,7 @@ for (test_strategy in strategies){
     subtitle = paste("Star tree n=", n, " m=", m," strategy=", test_strategy, sep="")
     title = paste("Emprical test sizes vs. nominal test levels based on ", nr_exp, " experiments. \n Star tree - setup ", setup, sep="")
   } else if (tree=="cat_binary"){
-    name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_", "caterpillar", "_n=", n,  sep="")
+    name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_", "caterpillar", "_n=", n,  "_m=", m, sep="")
     subtitle = paste("Caterpillar tree n=", n, " m=20 strategy=", test_strategy, sep="")
     title = paste("Emprical test sizes vs. nominal test levels based on ", nr_exp, " experiments. \n Caterpillar tree", sep="")
   }
