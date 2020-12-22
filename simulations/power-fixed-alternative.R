@@ -28,7 +28,7 @@ h = 15
 
 
 # Test strategy
-test_strategy="grouping"  # "grouping", "run-over", "U-stat", "LR"
+test_strategy="run-over"  # "grouping", "run-over", "U-stat", "LR"
 B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doing some experiments)
 N = 5000  # just for test_strategy=="U-stat"
 
