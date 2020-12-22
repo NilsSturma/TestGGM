@@ -4,7 +4,7 @@ library(MASS) #mvrnorm
 library(igraph)
 library(TestGLTM)
 
-setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
+#setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
 source("simulations/utils.R") # TODO: add these functions to package
 
 #################
@@ -12,22 +12,22 @@ source("simulations/utils.R") # TODO: add these functions to package
 #################
 
 # General
-n_range = c(1000)
+n_range = c(500)
 #n = 1000
 E = 1000
 nr_exp = 200
 alphas = seq(0.01, 0.99, 0.01)
 
 # Test strategy
-test_strategy="LR"  # "grouping", "run-over", "U-stat", "LR", "U-stat-deg"
+test_strategy="run-over"  # "grouping", "run-over", "U-stat", "LR", "U-stat-deg"
 B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doing some experiments)
 N = 5000 # the more, the better but not feasible
 #N_range = c(2*n, 5*n, round(n**1.5), round(n**1.8), round(n**2))
 
 # Tree
-tree = "cat_binary"  # "star_tree", "cat_binary"
-#m = 10  # (star_tree)
-#setup = 2  # (star_tree)
+tree = "star_tree"  # "star_tree", "cat_binary"
+m = 200  # (star_tree)
+setup = 1  # (star_tree)
 
 
 # Saving
@@ -46,13 +46,15 @@ if (tree=="star_tree"){
 
 plot(g)
 
-res = collect_indices(g)
+res = collect_indices(g, 5000, 250)
 ind_eq = matrix(unlist(res[[1]]), ncol = 8, byrow = TRUE)
 ind_ineq1 = matrix(unlist(res[[2]]), ncol = 6, byrow = TRUE)
 ind_ineq2 = matrix(unlist(res[[3]]), ncol = 8, byrow = TRUE)
 p = dim(ind_eq)[1] + dim(ind_ineq1)[1] + dim(ind_ineq2)[1]
 print(p)
 
+
+cov = cov_from_star_tree(g, setup=setup, m=m)
 
 #######################################
 # Test wrapper function (single test) #
@@ -68,7 +70,7 @@ for (n in n_range){
   # Compute empirical test sizes for all alphas #
   ###############################################
   
-  cores = 20 # detectCores()
+  cores = detectCores()
   cl <- makeCluster(cores, outfile = "")
   registerDoParallel(cl)
   
@@ -82,14 +84,14 @@ for (n in n_range){
     }
     warnings()
     
-    # Generate n independent data sets depending on setup
-    if (tree=="star_tree"){
-      cov = cov_from_star_tree(g, setup=setup, m=m)
-    } else if (tree=="cat_binary"){
-      V(g)$var = rep(1,38)
-      E(g)$corr = rep(0.7,37)
-      cov = cov_from_graph(g)
-    }
+    # # Generate n independent data sets depending on setup
+    # if (tree=="star_tree"){
+    #   cov = cov_from_star_tree(g, setup=setup, m=m)
+    # } else if (tree=="cat_binary"){
+    #   V(g)$var = rep(1,38)
+    #   E(g)$corr = rep(0.7,37)
+    #   cov = cov_from_graph(g)
+    # }
     
     X = mvrnorm(n, mu=rep(0,nrow(cov)), Sigma=cov)
     
