@@ -12,19 +12,19 @@ source("simulations/utils.R") # TODO: add these functions to package
 #################
 
 # General
-n_range = seq(250,1000, len=20)
+n_range = seq(250,1200, 50)
 E = 1000
-nr_exp = 100
+nr_exp = 500
 alpha = 0.05
 
 # Tree
-tree = "star_tree"  # "star_tree", "cat_binary"
+tree = "cat_binary"  # "star_tree", "cat_binary"
 m = 20  
 setup = 2  # (star_tree)
 
 
 beta_2 = c(rep(0,(m-2)),1,1)
-h = 3
+h = 15
 
 
 # Test strategy
@@ -83,7 +83,7 @@ for (i in (1:length(n_range))){
                     .errorhandling="remove",
                     .packages=c("MASS", "TestGLTM", "igraph", "stats")) %dopar% {
     
-    warnings()
+    #warnings()
     if((nr%%20) == 0){
       print(nr)
     }

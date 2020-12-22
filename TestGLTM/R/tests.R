@@ -63,7 +63,7 @@ test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=100
       stop("ERROR - exactly one set of inequalities is missing. Cannot handle this.")
     }
     test_ineqs = FALSE
-    m = 2
+    r = 2
   } else {
     test_ineqs = TRUE
     r = 4
@@ -72,7 +72,7 @@ test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=100
   # determine N_hat by Bernoulli sampling
   N_hat = rbinom(1, choose(n,r), (N / choose(n,r)))
   
-  # Choose randomly N_hat subsets with cardinality 4 of {1,...,n}
+  # Choose randomly N_hat subsets with cardinality r of {1,...,n}
   indices_U = matrix(ncol=r, nrow=N_hat) 
   for (i in 1:N_hat){
     indices_U[i,] = sort(sample(1:n, r, replace=FALSE), decreasing=FALSE)
