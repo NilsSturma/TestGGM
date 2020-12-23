@@ -51,6 +51,8 @@ if (tree=="star_tree"){
 
 plot(g)
 
+paths = get_paths(g)
+
 res = collect_indices(g)
 ind_eq = matrix(unlist(res[[1]]), ncol = 8, byrow = TRUE)
 ind_ineq1 = matrix(unlist(res[[2]]), ncol = 6, byrow = TRUE)
@@ -91,11 +93,11 @@ for (i in (1:length(n_range))){
     
     # Calculate covariance matric of alternative (depends on h)
     if (tree=="star_tree"){
-      cov = cov_from_star_tree(g, setup=setup, m=m)
+      cov = cov_from_star_tree(g, paths, setup=setup, m=m)
     } else if (tree=="cat_binary"){
       V(g)$var = rep(1,38)
       E(g)$corr = rep(0.7,37)
-      cov = cov_from_graph(g)
+      cov = cov_from_graph(g, paths)
     }
     
     cov = cov +  beta_2 %*% t(beta_2) * (h / sqrt(n))
