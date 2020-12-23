@@ -18,17 +18,17 @@ nr_exp = 500
 alpha = 0.05
 
 # Tree
-tree = "cat_binary"  # "star_tree", "cat_binary"
+tree = "star_tree"  # "star_tree", "cat_binary"
 m = 20  
-#setup = 2  # (star_tree)
+setup = 2  # (star_tree)
 
 
 beta_2 = c(rep(0,(m-2)),1,1)
-H = seq(1.5,30,len=20)
+H = seq(0.5,10,len=20)
 
 
 # Test strategy
-test_strategy="run-over" #"grouping", "run-over", "U-stat", "LR"
+test_strategy="U-stat" #"grouping", "run-over", "U-stat", "LR"
 B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doing some experiments)
 N = 5000  # just for test_strategy=="U-stat"
 
