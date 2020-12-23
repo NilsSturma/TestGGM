@@ -19,7 +19,7 @@ alphas = seq(0.01, 0.99, 0.01)
 
 # Test strategy
 #test_strategy="U-stat"  # "grouping", "run-over", "U-stat", "LR", "U-stat-deg"
-strategies = c("grouping", "run-over", "U-stat")
+strategies = c("U-stat")
 B = 5  # just for test_strategy=="run-over" 
 N = 5000 # just for test_strategy=="U-stat
 

@@ -69,6 +69,9 @@ test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=100
     r = 4
   }
   
+  
+  N = min(0.7*choose(n,r), N)
+  
   # determine N_hat by Bernoulli sampling
   N_hat = rbinom(1, choose(n,r), (N / choose(n,r)))
   
