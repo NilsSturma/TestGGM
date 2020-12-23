@@ -110,8 +110,24 @@ collect_indices <- function(g, nr_4=NULL, nr_3=NULL){
 
 
 
+get_paths = function(g){
+  nr_nodes = length(V(g))
+  paths = list()
+  for (i in 1:nr_nodes){
+    p_list = list()
+    for (j in 1:nr_nodes){
+      p = igraph::shortest_paths(g, from=V(g)[name==i], to=V(g)[name==j], output="epath", weight=NA)
+      p = c(unlist(p$epath))
+      p_list = c(p_list, list(p))
+    }
+    paths[[i]] = p_list
+  }
+  return(paths)
+}
 
-cov_from_graph = function(g){
+
+
+cov_from_graph = function(g, paths){
   
   # g is an igraph object with the following attributes
   # type: 1= observed, 2=unobserved
@@ -122,19 +138,14 @@ cov_from_graph = function(g){
   m = sum(V(g)$type==1)
   
   corr = diag(rep(1,m))
-  for (i in 1:m){
-    for (j in min((i+1),m):m){
-      path = igraph::shortest_paths(g, from=V(g)[name==i], to=V(g)[name==j], output="epath", weight=NA)
-      corr[i,j] = prod(E(g)$corr[c(unlist(path$epath))])
+  for (i in 1:(m-1)){
+    for (j in (i+1):m){
+      corr[i,j] = prod(E(g)$corr[paths[[i]][[j]]])
       corr[j,i] = corr[i,j]
     }
   }
   cov = (diag(std) %*% corr %*% diag(std))
   return(cov)
 }
-
-
-
-
 
 

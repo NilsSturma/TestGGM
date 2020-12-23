@@ -4,7 +4,7 @@ library(MASS) #mvrnorm
 library(igraph)
 library(TestGLTM)
 
-setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
+#setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
 source("simulations/utils.R") # TODO: add these functions to package
 
 #################
@@ -51,6 +51,8 @@ if (tree=="star_tree"){
 
 plot(g)
 
+paths = get_paths(g)
+
 res = collect_indices(g, nr_4, nr_3)
 ind_eq = matrix(unlist(res[[1]]), ncol = 8, byrow = TRUE)
 ind_ineq1 = matrix(unlist(res[[2]]), ncol = 6, byrow = TRUE)
@@ -94,11 +96,11 @@ for (test_strategy in strategies){
       # Generate n independent data sets depending on setup
       
       if (tree=="star_tree"){
-        cov = cov_from_star_tree(g, setup=setup, m=m)
+        cov = cov_from_star_tree(g, paths, setup=setup, m=m)
       } else if (tree=="cat_binary"){
         V(g)$var = rep(1,(m+(m-2)))
         E(g)$corr = rep(0.7,(m+(m-3)))
-        cov = cov_from_graph(g)
+        cov = cov_from_graph(g, paths)
       }
       X = mvrnorm(n, mu=rep(0,nrow(cov)), Sigma=cov)
       

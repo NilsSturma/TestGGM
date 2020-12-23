@@ -1,4 +1,4 @@
-cov_from_graph_large = function(g){
+cov_from_graph_large = function(g, paths){
   
   # g is an igraph object with the following attributes
   # V(g)$var: variances for all nodes
@@ -8,16 +8,16 @@ cov_from_graph_large = function(g){
   nr_nodes = length(V(g))
   
   corr = diag(rep(1,nr_nodes))
-  for (i in 1:nr_nodes){
-    for (j in min((i+1),nr_nodes):nr_nodes){
-      path = igraph::shortest_paths(g, from=V(g)[name==i], to=V(g)[name==j], output="epath", weight=NA)
-      corr[i,j] = prod(E(g)$corr[c(unlist(path$epath))])
+  for (i in 1:(nr_nodes-1)){
+    for (j in (i+1):nr_nodes){
+      corr[i,j] = prod(E(g)$corr[paths[[i]][[j]]])
       corr[j,i] = corr[i,j]
     }
   }
   cov = (diag(std) %*% corr %*% diag(std))
   return(cov)
 }
+
 
 
 
@@ -29,22 +29,19 @@ update_param = function(g, S){
   # S is large covariance matrix of dimensin equal to total number of nodes
   
   # update correlation of all edges
-  edges = get.data.frame(g, what="edges")
+  edges = get.edgelist(g)
   for (i in 1:dim(edges)[1]){
-    from = as.integer(edges[i,"from"])
-    to = as.integer(edges[i,"to"])
-    edges[i, "corr"] = S[from, to] / ( sqrt(S[from,from]) * sqrt(S[to,to]) )
+    from = as.integer(edges[i,][1])
+    to = as.integer(edges[i,][2])
+    E(g)$corr[i] = S[from, to] / ( sqrt(S[from,from]) * sqrt(S[to,to]) )
     
   }
   
   # update variance of observed nodes
-  vertices = get.data.frame(g, what="vertices")
   nr_observed = sum(V(g)$type==1) # always the first ones in vertices
   for (i in 1:nr_observed){
-    vertices[i, "var"] = S[i,i]
+    V(g)$var[i] = S[i,i]
   }
-  
-  g = igraph::graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
   return(g)
 }
 
@@ -100,17 +97,17 @@ E_step <- function(X,S){
 
 
 
-M_step = function(g, S){
+M_step = function(g, S, paths){
   g = update_param(g,S)
-  S = cov_from_graph_large(g)
+  S = cov_from_graph_large(g, paths)
   return(S)
 }
 
 
 
-EM = function(X,g,tol=1e-4, maxiter=200){
+EM = function(X,g,paths,tol=1e-4, maxiter=200){
   m = dim(X)[2] # number of observed nodes
-  S = cov_from_graph_large(g)
+  S = cov_from_graph_large(g, paths)
   l_0 = loglik(S[1:m,1:m], X)
   i=0
   while (i <= maxiter){
@@ -119,11 +116,11 @@ EM = function(X,g,tol=1e-4, maxiter=200){
     S = E_step(X,S)
     
     # M-step
-    g = update_param(g,S)
-    S = cov_from_graph_large(g)
+    S = M_step(g,S, paths)
     
     # Evaluate loglik 
     l_1 = loglik(S[1:m,1:m], X)
+    print(l_1)
     
     # Check stopping criteria
     if (abs(l_1-l_0) < tol){
@@ -150,10 +147,10 @@ mle = function(X){
 
 
 
-LR_test = function(X, g){
+LR_test = function(X, g, paths){
   
   # returns p value
-  LR_statistic = 2*( mle(X)$loglik - EM(X,g)$loglik )
+  LR_statistic = 2*( mle(X)$loglik - EM(X,g,paths)$loglik )
   df = choose((dim(X)[2]+1),2) - ( length(E(g)) + sum(V(g)$type==1) )
   p_value = 1 - stats::pchisq(LR_statistic, df)
   
