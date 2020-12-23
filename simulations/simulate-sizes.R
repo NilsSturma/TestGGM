@@ -25,7 +25,7 @@ N = 5000 # just for test_strategy=="U-stat
 
 # Tree
 tree = "cat_binary"  # "star_tree", "cat_binary"
-m = 20 
+m = 20
 #setup = 1  # (star_tree)
 
 # High dimensionality?
