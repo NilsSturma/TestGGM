@@ -12,9 +12,9 @@ source("simulations/utils.R") # TODO: add these functions to package
 #################
 
 # General
-n_range = c(100,250,1000)
+n_range = c(500)
 E = 1000
-nr_exp = 200
+nr_exp = 500
 alphas = seq(0.01, 0.99, 0.01)
 
 # Test strategy
@@ -24,19 +24,19 @@ B = 5  # just for test_strategy=="run-over"
 N = 5000 # just for test_strategy=="U-stat
 
 # Tree
-tree = "cat_binary"  # "star_tree", "cat_binary"
+tree = "star_tree"  # "star_tree", "cat_binary"
 m = 20
-#setup = 1  # (star_tree)
+setup = 2  # (star_tree)
 
 # High dimensionality?
 nr_4 = NULL  # 5000
 nr_3 = NULL  # 250
 
 # Test only equalities?
-only_equalities = TRUE
+only_equalities = FALSE
 
 # Saving
-save=TRUE
+save=FALSE
 
 
 ###################################
