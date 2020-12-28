@@ -14,17 +14,17 @@ source("simulations/utils.R") # TODO: add these functions to package
 # General
 n = 500
 E = 1000
-nr_exp = 500
+nr_exp = 300
 alpha = 0.05
 
 # Tree
-tree = "star_tree"  # "star_tree", "cat_binary"
+tree = "cat_binary"  # "star_tree", "cat_binary"
 m = 20  
-setup = 2  # (star_tree)
+#setup = 2  # (star_tree)
 
 
 beta_2 = c(rep(0,(m-2)),1,1)
-H = seq(0.5,10,len=20)
+H = seq(1.5,30,len=20)
 
 
 # Test strategy
@@ -32,6 +32,14 @@ test_strategy="U-stat" #"grouping", "run-over", "U-stat", "LR"
 B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doing some experiments)
 N = 5000  # just for test_strategy=="U-stat"
 
+
+
+# High dimensionality?
+nr_4 = NULL  # 5000
+nr_3 = NULL  # 250
+
+# Test only equalities?
+only_equalities = FALSE
 
 
 # Saving
@@ -46,18 +54,23 @@ save=TRUE
 if (tree=="star_tree"){
   g = star_tree(m)
 } else if (tree=="cat_binary"){
-  g = cat_binary()
+  g = cat_binary(m)
 } 
 
 plot(g)
 
 paths = get_paths(g)
 
-res = collect_indices(g)
+res = collect_indices(g, nr_4, nr_3)
 ind_eq = matrix(unlist(res[[1]]), ncol = 8, byrow = TRUE)
 ind_ineq1 = matrix(unlist(res[[2]]), ncol = 6, byrow = TRUE)
 ind_ineq2 = matrix(unlist(res[[3]]), ncol = 8, byrow = TRUE)
 p = dim(ind_eq)[1] + dim(ind_ineq1)[1] + dim(ind_ineq2)[1]
+if (only_equalities){
+  ind_ineq1 = NULL
+  ind_ineq2 = NULL
+  p = dim(ind_eq)[1]
+}
 print(p)
 
 

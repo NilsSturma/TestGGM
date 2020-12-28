@@ -36,7 +36,7 @@ nr_3 = NULL  # 250
 only_equalities = FALSE
 
 # Saving
-save=FALSE
+save=TRUE
 
 
 ###################################
