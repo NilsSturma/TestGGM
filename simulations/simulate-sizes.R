@@ -12,7 +12,7 @@ source("simulations/utils.R") # TODO: add these functions to package
 #################
 
 # General
-n_range = c(100,250,500,1000)
+n_range = c(500)
 E = 1000
 nr_exp = 500
 alphas = seq(0.01, 0.99, 0.01)
@@ -33,7 +33,7 @@ nr_4 = NULL  # 5000
 nr_3 = NULL  # 250
 
 # Test only equalities?
-only_equalities = TRUE
+only_equalities = FALSE
 
 # Saving
 save=TRUE
@@ -79,7 +79,7 @@ for (test_strategy in strategies){
     print(paste("strategy=",test_strategy ,sep=""))
     print(paste("n=",n ,sep=""))
     
-    cores = 20 #detectCores()
+    cores = detectCores()
     cl <- makeCluster(cores, outfile = "")
     registerDoParallel(cl)
     
