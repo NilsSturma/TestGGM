@@ -81,7 +81,7 @@ bootstrap_m_dep <- function(E, B, omega, Y_centered) {
     .Call(`_TestGLTM_bootstrap_m_dep`, E, B, omega, Y_centered)
 }
 
-bootstrap_U <- function(E, H_centered, G_centered, N) {
-    .Call(`_TestGLTM_bootstrap_U`, E, H_centered, G_centered, N)
+bootstrap_U <- function(E, r, H_centered, G_centered, N) {
+    .Call(`_TestGLTM_bootstrap_U`, E, r, H_centered, G_centered, N)
 }
 

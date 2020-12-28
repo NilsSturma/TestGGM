@@ -4,7 +4,7 @@ library(MASS) #mvrnorm
 library(igraph)
 library(TestGLTM)
 
-#setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
+setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
 source("simulations/utils.R") # TODO: add these functions to package
 
 #################
@@ -12,9 +12,9 @@ source("simulations/utils.R") # TODO: add these functions to package
 #################
 
 # General
-n_range = c(500)
+n_range = c(100,250,1000)
 E = 1000
-nr_exp = 500
+nr_exp = 200
 alphas = seq(0.01, 0.99, 0.01)
 
 # Test strategy
@@ -33,7 +33,7 @@ nr_4 = NULL  # 5000
 nr_3 = NULL  # 250
 
 # Test only equalities?
-only_equalities = FALSE
+only_equalities = TRUE
 
 # Saving
 save=TRUE
@@ -79,7 +79,7 @@ for (test_strategy in strategies){
     print(paste("strategy=",test_strategy ,sep=""))
     print(paste("n=",n ,sep=""))
     
-    cores = detectCores()
+    cores = 20 #detectCores()
     cl <- makeCluster(cores, outfile = "")
     registerDoParallel(cl)
     
