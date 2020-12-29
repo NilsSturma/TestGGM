@@ -37,6 +37,7 @@ lwd_legend = 1
 
 
 
+
 #######################
 # Parameter selection #
 #######################
@@ -53,7 +54,7 @@ B7 = readRDS("results/star_tree/run-over/vary-B/2020-11-28-16-17_B=7.rds")
 if (save){pdf(name, width=width,height=height)}
 
 plot(alphas, B3, 
-     xlab="Nominal level", ylab="Emprical test size", #main=title, sub=subtitle,
+     xlab="Nominal level", ylab="Empirical test size", #main=title, sub=subtitle,
      type="p", pch=15, cex=0.7,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
 points(alphas, B4, type="p", pch=0, cex=0.7)
 points(alphas, B5, type="p", pch=4, cex=0.7)
@@ -77,13 +78,13 @@ name = paste("results/FINAL-PLOTS/",  "vary-B_2.pdf", sep="")
 
 if (save){pdf(name, width=width,height=height)}
 
-plot(alphas, B3, 
-     xlab="Nominal level", ylab="Emprical test size", #main=title, sub=subtitle,
+plot(alphas[1:20], B3, 
+     xlab="Nominal level", ylab="Empirical test size", #main=title, sub=subtitle,
      type="p", pch=15, cex=1.5*0.7,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub, xlim = c(0,0.2), ylim = c(0,0.25))
-points(alphas, B4, type="p", pch=0, cex=1.5*0.7)
-points(alphas, B5, type="p", pch=4, cex=1.5*0.7)
-points(alphas, B6, type="p", pch=1, cex=1.5*0.9)
-points(alphas, B7, type="p", pch=16, cex=1.5*0.9)
+points(alphas[1:20], B4, type="p", pch=0, cex=1.5*0.7)
+points(alphas[1:20], B5, type="p", pch=4, cex=1.5*0.7)
+points(alphas[1:20], B6, type="p", pch=1, cex=1.5*0.9)
+points(alphas[1:20], B7, type="p", pch=16, cex=1.5*0.9)
 abline(coef = c(0,1))
 legend("bottomright", legend=c("B=3", "B=4", "B=5", "B=6", "B=7"), bty="n", lwd=lwd_legend, 
        cex=cex_legend, lty=c(NA, NA, NA, NA, NA), pch=c(15, 0, 4, 1, 16))
@@ -103,7 +104,7 @@ nonsym = readRDS("results/star_tree/grouping/symm vs. nonsym/nonsymmetric_star-t
 if (save){pdf(name, width=width,height=height)}
 
 plot(alphas, sym, 
-     xlab="Nominal level", ylab="Emprical test size", #main=title, sub=subtitle,
+     xlab="Nominal level", ylab="Empirical test size", #main=title, sub=subtitle,
      type="p", pch=gr_pch, cex=gr_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
 points(alphas, nonsym, type="p", pch=19, cex=gr_cex)
 abline(coef = c(0,1))
@@ -123,7 +124,7 @@ nonsym = readRDS("results/star_tree/run-over/symm vs. nonsymm/nonsymmetric_star-
 if (save){pdf(name, width=width,height=height)}
 
 plot(alphas, sym, 
-     xlab="Nominal level", ylab="Emprical test size", #main=title, sub=subtitle,
+     xlab="Nominal level", ylab="Empirical test size", #main=title, sub=subtitle,
      type="p", pch=ro_pch, cex=ro_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
 points(alphas, nonsym, type="p", pch=17, cex=ro_cex)
 abline(coef = c(0,1))
@@ -145,7 +146,7 @@ N5000 = readRDS("results/star_tree/U-stat/vary-N/2020-12-16-22-12_star-tree_setu
 if (save){pdf(name, width=width,height=height)}
 
 plot(alphas, N1000, 
-     xlab="Nominal level", ylab="Emprical test size", #main=title, sub=subtitle,
+     xlab="Nominal level", ylab="Empirical test size", #main=title, sub=subtitle,
      type="p", pch=0, cex=u_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
 points(alphas, N2500, type="p", pch=7, cex=u_cex)
 points(alphas, N5000, type="p", pch=u_pch, cex=u_cex)
@@ -167,7 +168,7 @@ Upsilon_h = readRDS("results/star_tree/U-stat/standardization/Upsilon_h_star-tre
 if (save){pdf(name, width=width,height=height)}
 
 plot(alphas, Upsilon_h, 
-     xlab="Nominal level", ylab="Emprical test size", #main=title, sub=subtitle,
+     xlab="Nominal level", ylab="Empirical test size", #main=title, sub=subtitle,
      type="p", pch=u_pch, cex=u_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
 points(alphas, Upsilon, type="p", pch=0, cex=u_cex)
 abline(coef = c(0,1))
@@ -175,6 +176,8 @@ legend("bottomright", legend=c("Upsilon", "Upsilon_h"), bty="n", lwd=lwd_legend,
        cex=cex_legend, lty=c(NA, NA), pch=c(0, u_pch))
 
 if (save){dev.off()}
+
+
 
 
 
@@ -202,7 +205,7 @@ s1_U_stat= readRDS("results/star_tree/U-stat/sizes/2020-12-17-17-34_star-tree_se
 if (save){pdf(name, width=width,height=height)}
 
 plot(alphas, s1_run_over, 
-     xlab="Nominal level", ylab="Emprical test size", #main=title, sub=subtitle,
+     xlab="Nominal level", ylab="Empirical test size", #main=title, sub=subtitle,
      type="p", pch=ro_pch, cex=ro_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
 points(alphas, s1_LR, type="p", pch=lr_pch, cex=lr_cex)
 points(alphas, s1_U_stat, type="p", pch=u_pch, cex=u_cex)
@@ -219,13 +222,13 @@ name = paste("results/FINAL-PLOTS/", "sizes_star-tree_setup-2_n=1000_m=20.pdf", 
 
 s2_LR = readRDS("results/star_tree/LR/sizes/2020-11-28-14-06_star-tree_setup=2_n=1000_m=20.rds")
 s2_run_over = readRDS("results/star_tree/run-over/sizes/2020-11-21-14-26_star-tree_setup=2_n=1000_m=20.rds")
-s2_U_stat= readRDS("results/star_tree/U-stat/sizes/2020-11-24-09-52_star-tree_setup=2_n=1000_m=20.rds")
+s2_U_stat= readRDS("results/star_tree/U-stat/sizes/2020-12-17-05-11_star-tree_setup=2_n=1000_m=20.rds")
 s2_grouping = readRDS("results/star_tree/grouping/sizes/2020-11-21-13-29_star-tree_setup=2_n=1000_m=20.rds")
 
 if (save){pdf(name, width=width,height=height)}
 
 plot(alphas, s2_run_over, 
-     xlab="Nominal level", ylab="Emprical test size", #main=title, sub=subtitle,
+     xlab="Nominal level", ylab="Empirical test size", #main=title, sub=subtitle,
      type="p", pch=ro_pch, cex=ro_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
 points(alphas, s2_LR, type="p", pch=lr_pch, cex=lr_cex)
 points(alphas, s2_U_stat, type="p", pch=u_pch, cex=u_cex)
@@ -248,7 +251,7 @@ grouping = readRDS("results/cat_binary/grouping/sizes/2020-12-13-17-01_caterpill
 if (save){pdf(name, width=width,height=height)}
 
 plot(alphas, run_over, 
-     xlab="Nominal level", ylab="Emprical test size", #main=title, sub=subtitle,
+     xlab="Nominal level", ylab="Empirical test size", #main=title, sub=subtitle,
      type="p", pch=ro_pch, cex=ro_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
 points(alphas, LR, type="p", pch=lr_pch, cex=lr_cex)
 points(alphas, U_stat, type="p", pch=u_pch, cex=u_cex)
@@ -258,6 +261,89 @@ legend("bottomright", legend=c(lr_name, gr_name, ro_name, u_name), bty="n", lwd=
        cex=cex_legend, lty=c(NA, NA, NA, NA), pch=c(lr_pch, gr_pch, ro_pch, u_pch))
 
 if (save){dev.off()}
+
+
+
+
+
+
+
+
+
+
+
+
+
+#######################
+# High dimensionality #
+#######################
+
+############### star-tree # setup 1 ###############
+name = paste("results/FINAL-PLOTS/", "sizes_star-tree_setup-1_n=500_m=200.pdf", sep="")
+
+LR = readRDS("results/star_tree/LR/sizes/2020-12-22-14-54_star-tree_setup=1_n=500_m=200.rds")
+grouping = readRDS("results/star_tree/grouping/sizes/2020-12-22-14-51_star-tree_setup=1_n=500_m=200.rds")
+run_over = readRDS("results/star_tree/run-over/sizes/2020-12-22-16-16_star-tree_setup=1_n=500_m=200.rds")
+U_stat= readRDS("results/star_tree/U-stat/sizes/2020-12-22-17-24_star-tree_setup=1_n=500_m=200.rds")
+
+if (save){pdf(name, width=width,height=height)}
+
+plot(alphas, run_over, 
+     xlab="Nominal level", ylab="Empirical test size", #main=title, sub=subtitle,
+     type="p", pch=ro_pch, cex=ro_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
+points(alphas, LR, type="p", pch=lr_pch, cex=lr_cex)
+points(alphas, U_stat, type="p", pch=u_pch, cex=u_cex)
+points(alphas, grouping, type="p", pch=gr_pch, cex=gr_cex)
+abline(coef = c(0,1))
+legend("bottomright", legend=c(lr_name, gr_name, ro_name, u_name), bty="n", lwd=lwd_legend, 
+       cex=cex_legend, lty=c(NA, NA, NA, NA), pch=c(lr_pch, gr_pch, ro_pch, u_pch))
+
+if (save){dev.off()}
+
+
+############### caterpillar tree ###############
+name = paste("results/FINAL-PLOTS/", "sizes_cat_binary_n=500_m=200.pdf", sep="")
+
+#LR = readRDS("results/cat_binary/LR/sizes/2020-12-22-14-54_star-tree_setup=1_n=500_m=200.rds")
+grouping = readRDS("results/cat_binary/grouping/sizes/2020-12-22-18-06_caterpillar_n=500_m=200.rds")
+run_over = readRDS("results/cat_binary/run-over/sizes/2020-12-22-23-52_caterpillar_n=500_m=200.rds")
+U_stat= readRDS("results/cat_binary/U-stat/sizes/2020-12-22-18-59_caterpillar_n=500_m=200.rds")
+
+if (save){pdf(name, width=width,height=height)}
+
+plot(alphas, grouping, 
+     xlab="Nominal level", ylab="Empirical test size", #main=title, sub=subtitle,
+     type="p", pch=gr_pch, cex=gr_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
+#points(alphas, LR, type="p", pch=lr_pch, cex=lr_cex)
+points(alphas, run_over, type="p", pch=ro_pch, cex=ro_cex)
+points(alphas, U_stat, type="p", pch=u_pch, cex=u_cex)
+abline(coef = c(0,1))
+legend("bottomright", legend=c(gr_name, ro_name, u_name), bty="n", lwd=lwd_legend, 
+       cex=cex_legend, lty=c(NA, NA, NA), pch=c(gr_pch, ro_pch, u_pch))
+
+if (save){dev.off()}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###################
+# Only equalities #
+###################
+
+############### star-tree # setup 1 ###############
+
+
+
 
 
 
@@ -285,7 +371,7 @@ U_stat= readRDS("results/star_tree/U-stat/power-fixed-n/2020-12-25-17-16_setup=2
 if (save){pdf(name, width=width,height=height)}
 
 plot(H, grouping, 
-     xlab="h", ylab="Emprical power", #main=title, sub=subtitle,
+     xlab="h", ylab="Empirical power", #main=title, sub=subtitle,
      type="p", pch=gr_pch, cex=1.5*gr_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
 points(H, run_over, type="p", pch=ro_pch, cex=1.5*ro_cex)
 points(H, U_stat, type="p", pch=u_pch, cex=1.5*u_cex)
