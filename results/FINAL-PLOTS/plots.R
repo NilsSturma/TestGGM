@@ -1,143 +1,299 @@
+#################
+# Set variables #
+#################
+alphas = seq(0.01, 0.99, 0.01)
+save = TRUE
 setwd("C:/Users/Nils/Documents/Studium/TUM/09_Masterarbeit/master-thesis-tests")
 
-save = TRUE
+width=8
+height=6
 
-#################
-# Sizes setup 1 #
-#################
+lr_pch = 4
+gr_pch = 1
+ro_pch = 2
+u_pch = 15
+  
+lr_cex = 0.7
+gr_cex = 0.9
+ro_cex = 0.8
+u_cex = 0.7
 
-name = paste("results/FINAL-PLOTS/", "sizes_star-tree_setup-1_n=1000_m=20.pdf", sep="")
-
-# Load data
-s1_LR = readRDS("results/star_tree/LR/sizes/2020-11-29-00-27_star-tree_setup=1_n=1000_m=20.rds")
-s1_grouping = readRDS("results/star_tree/grouping/sizes/2020-11-21-11-56_star-tree_setup=1_n=1000_m=20.rds")
-s1_run_over = readRDS("results/star_tree/run-over/sizes/2020-11-21-12-29_star-tree_setup=1_n=1000_m=20.rds")
-s1_U_stat= readRDS("results/star_tree/U-stat/sizes/2020-12-17-17-34_star-tree_setup=1_n=1000_m=20.rds")
-
-
-# Set variables
-alphas = seq(0.01, 0.99, 0.01)
-
-
-# create pdf file
-if (save){
-  pdf(name, width=8,height=6) 
-}
+lr_name = "LR"
+gr_name = "Test 1"
+ro_name = "Test 2"
+u_name = "Test 3"
 
 
-plot(alphas, s1_run_over, 
-     xlab="Nominal level", ylab="Emprical test size", #main=title, sub=subtitle,
-     type="p", pch=2, cex=0.8,  cex.lab=1.3, cex.axis=1.3, cex.main=1.3, cex.sub=1.3)
-points(alphas, s1_LR, type="p", pch=4, cex=0.7)
-points(alphas, s1_U_stat, type="p", pch=15, cex=0.7)
-points(alphas, s1_grouping, type="p", pch=1, cex=0.9)
-abline(coef = c(0,1))
-legend("bottomright", legend = c("LR", "Test 1", "Test 2", "Test 3"), bty = "n", lwd = 1, 
-       cex = 1.3, lty = c(NA, NA, NA, NA), pch = c(4, 1, 2, 15))
+cex_lab = 1.3
+cex_axis = 1.3
+cex_main = 1.3
+cex_sub = 1.3
+cex_legend = 1.3
 
-# close pdf file
-if (save){
-  dev.off() 
-}
-
-
-#################
-# Sizes setup 2 #
-#################
-
-name = paste("results/FINAL-PLOTS/", "sizes_star-tree_setup-2_n=1000_m=20.pdf", sep="")
-
-# Load data
-s2_LR = readRDS("results/star_tree/LR/sizes/2020-11-28-14-06_star-tree_setup=2_n=1000_m=20.rds")
-s2_run_over = readRDS("results/star_tree/run-over/sizes/2020-11-21-14-26_star-tree_setup=2_n=1000_m=20.rds")
-s2_U_stat= readRDS("results/star_tree/U-stat/sizes/2020-11-24-09-52_star-tree_setup=2_n=1000_m=20.rds")
-s2_grouping = readRDS("results/star_tree/grouping/sizes/2020-11-21-13-29_star-tree_setup=2_n=1000_m=20.rds")
-
-# Set variables
-alphas = seq(0.01, 0.99, 0.01)
-
-
-# create pdf file
-if (save){
-  pdf(name, width=8,height=6) 
-}
-
-
-plot(alphas, s2_run_over, 
-     xlab="Nominal level", ylab="Emprical test size", #main=title, sub=subtitle,
-     type="p", pch=2, cex=0.8,  cex.lab=1.3, cex.axis=1.3, cex.main=1.3, cex.sub=1.3)
-points(alphas, s2_LR, type="p", pch=4, cex=0.7)
-points(alphas, s2_U_stat, type="p", pch=15, cex=0.7)
-points(alphas, s2_grouping, type="p", pch=1, cex=0.9)
-abline(coef = c(0,1))
-legend("bottomright", legend = c("LR", "Test 1", "Test 2", "Test 3"), bty = "n", lwd = 1, 
-       cex = 1.3, lty = c(NA, NA, NA, NA), pch = c(4, 1, 2, 15))
-
-# close pdf file
-if (save){
-  dev.off() 
-}
+lwd_legend = 1
 
 
 
 
-##########
-# vary B #
-##########
 
-# Set variables
-alphas = seq(0.01, 0.99, 0.01)
 
-# create pdf file
+#######################
+# Parameter selection #
+#######################
+
+############### vary B # 1 ###############
 name = paste("results/FINAL-PLOTS/", "vary-B_1.pdf", sep="")
-if (save){
-  pdf(name, width=8,height=6) 
-}
+
+B3 = readRDS("results/star_tree/run-over/vary-B/2020-11-28-14-51_B=3.rds")
+B4 = readRDS("results/star_tree/run-over/vary-B/2020-11-28-15-14_B=4.rds")
+B5 = readRDS("results/star_tree/run-over/vary-B/2020-11-28-15-37_B=5.rds")
+B6 = readRDS("results/star_tree/run-over/vary-B/2020-11-28-15-58_B=6.rds")
+B7 = readRDS("results/star_tree/run-over/vary-B/2020-11-28-16-17_B=7.rds")
+
+if (save){pdf(name, width=width,height=height)}
 
 plot(alphas, B3, 
      xlab="Nominal level", ylab="Emprical test size", #main=title, sub=subtitle,
-     type="p", pch=15, cex=0.7,  cex.lab=1.3, cex.axis=1.3, cex.main=1.3, cex.sub=1.3)
+     type="p", pch=15, cex=0.7,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
 points(alphas, B4, type="p", pch=0, cex=0.7)
 points(alphas, B5, type="p", pch=4, cex=0.7)
 points(alphas, B6, type="p", pch=1, cex=0.9)
 points(alphas, B7, type="p", pch=16, cex=0.9)
 abline(coef = c(0,1))
-legend("bottomright", legend = c("B=3", "B=4", "B=5", "B=6", "B=7"), bty = "n", lwd = 1, 
-       cex = 1.3, lty = c(NA, NA, NA, NA, NA), pch = c(15, 0, 4, 1, 16))
+legend("bottomright", legend=c("B=3", "B=4", "B=5", "B=6", "B=7"), bty="n", lwd=lwd_legend, 
+       cex=cex_legend, lty=c(NA, NA, NA, NA, NA), pch=c(15, 0, 4, 1, 16))
 
-# close pdf file
-if (save){
-  dev.off() 
-}
+if (save){dev.off() }
 
 
-alphas = seq(0.01, 0.2, 0.01)
+############### vary B # 2 ###############
+B3 = B3[1:20]
+B4 = B4[1:20]
+B5 = B5[1:20]
+B6 = B6[1:20]
+B7 = B7[1:20]
+
 name = paste("results/FINAL-PLOTS/",  "vary-B_2.pdf", sep="")
 
-# Load data
-B3 = readRDS("results/star_tree/run-over/vary-B/2020-11-28-14-51_B=3.rds")[1:20]
-B4 = readRDS("results/star_tree/run-over/vary-B/2020-11-28-15-14_B=4.rds")[1:20]
-B5 = readRDS("results/star_tree/run-over/vary-B/2020-11-28-15-37_B=5.rds")[1:20]
-B6 = readRDS("results/star_tree/run-over/vary-B/2020-11-28-15-58_B=6.rds")[1:20]
-B7 = readRDS("results/star_tree/run-over/vary-B/2020-11-28-16-17_B=7.rds")[1:20]
-
-# create pdf file
-if (save){
-  pdf(name, width=8,height=6) 
-}
+if (save){pdf(name, width=width,height=height)}
 
 plot(alphas, B3, 
      xlab="Nominal level", ylab="Emprical test size", #main=title, sub=subtitle,
-     type="p", pch=15, cex=1.5*0.7,  cex.lab=1.3, cex.axis=1.3, cex.main=1.3, cex.sub=1.3, xlim = c(0,0.2), ylim = c(0,0.25))
+     type="p", pch=15, cex=1.5*0.7,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub, xlim = c(0,0.2), ylim = c(0,0.25))
 points(alphas, B4, type="p", pch=0, cex=1.5*0.7)
 points(alphas, B5, type="p", pch=4, cex=1.5*0.7)
 points(alphas, B6, type="p", pch=1, cex=1.5*0.9)
 points(alphas, B7, type="p", pch=16, cex=1.5*0.9)
 abline(coef = c(0,1))
-legend("bottomright", legend = c("B=3", "B=4", "B=5", "B=6", "B=7"), bty = "n", lwd = 1, 
-       cex = 1.3, lty = c(NA, NA, NA, NA, NA), pch = c(15, 0, 4, 1, 16))
+legend("bottomright", legend=c("B=3", "B=4", "B=5", "B=6", "B=7"), bty="n", lwd=lwd_legend, 
+       cex=cex_legend, lty=c(NA, NA, NA, NA, NA), pch=c(15, 0, 4, 1, 16))
 
 # close pdf file
-if (save){
-  dev.off() 
-}
+if (save){dev.off()}
+
+
+
+############### grouping # symmetric ###############
+name = paste("results/FINAL-PLOTS/", "grouping_symmetric.pdf", sep="")
+
+sym = readRDS("results/star_tree/grouping/symm vs. nonsym/symmetric_star-tree_setup=2_n=500_m=20.rds")
+nonsym = readRDS("results/star_tree/grouping/symm vs. nonsym/nonsymmetric_star-tree_setup=2_n=500_m=20.rds")
+
+
+if (save){pdf(name, width=width,height=height)}
+
+plot(alphas, sym, 
+     xlab="Nominal level", ylab="Emprical test size", #main=title, sub=subtitle,
+     type="p", pch=gr_pch, cex=gr_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
+points(alphas, nonsym, type="p", pch=19, cex=gr_cex)
+abline(coef = c(0,1))
+legend("bottomright", legend=c("h symmetric", "h not symmetric"), bty="n", lwd=lwd_legend, 
+       cex=cex_legend, lty=c(NA, NA), pch=c(gr_pch, 19))
+
+if (save){dev.off()}
+
+
+############### run-over # symmetric ###############
+name = paste("results/FINAL-PLOTS/", "run-over_symmetric.pdf", sep="")
+
+sym = readRDS("results/star_tree/run-over/symm vs. nonsymm/symmetric_star-tree_setup=2_n=500_m=20.rds")
+nonsym = readRDS("results/star_tree/run-over/symm vs. nonsymm/nonsymmetric_star-tree_setup=2_n=500_m=20.rds")
+
+
+if (save){pdf(name, width=width,height=height)}
+
+plot(alphas, sym, 
+     xlab="Nominal level", ylab="Emprical test size", #main=title, sub=subtitle,
+     type="p", pch=ro_pch, cex=ro_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
+points(alphas, nonsym, type="p", pch=17, cex=ro_cex)
+abline(coef = c(0,1))
+legend("bottomright", legend=c("h symmetric", "h not symmetric"), bty="n", lwd=lwd_legend, 
+       cex=cex_legend, lty=c(NA, NA), pch=c(ro_pch, 17))
+
+if (save){dev.off()}
+
+
+
+############### U-stat # vary-N ###############
+name = paste("results/FINAL-PLOTS/", "vary-N.pdf", sep="")
+
+N1000 = readRDS("results/star_tree/U-stat/vary-N/2020-12-04-23-25_star-tree_setup=2_N=1000.rds")
+N2500 = readRDS("results/star_tree/U-stat/vary-N/2020-12-05-00-10_star-tree_setup=2_N=2500.rds")
+N5000 = readRDS("results/star_tree/U-stat/vary-N/2020-12-16-22-12_star-tree_setup=2_N=5000.rds")
+
+
+if (save){pdf(name, width=width,height=height)}
+
+plot(alphas, N1000, 
+     xlab="Nominal level", ylab="Emprical test size", #main=title, sub=subtitle,
+     type="p", pch=0, cex=u_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
+points(alphas, N2500, type="p", pch=7, cex=u_cex)
+points(alphas, N5000, type="p", pch=u_pch, cex=u_cex)
+abline(coef = c(0,1))
+legend("bottomright", legend=c("n=1000", "n=2500", "n=5000"), bty="n", lwd=lwd_legend, 
+       cex=cex_legend, lty=c(NA, NA, NA), pch=c(0, 7, u_pch))
+
+if (save){dev.off()}
+
+
+
+############### U-stat # standardization ###############
+name = paste("results/FINAL-PLOTS/", "standardization.pdf", sep="")
+
+Upsilon = readRDS("results/star_tree/U-stat/standardization/Upsilon_star-tree_setup=2_n=500_m=20.rds")
+Upsilon_h = readRDS("results/star_tree/U-stat/standardization/Upsilon_h_star-tree_setup=2_n=500_m=20.rds")
+
+
+if (save){pdf(name, width=width,height=height)}
+
+plot(alphas, Upsilon_h, 
+     xlab="Nominal level", ylab="Emprical test size", #main=title, sub=subtitle,
+     type="p", pch=u_pch, cex=u_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
+points(alphas, Upsilon, type="p", pch=0, cex=u_cex)
+abline(coef = c(0,1))
+legend("bottomright", legend=c("Upsilon", "Upsilon_h"), bty="n", lwd=lwd_legend, 
+       cex=cex_legend, lty=c(NA, NA), pch=c(0, u_pch))
+
+if (save){dev.off()}
+
+
+
+
+
+
+
+
+
+
+
+
+###################
+# Empirical sizes #
+###################
+
+############### sizes # setup 1 ###############
+name = paste("results/FINAL-PLOTS/", "sizes_star-tree_setup-1_n=1000_m=20.pdf", sep="")
+
+s1_LR = readRDS("results/star_tree/LR/sizes/2020-11-29-00-27_star-tree_setup=1_n=1000_m=20.rds")
+s1_grouping = readRDS("results/star_tree/grouping/sizes/2020-11-21-11-56_star-tree_setup=1_n=1000_m=20.rds")
+s1_run_over = readRDS("results/star_tree/run-over/sizes/2020-11-21-12-29_star-tree_setup=1_n=1000_m=20.rds")
+s1_U_stat= readRDS("results/star_tree/U-stat/sizes/2020-12-17-17-34_star-tree_setup=1_n=1000_m=20.rds")
+
+if (save){pdf(name, width=width,height=height)}
+
+plot(alphas, s1_run_over, 
+     xlab="Nominal level", ylab="Emprical test size", #main=title, sub=subtitle,
+     type="p", pch=ro_pch, cex=ro_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
+points(alphas, s1_LR, type="p", pch=lr_pch, cex=lr_cex)
+points(alphas, s1_U_stat, type="p", pch=u_pch, cex=u_cex)
+points(alphas, s1_grouping, type="p", pch=gr_pch, cex=gr_cex)
+abline(coef = c(0,1))
+legend("bottomright", legend=c(lr_name, gr_name, ro_name, u_name), bty="n", lwd=lwd_legend, 
+       cex=cex_legend, lty=c(NA, NA, NA, NA), pch=c(lr_pch, gr_pch, ro_pch, u_pch))
+
+if (save){dev.off()}
+
+
+############### sizes # setup 2 ###############
+name = paste("results/FINAL-PLOTS/", "sizes_star-tree_setup-2_n=1000_m=20.pdf", sep="")
+
+s2_LR = readRDS("results/star_tree/LR/sizes/2020-11-28-14-06_star-tree_setup=2_n=1000_m=20.rds")
+s2_run_over = readRDS("results/star_tree/run-over/sizes/2020-11-21-14-26_star-tree_setup=2_n=1000_m=20.rds")
+s2_U_stat= readRDS("results/star_tree/U-stat/sizes/2020-11-24-09-52_star-tree_setup=2_n=1000_m=20.rds")
+s2_grouping = readRDS("results/star_tree/grouping/sizes/2020-11-21-13-29_star-tree_setup=2_n=1000_m=20.rds")
+
+if (save){pdf(name, width=width,height=height)}
+
+plot(alphas, s2_run_over, 
+     xlab="Nominal level", ylab="Emprical test size", #main=title, sub=subtitle,
+     type="p", pch=ro_pch, cex=ro_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
+points(alphas, s2_LR, type="p", pch=lr_pch, cex=lr_cex)
+points(alphas, s2_U_stat, type="p", pch=u_pch, cex=u_cex)
+points(alphas, s2_grouping, type="p", pch=gr_pch, cex=gr_cex)
+abline(coef = c(0,1))
+legend("bottomright", legend=c(lr_name, gr_name, ro_name, u_name), bty="n", lwd=lwd_legend, 
+       cex=cex_legend, lty=c(NA, NA, NA, NA), pch=c(lr_pch, gr_pch, ro_pch, u_pch))
+
+if (save){dev.off()}
+
+
+############### sizes # caterpillar ###############
+name = paste("results/FINAL-PLOTS/", "sizes_cat_binary_n=1000_m=20.pdf", sep="")
+
+LR = readRDS("results/cat_binary/LR/sizes/caterpillar_n=1000.rds")
+run_over = readRDS("results/cat_binary/run-over/sizes/2020-12-13-18-02_caterpillar_n=1000.rds")
+U_stat= readRDS("results/cat_binary/U-stat/sizes/2020-12-18-12-20_caterpillar_n=1000.rds")
+grouping = readRDS("results/cat_binary/grouping/sizes/2020-12-13-17-01_caterpillar_n=1000.rds")
+
+if (save){pdf(name, width=width,height=height)}
+
+plot(alphas, run_over, 
+     xlab="Nominal level", ylab="Emprical test size", #main=title, sub=subtitle,
+     type="p", pch=ro_pch, cex=ro_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
+points(alphas, LR, type="p", pch=lr_pch, cex=lr_cex)
+points(alphas, U_stat, type="p", pch=u_pch, cex=u_cex)
+points(alphas, grouping, type="p", pch=gr_pch, cex=gr_cex)
+abline(coef = c(0,1))
+legend("bottomright", legend=c(lr_name, gr_name, ro_name, u_name), bty="n", lwd=lwd_legend, 
+       cex=cex_legend, lty=c(NA, NA, NA, NA), pch=c(lr_pch, gr_pch, ro_pch, u_pch))
+
+if (save){dev.off()}
+
+
+
+
+
+
+
+
+
+
+
+###################
+# Empirical power #
+###################
+
+############### fixed-n # star-tree setup 2 ###############
+name = paste("results/FINAL-PLOTS/", "power-fixed-n_star-tree.pdf", sep="")
+H = seq(0.5,10,len=20)
+
+grouping = readRDS("results/star_tree/grouping/power-fixed-n/2020-12-18-19-38_setup=2_n=500_m=20.rds")
+run_over = readRDS("results/star_tree/run-over/power-fixed-n/2020-12-19-03-33_setup=2_n=500_m=20.rds")
+U_stat= readRDS("results/star_tree/U-stat/power-fixed-n/2020-12-25-17-16_setup=2_n=500_m=20.rds")
+
+
+if (save){pdf(name, width=width,height=height)}
+
+plot(H, grouping, 
+     xlab="h", ylab="Emprical power", #main=title, sub=subtitle,
+     type="p", pch=gr_pch, cex=1.5*gr_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
+points(H, run_over, type="p", pch=ro_pch, cex=1.5*ro_cex)
+points(H, U_stat, type="p", pch=u_pch, cex=1.5*u_cex)
+legend("bottomright", legend=c(gr_name, ro_name, u_name), bty="n", lwd=lwd_legend, 
+       cex=cex_legend, lty=c(NA, NA, NA), pch=c(gr_pch, ro_pch, u_pch))
+
+if (save){dev.off()}
+
+
+
+
