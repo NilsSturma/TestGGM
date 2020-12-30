@@ -14,7 +14,7 @@ source("simulations/utils.R") # TODO: add these functions to package
 # General
 n = 500
 E = 1000
-nr_exp = 300
+nr_exp = 100
 alpha = 0.05
 
 # Tree
