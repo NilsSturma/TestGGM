@@ -14,7 +14,7 @@ source("simulations/utils.R") # TODO: add these functions to package
 # General
 n = 500
 E = 1000
-nr_exp = 100
+nr_exp = 300
 alpha = 0.05
 
 # Tree
@@ -28,15 +28,15 @@ H = seq(1.5,30,len=20)
 
 
 # Test strategy
-test_strategy="U-stat" #"grouping", "run-over", "U-stat", "LR"
-B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doing some experiments)
-N = 5000  # just for test_strategy=="U-stat"
+test_strategy="LR" #"grouping", "run-over", "U-stat", "LR"
+#B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doing some experiments)
+#N = 5000  # just for test_strategy=="U-stat"
 
 
 
 # High dimensionality?
-nr_4 = NULL  # 5000
-nr_3 = NULL  # 250
+#nr_4 = NULL  # 5000, NULL
+#nr_3 = NULL  # 250, NULL
 
 # Test only equalities?
 only_equalities = FALSE
@@ -61,17 +61,17 @@ plot(g)
 
 paths = get_paths(g)
 
-res = collect_indices(g, nr_4, nr_3)
-ind_eq = matrix(unlist(res[[1]]), ncol = 8, byrow = TRUE)
-ind_ineq1 = matrix(unlist(res[[2]]), ncol = 6, byrow = TRUE)
-ind_ineq2 = matrix(unlist(res[[3]]), ncol = 8, byrow = TRUE)
-p = dim(ind_eq)[1] + dim(ind_ineq1)[1] + dim(ind_ineq2)[1]
-if (only_equalities){
-  ind_ineq1 = NULL
-  ind_ineq2 = NULL
-  p = dim(ind_eq)[1]
-}
-print(p)
+# res = collect_indices(g, nr_4, nr_3)
+# ind_eq = matrix(unlist(res[[1]]), ncol = 8, byrow = TRUE)
+# ind_ineq1 = matrix(unlist(res[[2]]), ncol = 6, byrow = TRUE)
+# ind_ineq2 = matrix(unlist(res[[3]]), ncol = 8, byrow = TRUE)
+# p = dim(ind_eq)[1] + dim(ind_ineq1)[1] + dim(ind_ineq2)[1]
+# if (only_equalities){
+#   ind_ineq1 = NULL
+#   ind_ineq2 = NULL
+#   p = dim(ind_eq)[1]
+# }
+# print(p)
 
 
 
@@ -119,7 +119,7 @@ results <- foreach(h = H,
         res = factanal(X, 1)
         powers[nr] = res[["PVAL"]] <= alpha # result: TRUE = rejected
       } else if (tree=="cat_binary"){
-        powers[nr] = LR_test(X,g) <= alpha # result: TRUE = rejected
+        powers[nr] = LR_test(X,g,paths) <= alpha # result: TRUE = rejected
       }
     } else if (test_strategy=="grouping"){
       powers[nr] = test_grouping(X, ind_eq, ind_ineq1, ind_ineq2, E=E, alphas=alpha)

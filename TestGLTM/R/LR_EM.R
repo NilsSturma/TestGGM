@@ -120,7 +120,6 @@ EM = function(X,g,paths,tol=1e-4, maxiter=200){
     
     # Evaluate loglik 
     l_1 = loglik(S[1:m,1:m], X)
-    print(l_1)
     
     # Check stopping criteria
     if (abs(l_1-l_0) < tol){

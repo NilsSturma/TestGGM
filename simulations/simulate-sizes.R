@@ -4,6 +4,8 @@ library(MASS) #mvrnorm
 library(igraph)
 library(TestGLTM)
 
+# TODO: uncomment everything
+
 setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
 source("simulations/utils.R") # TODO: add these functions to package
 
@@ -14,23 +16,23 @@ source("simulations/utils.R") # TODO: add these functions to package
 # General
 n_range = c(500)
 E = 1000
-nr_exp = 500
+nr_exp = 200
 alphas = seq(0.01, 0.99, 0.01)
 
 # Test strategy
 #test_strategy="U-stat"  # "grouping", "run-over", "U-stat", "LR", "U-stat-deg"
-strategies = c("U-stat")
-B = 5  # just for test_strategy=="run-over" 
-N = 5000 # just for test_strategy=="U-stat
+strategies = c("LR")
+#B = 5  # just for test_strategy=="run-over" 
+#N = 5000 # just for test_strategy=="U-stat
 
 # Tree
-tree = "star_tree"  # "star_tree", "cat_binary"
-m = 20
-setup = 2  # (star_tree)
+tree = "cat_binary"  # "star_tree", "cat_binary"
+m = 200
+#setup = 2  # (star_tree)
 
 # High dimensionality?
-nr_4 = NULL  # 5000
-nr_3 = NULL  # 250
+#nr_4 = 5000  # 5000, NULL
+#nr_3 = 250  # 250, NULL
 
 # Test only equalities?
 only_equalities = FALSE
@@ -53,17 +55,17 @@ plot(g)
 
 paths = get_paths(g)
 
-res = collect_indices(g, nr_4, nr_3)
-ind_eq = matrix(unlist(res[[1]]), ncol = 8, byrow = TRUE)
-ind_ineq1 = matrix(unlist(res[[2]]), ncol = 6, byrow = TRUE)
-ind_ineq2 = matrix(unlist(res[[3]]), ncol = 8, byrow = TRUE)
-p = dim(ind_eq)[1] + dim(ind_ineq1)[1] + dim(ind_ineq2)[1]
-if (only_equalities){
-  ind_ineq1 = NULL
-  ind_ineq2 = NULL
-  p = dim(ind_eq)[1]
-}
-print(p)
+# res = collect_indices(g, nr_4, nr_3)
+# ind_eq = matrix(unlist(res[[1]]), ncol = 8, byrow = TRUE)
+# ind_ineq1 = matrix(unlist(res[[2]]), ncol = 6, byrow = TRUE)
+# ind_ineq2 = matrix(unlist(res[[3]]), ncol = 8, byrow = TRUE)
+# p = dim(ind_eq)[1] + dim(ind_ineq1)[1] + dim(ind_ineq2)[1]
+# if (only_equalities){
+#   ind_ineq1 = NULL
+#   ind_ineq2 = NULL
+#   p = dim(ind_eq)[1]
+# }
+# print(p)
 
 
 
@@ -110,7 +112,7 @@ for (test_strategy in strategies){
           res = factanal(X, 1)
           result = res[["PVAL"]] <= alphas # result: TRUE = rejected
         } else if (tree=="cat_binary"){
-          result = LR_test(X,g) <= alphas # result: TRUE = rejected
+          result = LR_test(X,g,paths) <= alphas # result: TRUE = rejected
         }
       } else if (test_strategy=="grouping"){
         result = test_grouping(X, ind_eq, ind_ineq1, ind_ineq2, E=E, alphas=alphas)
@@ -152,7 +154,7 @@ for (test_strategy in strategies){
       title = paste("Emprical test sizes vs. nominal test levels based on ", nr_exp, " experiments. \n Star tree - setup ", setup, sep="")
     } else if (tree=="cat_binary"){
       name = paste(prefix, "_", "caterpillar", "_n=", n,  "_m=", m, sep="")
-      subtitle = paste("Caterpillar tree n=", n, " m=20 strategy=", test_strategy, sep="")
+      subtitle = paste("Caterpillar tree n=", n, " m=", m," strategy=", test_strategy, sep="")
       title = paste("Emprical test sizes vs. nominal test levels based on ", nr_exp, " experiments. \n Caterpillar tree", sep="")
     }
     

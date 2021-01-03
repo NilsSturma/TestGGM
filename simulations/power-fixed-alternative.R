@@ -111,7 +111,7 @@ for (i in (1:length(n_range))){
         res = factanal(X, 1)
         result = res[["PVAL"]] <= alpha # result: TRUE = rejected
       } else if (tree=="cat_binary"){
-        result = LR_test(X,g) <= alpha # result: TRUE = rejected
+        result = LR_test(X,g, paths) <= alpha # result: TRUE = rejected
       }
     } else if (test_strategy=="grouping"){
       result = test_grouping(X, ind_eq, ind_ineq1, ind_ineq2, E=E, alphas=alpha)
