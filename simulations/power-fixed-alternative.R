@@ -12,7 +12,7 @@ source("simulations/utils.R") # TODO: add these functions to package
 #################
 
 # General
-n_range = seq(250,2000, 250)
+n_range = seq(250,1200, len=20)
 E = 1000
 nr_exp = 500
 alpha = 0.05
@@ -23,12 +23,12 @@ m = 20
 setup = 1  # (star_tree)
 
 
-beta_2 = c10rep(0,(m-2)),1,1)
+beta_2 = c(rep(0,(m-2)),1,1)
 h = 10
 
 
 # Test strategy
-test_strategy="grouping"  # "grouping", "run-over", "U-stat", "LR"
+test_strategy="run-over"  # "grouping", "run-over", "U-stat", "LR"
 B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doing some experiments)
 N = 5000  # just for test_strategy=="U-stat"
 

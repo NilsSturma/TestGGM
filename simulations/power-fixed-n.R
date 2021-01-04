@@ -18,25 +18,25 @@ nr_exp = 300
 alpha = 0.05
 
 # Tree
-tree = "cat_binary"  # "star_tree", "cat_binary"
+tree = "star_tree"  # "star_tree", "cat_binary"
 m = 20  
-#setup = 2  # (star_tree)
+setup = 1  # (star_tree)
 
 
 beta_2 = c(rep(0,(m-2)),1,1)
-H = seq(1.5,30,len=20)
+H = seq(1,20,len=20)
 
 
 # Test strategy
-test_strategy="LR" #"grouping", "run-over", "U-stat", "LR"
+test_strategy="grouping" #"grouping", "run-over", "U-stat", "LR"
 #B = 5  # just for test_strategy=="run-over" (5 works best for setup 1 after doing some experiments)
 #N = 5000  # just for test_strategy=="U-stat"
 
 
 
 # High dimensionality?
-#nr_4 = NULL  # 5000, NULL
-#nr_3 = NULL  # 250, NULL
+nr_4 = NULL  # 5000, NULL
+nr_3 = NULL  # 250, NULL
 
 # Test only equalities?
 only_equalities = FALSE
@@ -61,17 +61,17 @@ plot(g)
 
 paths = get_paths(g)
 
-# res = collect_indices(g, nr_4, nr_3)
-# ind_eq = matrix(unlist(res[[1]]), ncol = 8, byrow = TRUE)
-# ind_ineq1 = matrix(unlist(res[[2]]), ncol = 6, byrow = TRUE)
-# ind_ineq2 = matrix(unlist(res[[3]]), ncol = 8, byrow = TRUE)
-# p = dim(ind_eq)[1] + dim(ind_ineq1)[1] + dim(ind_ineq2)[1]
-# if (only_equalities){
-#   ind_ineq1 = NULL
-#   ind_ineq2 = NULL
-#   p = dim(ind_eq)[1]
-# }
-# print(p)
+res = collect_indices(g, nr_4, nr_3)
+ind_eq = matrix(unlist(res[[1]]), ncol = 8, byrow = TRUE)
+ind_ineq1 = matrix(unlist(res[[2]]), ncol = 6, byrow = TRUE)
+ind_ineq2 = matrix(unlist(res[[3]]), ncol = 8, byrow = TRUE)
+p = dim(ind_eq)[1] + dim(ind_ineq1)[1] + dim(ind_ineq2)[1]
+if (only_equalities){
+  ind_ineq1 = NULL
+  ind_ineq2 = NULL
+  p = dim(ind_eq)[1]
+}
+print(p)
 
 
 
