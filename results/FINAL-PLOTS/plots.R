@@ -447,8 +447,10 @@ if (save){dev.off()}
 name = paste("results/FINAL-PLOTS/", "power-fixed-alternative_star-tree_setup-1.pdf", sep="")
 N = seq(250, 1200,len=20)
 
-grouping = readRDS("results/star_tree/grouping/power-fixed-alternative/2021-01-04-13-46_setup=1_m=20.rds")
+
 LR = readRDS("results/star_tree/LR/power-fixed-alternative/2021-01-04-12-28_setup=1_m=20.rds")
+grouping = readRDS("results/star_tree/grouping/power-fixed-alternative/2021-01-04-13-46_setup=1_m=20.rds")
+run_over = readRDS("results/star_tree/run-over/power-fixed-alternative/2021-01-05-01-42_setup=1_m=20.rds")
 
 if (save){pdf(name, width=width,height=height)}
 
@@ -456,8 +458,9 @@ plot(N, grouping,
      xlab="N", ylab="Empirical power", ylim = c(0,1), #main=title, sub=subtitle,
      type="p", pch=gr_pch, cex=1.5*gr_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
 points(N, LR, type="p", pch=lr_pch, cex=1.5*lr_cex)
-legend("bottomright", legend=c(gr_name, lr_name), bty="n", lwd=lwd_legend, 
-       cex=cex_legend, lty=c(NA, NA), pch=c(gr_pch, lr_pch))
+points(N, run_over, type="p", pch=ro_pch, cex=1.5*ro_cex)
+legend("topleft", legend=c(lr_name, gr_name, ro_name), bty="n", lwd=lwd_legend, 
+       cex=cex_legend, lty=c(NA, NA, NA), pch=c(lr_pch, gr_pch, ro_pch))
 
 if (save){dev.off()}
 
