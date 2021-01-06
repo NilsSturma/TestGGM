@@ -56,10 +56,10 @@ if (save){pdf(name, width=width,height=height)}
 plot(alphas, B3, 
      xlab="Nominal level", ylab="Empirical test size", #main=title, sub=subtitle,
      type="p", pch=15, cex=0.7,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
-points(alphas, B4, type="p", pch=0, cex=0.7)
+lines(alphas, B4, type="p", pch=0, cex=0.7)
 points(alphas, B5, type="p", pch=4, cex=0.7)
-points(alphas, B6, type="p", pch=1, cex=0.9)
-points(alphas, B7, type="p", pch=16, cex=0.9)
+lines(alphas, B6, type="p", pch=1, cex=0.9)
+lines(alphas, B7, type="p", pch=16, cex=0.9)
 abline(coef = c(0,1))
 legend("bottomright", legend=c("B=3", "B=4", "B=5", "B=6", "B=7"), bty="n", lwd=lwd_legend, 
        cex=cex_legend, lty=c(NA, NA, NA, NA, NA), pch=c(15, 0, 4, 1, 16))
@@ -420,6 +420,31 @@ legend("bottomright", legend=c(gr_name, ro_name, u_name), bty="n", lwd=lwd_legen
 
 if (save){dev.off()}
 
+
+
+
+############### fixed-n # star-tree setup 1 ###############
+name = paste("results/FINAL-PLOTS/", "power-fixed-n_star-tree_setup-1.pdf", sep="")
+H = seq(1,20,len=20)
+
+LR = readRDS("results/star_tree/LR/power-fixed-n/2021-01-04-18-30_setup=1_n=500_m=20.rds")
+grouping = readRDS("results/star_tree/grouping/power-fixed-n/2021-01-04-19-21_setup=1_n=500_m=20.rds")
+run_over = readRDS("results/star_tree/run-over/power-fixed-n/2021-01-05-04-05_setup=1_n=500_m=20.rds")
+U_stat= readRDS("results/star_tree/U-stat/power-fixed-n/2021-01-06-14-28_setup=1_n=500_m=20.rds")
+
+
+if (save){pdf(name, width=width,height=height)}
+
+plot(H, grouping, 
+     xlab="h", ylab="Empirical power", ylim = c(0,1), #main=title, sub=subtitle, 
+     type="p", pch=gr_pch, cex=1.5*gr_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
+points(H, run_over, type="p", pch=ro_pch, cex=1.5*ro_cex)
+points(H, LR, type="p", pch=lr_pch, cex=1.5*lr_cex)
+points(H, U_stat, type="p", pch=u_pch, cex=1.5*u_cex)
+legend("topleft", legend=c(lr_name, gr_name, ro_name, u_name), bty="n", lwd=lwd_legend, 
+       cex=cex_legend, lty=c(NA, NA, NA, NA), pch=c(lr_pch, gr_pch, ro_pch, u_pch))
+
+if (save){dev.off()}
 
 
 
