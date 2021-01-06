@@ -240,7 +240,7 @@ legend("bottomright", legend=c(lr_name, gr_name, ro_name, u_name), bty="n", lwd=
 if (save){dev.off()}
 
 
-############### sizes # caterpillar ###############
+############### sizes # caterpillar n=1000 ###############
 name = paste("results/FINAL-PLOTS/", "sizes_cat_binary_n=1000_m=20.pdf", sep="")
 
 LR = readRDS("results/cat_binary/LR/sizes/caterpillar_n=1000.rds")
@@ -261,6 +261,29 @@ legend("bottomright", legend=c(lr_name, gr_name, ro_name, u_name), bty="n", lwd=
        cex=cex_legend, lty=c(NA, NA, NA, NA), pch=c(lr_pch, gr_pch, ro_pch, u_pch))
 
 if (save){dev.off()}
+
+
+############### sizes # caterpillar n=500 ###############
+name = paste("results/FINAL-PLOTS/", "sizes_cat_binary_n=500_m=20.pdf", sep="")
+
+run_over = readRDS("results/cat_binary/run-over/sizes/2020-12-13-17-41_caterpillar_n=500.rds")
+U_stat= readRDS("results/cat_binary/U-stat/sizes/2020-12-18-04-32_caterpillar_n=500.rds")
+grouping = readRDS("results/cat_binary/grouping/sizes/2020-12-13-16-56_caterpillar_n=500.rds")
+
+if (save){pdf(name, width=width,height=height)}
+
+plot(alphas, run_over, 
+     xlab="Nominal level", ylab="Empirical test size", ylim = c(0,1),
+     type="p", pch=ro_pch, cex=ro_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
+points(alphas, U_stat, type="p", pch=u_pch, cex=u_cex)
+points(alphas, grouping, type="p", pch=gr_pch, cex=gr_cex)
+abline(coef = c(0,1))
+legend("bottomright", legend=c(gr_name, ro_name, u_name), bty="n", lwd=lwd_legend, 
+       cex=cex_legend, lty=c(NA, NA, NA), pch=c(gr_pch, ro_pch, u_pch))
+
+if (save){dev.off()}
+
+
 
 
 
@@ -340,8 +363,25 @@ if (save){dev.off()}
 # Only equalities #
 ###################
 
-############### star-tree # setup 1 ###############
+############### caterpillar ###############
+name = paste("results/FINAL-PLOTS/", "only_equalities_cat_binary_n=500_m=20.pdf", sep="")
 
+run_over = readRDS("results/cat_binary/run-over/sizes/only_equalities_caterpillar_n=500_m=20.rds")
+U_stat= readRDS("results/cat_binary/U-stat/sizes/only_equalities_caterpillar_n=500_m=20.rds")
+grouping = readRDS("results/cat_binary/grouping/sizes/only_equalities_caterpillar_n=500_m=20.rds")
+
+if (save){pdf(name, width=width,height=height)}
+
+plot(alphas, run_over, 
+     xlab="Nominal level", ylab="Empirical test size", #main=title, sub=subtitle,
+     type="p", pch=ro_pch, cex=ro_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
+points(alphas, U_stat, type="p", pch=u_pch, cex=u_cex)
+points(alphas, grouping, type="p", pch=gr_pch, cex=gr_cex)
+abline(coef = c(0,1))
+legend("bottomright", legend=c(gr_name, ro_name, u_name), bty="n", lwd=lwd_legend, 
+       cex=cex_legend, lty=c(NA, NA, NA), pch=c(gr_pch, ro_pch, u_pch))
+
+if (save){dev.off()}
 
 
 
@@ -360,7 +400,7 @@ if (save){dev.off()}
 ###################
 
 ############### fixed-n # star-tree setup 2 ###############
-name = paste("results/FINAL-PLOTS/", "power-fixed-n_star-tree.pdf", sep="")
+name = paste("results/FINAL-PLOTS/", "power-fixed-n_star-tree_setup-2.pdf", sep="")
 H = seq(0.5,10,len=20)
 
 grouping = readRDS("results/star_tree/grouping/power-fixed-n/2020-12-18-19-38_setup=2_n=500_m=20.rds")
@@ -371,7 +411,7 @@ U_stat= readRDS("results/star_tree/U-stat/power-fixed-n/2020-12-25-17-16_setup=2
 if (save){pdf(name, width=width,height=height)}
 
 plot(H, grouping, 
-     xlab="h", ylab="Empirical power", #main=title, sub=subtitle,
+     xlab="h", ylab="Empirical power", ylim = c(0,1), #main=title, sub=subtitle, 
      type="p", pch=gr_pch, cex=1.5*gr_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
 points(H, run_over, type="p", pch=ro_pch, cex=1.5*ro_cex)
 points(H, U_stat, type="p", pch=u_pch, cex=1.5*u_cex)
@@ -379,6 +419,57 @@ legend("bottomright", legend=c(gr_name, ro_name, u_name), bty="n", lwd=lwd_legen
        cex=cex_legend, lty=c(NA, NA, NA), pch=c(gr_pch, ro_pch, u_pch))
 
 if (save){dev.off()}
+
+
+
+
+
+############### fixed-alternative # star-tree setup 2 ###############
+name = paste("results/FINAL-PLOTS/", "power-fixed-alternative_star-tree_setup-2.pdf", sep="")
+N = seq(250,1200,len=20)
+
+grouping = readRDS("results/star_tree/grouping/power-fixed-alternative/2020-12-21-23-41_setup=2_m=20.rds")
+run_over = readRDS("results/star_tree/run-over/power-fixed-alternative/2020-12-22-04-04_setup=2_m=20.rds")
+
+if (save){pdf(name, width=width,height=height)}
+plot(N, grouping, 
+     xlab="N", ylab="Empirical power", ylim = c(0,1), #main=title, sub=subtitle,
+     type="p", pch=gr_pch, cex=1.5*gr_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
+points(N, run_over, type="p", pch=ro_pch, cex=1.5*ro_cex)
+legend("bottomright", legend=c(gr_name, ro_name), bty="n", lwd=lwd_legend, 
+       cex=cex_legend, lty=c(NA, NA), pch=c(gr_pch, ro_pch))
+
+if (save){dev.off()}
+
+
+
+############### fixed-alternative # star-tree setup 1 ###############
+name = paste("results/FINAL-PLOTS/", "power-fixed-alternative_star-tree_setup-1.pdf", sep="")
+N = seq(250, 1200,len=20)
+
+
+LR = readRDS("results/star_tree/LR/power-fixed-alternative/2021-01-04-12-28_setup=1_m=20.rds")
+grouping = readRDS("results/star_tree/grouping/power-fixed-alternative/2021-01-04-13-46_setup=1_m=20.rds")
+run_over = readRDS("results/star_tree/run-over/power-fixed-alternative/2021-01-05-01-42_setup=1_m=20.rds")
+
+if (save){pdf(name, width=width,height=height)}
+
+plot(N, grouping, 
+     xlab="N", ylab="Empirical power", ylim = c(0,1), #main=title, sub=subtitle,
+     type="p", pch=gr_pch, cex=1.5*gr_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
+points(N, LR, type="p", pch=lr_pch, cex=1.5*lr_cex)
+points(N, run_over, type="p", pch=ro_pch, cex=1.5*ro_cex)
+legend("topleft", legend=c(lr_name, gr_name, ro_name), bty="n", lwd=lwd_legend, 
+       cex=cex_legend, lty=c(NA, NA, NA), pch=c(lr_pch, gr_pch, ro_pch))
+
+if (save){dev.off()}
+
+
+
+
+
+
+
 
 
 
