@@ -62,10 +62,10 @@ plot(g)
 
 paths = get_paths(g)
 
-res = collect_indices(g, nr_4, nr_3)
-ind_eq = matrix(unlist(res[[1]]), ncol = 8, byrow = TRUE)
-ind_ineq1 = matrix(unlist(res[[2]]), ncol = 6, byrow = TRUE)
-ind_ineq2 = matrix(unlist(res[[3]]), ncol = 8, byrow = TRUE)
+res = collect_indices(g, m, nr_4, nr_3)
+ind_eq = res$ind_eq
+ind_ineq1 = res$ind_ineq1
+ind_ineq2 = res$ind_ineq2
 p = dim(ind_eq)[1] + dim(ind_ineq1)[1] + dim(ind_ineq2)[1]
 if (only_equalities){
   ind_ineq1 = NULL

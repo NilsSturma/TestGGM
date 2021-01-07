@@ -3,32 +3,24 @@
 \alias{TestGLTM}
 \docType{package}
 \title{
-  A short title line describing what the package does
+  Testing Gaussian Latent Tree Models
 }
 \description{
-  A more detailed description of what the package does. A length
-  of about one to five lines is recommended.
+  Tests the goodness-of-fit of Gaussian latent tree models. Three algebraic testing methodologies are implemented as well as the likelihood ratio test using the EM-algorithm. Supports all Gaussian latent tree models where the observed variables correspond to the leaves of the tree.
 }
-\details{
-  This section should provide a more detailed overview of how to use the
-  package, including the most important functions.
-}
+%\details{
+%  This section should provide a more detailed overview of how to use the
+%  package, including the most important functions.
+%&}
 \author{
-Your Name, email optional.
+Nils Sturma
 
-Maintainer: Your Name <your@email.com>
+Maintainer: Nils Sturma <nils.sturma@tum.de>
 }
-\references{
-  This optional section can contain literature or other references for
-  background information.
-}
-\keyword{ package }
-\seealso{
-  Optional links to other man pages
-}
-\examples{
-  \dontrun{
-     ## Optional simple examples of the most important functions
-     ## These can be in \dontrun{} and \donttest{} blocks.   
-  }
-}
+%\keyword{ package }
+%\examples{
+%  \dontrun{
+%     ## Optional simple examples of the most important functions
+%     ## These can be in \dontrun{} and \donttest{} blocks.   
+%  }
+%}
