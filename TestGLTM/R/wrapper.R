@@ -1,7 +1,9 @@
-bootstrap_test <- function(X, tree, method="grouping", E=1000, alpha=0.05, B=5){
+bootstrap_test <- function(X, tree, m, method="grouping", E=1000, alpha=0.05, B=5, N=5000, only_equalities=FALSE, nr_4 = NULL, nr_3=NULL){
   # TODO: Add checks
   # TODO: Change this. Should return value of test statistic, estimated quantile, etc.
   # Returns: TRUE if nullhypothesis (data X comes from given tree) is rejected
+  
+  paths = get_paths(g)
   
   # Collect indices
   indices = collect_indices(tree)

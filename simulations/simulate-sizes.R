@@ -15,6 +15,7 @@ source("simulations/utils.R") # TODO: add these functions to package
 
 # General
 n_range = c(500)
+n=500
 E = 1000
 nr_exp = 200
 alphas = seq(0.01, 0.99, 0.01)
@@ -27,12 +28,12 @@ strategies = c("LR")
 
 # Tree
 tree = "cat_binary"  # "star_tree", "cat_binary"
-m = 200
+m = 20
 #setup = 2  # (star_tree)
 
 # High dimensionality?
-#nr_4 = 5000  # 5000, NULL
-#nr_3 = 250  # 250, NULL
+nr_4 = NULL  # 5000, NULL
+nr_3 = NULL  # 250, NULL
 
 # Test only equalities?
 only_equalities = FALSE
@@ -55,17 +56,17 @@ plot(g)
 
 paths = get_paths(g)
 
-# res = collect_indices(g, m, nr_4, nr_3)
-# ind_eq = res$ind_eq
-# ind_ineq1 = res$ind_ineq1
-# ind_ineq2 = res$ind_ineq2
-# p = dim(ind_eq)[1] + dim(ind_ineq1)[1] + dim(ind_ineq2)[1]
-# if (only_equalities){
-#   ind_ineq1 = NULL
-#   ind_ineq2 = NULL
-#   p = dim(ind_eq)[1]
-# }
-# print(p)
+res = collect_indices(g, m, nr_4, nr_3)
+ind_eq = res$ind_eq
+ind_ineq1 = res$ind_ineq1
+ind_ineq2 = res$ind_ineq2
+p = dim(ind_eq)[1] + dim(ind_ineq1)[1] + dim(ind_ineq2)[1]
+if (only_equalities){
+  ind_ineq1 = NULL
+  ind_ineq2 = NULL
+  p = dim(ind_eq)[1]
+}
+print(p)
 
 
 

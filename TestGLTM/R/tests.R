@@ -46,7 +46,7 @@ test_grouping <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000, alp
   
   # Reject if test_stat > critical_value
   is_rejected = test_stat > critical_values
-  return(is_rejected)
+  return(is_rejected) #list("PVAL"=pval, "TSTAT"=test_stat)
 }
 
 

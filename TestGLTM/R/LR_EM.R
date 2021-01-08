@@ -47,7 +47,7 @@ update_param = function(g, S){
 
 
 
-# pzwiernik/structuralEM
+# From pzwiernik/structuralEM
 loglik = function(cov, X){
   
   # cov: SMALL covariance matrix (of observed nodes)
@@ -63,7 +63,7 @@ loglik = function(cov, X){
 
 
 
-# pzwiernik/structuralEM
+# From pzwiernik/structuralEM
 E_step <- function(X,S){
   
   # this is the E-step of the algorithm
@@ -145,7 +145,36 @@ mle = function(X){
 }
 
 
-
+#' Likelihood ratio test for the goodness of fit of a Gaussian latent tree model
+#' 
+#' Testing the goodness of fit of a given Gaussian latent tree model to observed data.
+#' 
+#' @param X Matrix with observed data. 
+#' Number of columns equal to the number of leaves of the tree (i.e. number of observed variables). 
+#' Each row corresponds to one sample.
+#' @param g An igraph object that is a tree. It is assumed that the first m nodes correspond to oberseved nodes. 
+#' Type 1 indicates that a node is observed. Should be set via \code{V(g)$type==1}.
+#' It is assumed that \code{V(g)$var} is the variance of the observed variables and 
+#' that \code{E(g)$corr} represents the edge correlations. Should be initialized with starting values.
+#' @param paths Nested list with the paths between all nodes. 
+#' Should be computed by the function \code{\link{get_paths}}. 
+#' This is done outside the LR test to accelerate the computation.
+#' @return p-value
+#' @examples 
+#' vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
+#' edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
+#' tree <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+#' plot(tree)
+#' 
+#' # Set starting values
+#' E(tree)$corr = rep(0.7,7)
+#' V(tree)$var = rep(1,8)
+#' 
+#' # Compute all paths
+#' paths <- get_paths(tree)
+#' 
+#' # Call the test
+#' LR_test(X, g, paths)
 LR_test = function(X, g, paths){
   
   # returns p value
