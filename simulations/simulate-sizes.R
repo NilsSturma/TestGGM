@@ -7,7 +7,6 @@ library(TestGLTM)
 # TODO: uncomment everything
 
 setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
-source("simulations/utils.R") # TODO: add these functions to package
 
 #################
 # Set variables #
@@ -21,15 +20,15 @@ nr_exp = 200
 alphas = seq(0.01, 0.99, 0.01)
 
 # Test strategy
-#test_strategy="U-stat"  # "grouping", "run-over", "U-stat", "LR", "U-stat-deg"
+test_strategy="grouping"  # "grouping", "run-over", "U-stat", "LR", "U-stat-deg"
 strategies = c("LR")
 #B = 5  # just for test_strategy=="run-over" 
 #N = 5000 # just for test_strategy=="U-stat
 
 # Tree
-tree = "cat_binary"  # "star_tree", "cat_binary"
+tree = "star_tree"  # "star_tree", "cat_binary"
 m = 20
-#setup = 2  # (star_tree)
+setup = 1  # (star_tree)
 
 # High dimensionality?
 nr_4 = NULL  # 5000, NULL
@@ -111,21 +110,17 @@ for (test_strategy in strategies){
       if (test_strategy=="LR"){
         if (tree=="star_tree"){
           res = factanal(X, 1)
-          result = res[["PVAL"]] <= alphas # result: TRUE = rejected
         } else if (tree=="cat_binary"){
-          result = LR_test(X,g,paths) <= alphas # result: TRUE = rejected
+          res = LR_test(X,g,paths)
         }
       } else if (test_strategy=="grouping"){
-        result = test_grouping(X, ind_eq, ind_ineq1, ind_ineq2, E=E, alphas=alphas)
+        res = test_grouping(X, ind_eq, ind_ineq1, ind_ineq2, E=E)
       } else if (test_strategy=="run-over"){
-        result = test_run_over(X, ind_eq, ind_ineq1, ind_ineq2, B=B, E=E, alphas=alphas)
+        res = test_run_over(X, ind_eq, ind_ineq1, ind_ineq2, B=B, E=E)
       } else if (test_strategy=="U-stat"){
-        result = test_U_stat(X, ind_eq, ind_ineq1, ind_ineq2, N=N, E=E, alphas=alphas)
-      } else if (test_strategy=="U-stat-deg"){
-        result = test_U_stat_degenerate(X, ind_eq, ind_ineq1, ind_ineq2, N=N, E=E, alphas=alphas)
-      }
-      
-      
+        res = test_U_stat(X, ind_eq, ind_ineq1, ind_ineq2, N=N, E=E)
+      } 
+      result = res$PVAL <= alphas # result: TRUE = rejected
       result = as.numeric(result)
     }
     

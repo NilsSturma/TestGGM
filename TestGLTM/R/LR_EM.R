@@ -139,7 +139,6 @@ mle = function(X){
   n = dim(X)[1]
   m = dim(X)[2]
   C = (1/n)*t(X)%*%X
-  
   ll = - (n/2) * ( m * log(2*pi) + log(det(C)) + m )
   return(list(loglik=ll, Sigma=C))
 }
@@ -157,9 +156,9 @@ mle = function(X){
 #' It is assumed that \code{V(g)$var} is the variance of the observed variables and 
 #' that \code{E(g)$corr} represents the edge correlations. Should be initialized with starting values.
 #' @param paths Nested list with the paths between all nodes. 
-#' Should be computed by the function \code{\link{get_paths}}. 
+#' Should be computed with the function \code{\link{get_paths}}. 
 #' This is done outside the LR test to accelerate the computation.
-#' @return p-value
+#' @return Named list with two entries: The test statistic (\code{TSTAT}) and the p-value (\code{PVAL}).
 #' @examples 
 #' vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
 #' edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
@@ -182,6 +181,6 @@ LR_test = function(X, g, paths){
   df = choose((dim(X)[2]+1),2) - ( length(E(g)) + sum(V(g)$type==1) )
   p_value = 1 - stats::pchisq(LR_statistic, df)
   
-  return(p_value)
+  return(list("PVAL"=p_value, "TSTAT"=LR_statistic))
 }
 

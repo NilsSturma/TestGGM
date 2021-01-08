@@ -1,7 +1,3 @@
-library(TestGLTM)
-library(igraph)
-
-
 # Create an igraph object that is the quinted tree
 quinted_tree <- function(){
   colors <- c("tomato", "gray50")
@@ -9,7 +5,7 @@ quinted_tree <- function(){
                          type=c(rep(1,5), rep(2,3)), # 1=observed, 2=latent -> always first m nodes should be observed (=leaves)
                          color=colors[c(1,1,1,1,1,2,2,2)])
   edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
-  g <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+  g <- igraph::graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
   return(g)
 }
 
@@ -25,11 +21,13 @@ binary_rooted <- function(){
                          color=colors[type])
   edges <- data.frame(from=c(22,22,22,19,19,20,20,21,21,13,13,14,14,15,15,16,16,17,17,18,18), 
                       to=c(19,20,21,13,14,15,16,17,18,1,2,3,4,5,6,7,8,9,10,11,12))
-  g <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+  g <- igraph::graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
   return(g)
 }
 
-cat_binary <- function(m){
+
+# Create an igraph object that is a binary caterpillar tree with m observed variables
+cat_binary <- function(m=10){
   colors <- c("tomato", "gray50")
   name = seq(1,(m+(m-2)))
   type = c(rep(1,m), rep(2,(m-2)))
@@ -38,27 +36,13 @@ cat_binary <- function(m){
                          color=colors[type])
   edges <- data.frame(from=c(seq((m+1),(m+(m-2))),(m+1),(m+(m-2)),seq((m+1),(m+(m-2)-1))),
                       to=c(seq(1,(m-2)),(m-1),(m),seq((m+2),(m+(m-2)))) )
-  g <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
-  return(g)
-}
-
-cat <- function(){
-  colors <- c("tomato", "gray50")
-  name = seq(1,29)
-  type = c(rep(1,20), rep(2,9))
-  vertices <- data.frame(name=name, 
-                         type=type, # 1=observed, 2=latent -> always first m nodes should be observed (=leaves)
-                         color=colors[type])
-  edges <- data.frame(from=c(1,2,seq(3,11),seq(12,20),seq(21,28)),
-                      to=c(21,29,seq(21,29),seq(21,29),seq(22,29)))
-  g <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+  g <- igraph::graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
   return(g)
 }
 
 
 
-
-# Create an igraph object that is star tree
+# Create an igraph object that is star tree with m observed variables
 star_tree <- function(m=10){
   colors <- c("tomato", "gray50")
   name = seq(1,m+1)
@@ -67,7 +51,7 @@ star_tree <- function(m=10){
                          type=type, # 1=observed, 2=latent -> always first m nodes should be observed (=leaves)
                          color=colors[type])
   edges <- data.frame(from=seq(1,m), to=rep((m+1),m))
-  g <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+  g <- igraph::graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
   return(g)
 }
 

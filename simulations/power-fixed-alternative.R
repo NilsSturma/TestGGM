@@ -5,7 +5,6 @@ library(igraph)
 library(TestGLTM)
 
 setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
-source("simulations/utils.R") # TODO: add these functions to package
 
 #################
 # Set variables #
@@ -109,19 +108,17 @@ for (i in (1:length(n_range))){
     if (test_strategy=="LR"){
       if (tree=="star_tree"){
         res = factanal(X, 1)
-        result = res[["PVAL"]] <= alpha # result: TRUE = rejected
       } else if (tree=="cat_binary"){
-        result = LR_test(X,g, paths) <= alpha # result: TRUE = rejected
+        res = LR_test(X,g, paths)
       }
     } else if (test_strategy=="grouping"){
-      result = test_grouping(X, ind_eq, ind_ineq1, ind_ineq2, E=E, alphas=alpha)
+      res = test_grouping(X, ind_eq, ind_ineq1, ind_ineq2, E=E)
     } else if (test_strategy=="run-over"){
-      result = test_run_over(X, ind_eq, ind_ineq1, ind_ineq2, B=B, E=E, alphas=alpha)
+      res = test_run_over(X, ind_eq, ind_ineq1, ind_ineq2, B=B, E=E)
     } else if (test_strategy=="U-stat"){
-      result = test_U_stat(X, ind_eq, ind_ineq1, ind_ineq2, N=N, E=E, alphas=alpha)
-    } else if (test_strategy=="U-stat-deg"){
-      result = test_U_stat_degenerate(X, ind_eq, ind_ineq1, ind_ineq2, N=N, E=E, alphas=alpha)
+      res = test_U_stat(X, ind_eq, ind_ineq1, ind_ineq2, N=N, E=E,)
     }
+    result = res$PVAL <= alpha # result: TRUE = rejected
     result = as.numeric(result)
   }
   results[i] = mean(powers)
