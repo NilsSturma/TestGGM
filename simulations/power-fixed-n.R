@@ -139,6 +139,7 @@ for (test_strategy in strategies){
     simulated_power = mean(powers)
   }
   
+  # Stop cluster
   stopCluster(cl)
   
   # Plot and save result
