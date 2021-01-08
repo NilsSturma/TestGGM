@@ -102,7 +102,7 @@ for (test_strategy in strategies){
       } else if (tree=="cat_binary"){
         V(g)$var = rep(1,(m+(m-2)))
         E(g)$corr = rep(0.7,(m+(m-3)))
-        cov = cov_from_graph(g, paths)
+        cov = cov_from_graph(g, m, paths)
       }
       X = mvrnorm(n, mu=rep(0,nrow(cov)), Sigma=cov)
       

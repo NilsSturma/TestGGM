@@ -96,7 +96,7 @@ for (i in (1:length(n_range))){
     } else if (tree=="cat_binary"){
       V(g)$var = rep(1,38)
       E(g)$corr = rep(0.7,37)
-      cov = cov_from_graph(g, paths)
+      cov = cov_from_graph(g, m, paths)
     }
     
     cov = cov +  beta_2 %*% t(beta_2) * (h / sqrt(n))

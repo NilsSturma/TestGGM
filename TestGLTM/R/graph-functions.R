@@ -93,8 +93,8 @@ findQ = function(g, m, nr=NULL){
 #' If \code{NULL}, all subsets are considered. 
 #' If a number is given, subsets are choosen randomly by the function \code{\link{random_combs}}.
 #' @param nr_3 Number of considered subsets of size 3. This is optional. 
-#' If \code{NULL}, all subsets are considered. I
-#' f a number is given, subsets are choosen randomly by the function \code{\link{random_combs}}.
+#' If \code{NULL}, all subsets are considered. 
+#' If a number is given, subsets are choosen randomly by the function \code{\link{random_combs}}.
 #' @return A list with three entries is returned. All entries are matrices. 
 #' The first matrx contains the equality constraints and has 8 columns. 
 #' The second matrx contains all inequality constraints where only 6 indices are necessary (i.e. it has 6 columns). 
@@ -195,6 +195,9 @@ get_paths = function(g){
 #' @param g An igraph object that is a tree. It is assumed that the first m nodes correspond to oberseved nodes. 
 #' Type 1 indicates that a node is observed. Should be set via \code{V(g)$type==1}.
 #' It is assumed that \code{V(g)$var} is the variance of the observed variables and that \code{E(g)$corr} represents the edge correlations.
+#' @param m Integer, number of observed nodes.
+#' @param paths Nested list with the paths between all nodes. 
+#' Should be computed with the function \code{\link{get_paths}}. 
 #' @return Covarianz matrix.
 #' @examples 
 #' vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
@@ -210,8 +213,8 @@ get_paths = function(g){
 #' paths <- get_paths(tree)
 #' 
 #' # Call function
-#' cov_from_graph(g, paths)
-cov_from_graph = function(g, paths){
+#' cov_from_graph(tree, 5, paths)
+cov_from_graph = function(g, m, paths){
   
   # g is an igraph object with the following attributes
   # type: 1= observed, 2=unobserved

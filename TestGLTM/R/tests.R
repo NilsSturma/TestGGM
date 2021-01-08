@@ -1,3 +1,44 @@
+#' Tests the goodness-of-fit of a Gaussian latent tree model
+#' 
+#' This function tests the goodness-of-fit of a given Gaussian latent tree model to observed data.
+#' The parameter space of the model is a semialgebraic set. The involved polynomials are 
+#' estimated by grouping the data into independent subsets. Each group is used to form an 
+#' unbiased estimate of the polynomials. To test all constraints simultaneously the test statistic 
+#' is the maximum of a scaled average of the estimates.
+#' A Gaussian multiplier bootstrap is used to estimate the limiting distribution of the 
+#' test statistic and to compute the p-value of the test.
+#' 
+#' @param X Matrix with observed data. Number of columns has to be equal to the number of 
+#' leaves of the postulated tree (i.e. number of observed variables). Each row corresponds to one sample.
+#' @param ind_eq Representation of the equality constraints that have to be tested. 
+#' Create this object using the function \code{\link{collect_indices}}.
+#' @param ind_ineq1 Representation of the inequality constraints in three variables that have to be tested. 
+#' Create this object using the function \code{\link{collect_indices}}. If \code{NULL} inequality constraints are not tested.
+#' @param ind_ineq2 Representation of the inequality constraints in four variables that have to be tested. 
+#' Create this object using the function \code{\link{collect_indices}}. If \code{NULL} inequality constraints are not tested.
+#' @param E Integer, number of bootstrap iterations.
+#' 
+#' @return Named list with two entries: Test statistic (\code{TSTAT}) and p-value (\code{PVAL}).
+#' 
+#' @examples
+#' # Create tree
+#' vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
+#' edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
+#' tree <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+#' 
+#' # Sample data from tree
+#' V(tree)$var = rep(1,8)
+#' E(tree)$corr = rep(0.7,7)
+#' X = sample_from_tree(tree, m=5, n=500)
+#' 
+#' # Determine the representation of the polynomials that have to be tested
+#' res = collect_indices(tree, m=5)
+#' ind_eq = res$ind_eq
+#' ind_ineq1 = res$ind_ineq1
+#' ind_ineq2 = res$ind_ineq2
+#' 
+#' # Apply the test
+#' test_grouping(X, ind_eq, ind_ineq1, ind_ineq2)
 test_grouping <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000){
   
   if (is.null(ind_ineq1) | is.null(ind_ineq2)){
@@ -51,7 +92,49 @@ test_grouping <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000){
 
 
 
-
+#' Tests the goodness-of-fit of a Gaussian latent tree model
+#' 
+#' This function tests the goodness-of-fit of a given Gaussian latent tree model to observed data.
+#' The parameter space of the model is a semialgebraic set. The involved polynomials are 
+#' estimated by considering overlapping subsets of the data 
+#' (\code{\{X_1, X_2, X_3, X_4\}, \{X_2, X_3, X_4, X_5\}, ...}). Each subset is used to form an 
+#' unbiased estimate of the polynomials. To test all constraints simultaneously the test statistic 
+#' is the maximum of a scaled average of the estimates.
+#' A Gaussian multiplier bootstrap is used to estimate the limiting distribution of the 
+#' test statistic and to compute the p-value of the test.
+#' 
+#' @param X Matrix with observed data. Number of columns has to be equal to the number of 
+#' leaves of the postulated tree (i.e. number of observed variables). Each row corresponds to one sample.
+#' @param ind_eq Representation of the equality constraints that have to be tested. 
+#' Create this object using the function \code{\link{collect_indices}}.
+#' @param ind_ineq1 Representation of the inequality constraints in three variables that have to be tested. 
+#' Create this object using the function \code{\link{collect_indices}}. If \code{NULL} inequality constraints are not tested.
+#' @param ind_ineq2 Representation of the inequality constraints in four variables that have to be tested. 
+#' Create this object using the function \code{\link{collect_indices}}. If \code{NULL} inequality constraints are not tested.
+#' @param B  Integer, batch size for the estimate of the covariance matrix.
+#' @param E Integer, number of bootstrap iterations.
+#' 
+#' @return Named list with two entries: Test statistic (\code{TSTAT}) and p-value (\code{PVAL}).
+#' 
+#' @examples
+#' # Create tree
+#' vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
+#' edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
+#' tree <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+#' 
+#' # Sample data from tree
+#' V(tree)$var = rep(1,8)
+#' E(tree)$corr = rep(0.7,7)
+#' X = sample_from_tree(tree, m=5, n=500)
+#' 
+#' # Determine the representation of the polynomials that have to be tested
+#' res = collect_indices(tree, m=5)
+#' ind_eq = res$ind_eq
+#' ind_ineq1 = res$ind_ineq1
+#' ind_ineq2 = res$ind_ineq2
+#' 
+#' # Apply the test
+#' test_run_over(X, ind_eq, ind_ineq1, ind_ineq2)
 test_run_over <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, B=5, E=1000){
   
   # Call function to calculate matrix H
@@ -109,7 +192,48 @@ test_run_over <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, B=5, E=1000
 
 
 
-
+#' Tests the goodness-of-fit of a Gaussian latent tree model
+#' 
+#' This function tests the goodness-of-fit of a given Gaussian latent tree model to observed data.
+#' The parameter space of the model is a semialgebraic set. The involved polynomials are 
+#' estimated by considering subsets of the data. The number of subsets as well as the subsets itself 
+#' are chosen randomly. Each subset is used to form an unbiased estimate of the polynomials. 
+#' To test all constraints simultaneously the test statistic is the maximum of a scaled average 
+#' of the estimates. A Gaussian multiplier bootstrap is used to estimate the limiting distribution 
+#' of the  test statistic and to compute the p-value of the test.
+#' 
+#' @param X Matrix with observed data. Number of columns has to be equal to the number of 
+#' leaves of the postulated tree (i.e. number of observed variables). Each row corresponds to one sample.
+#' @param ind_eq Representation of the equality constraints that have to be tested. 
+#' Create this object using the function \code{\link{collect_indices}}.
+#' @param ind_ineq1 Representation of the inequality constraints in three variables that have to be tested. 
+#' Create this object using the function \code{\link{collect_indices}}. If \code{NULL} inequality constraints are not tested.
+#' @param ind_ineq2 Representation of the inequality constraints in four variables that have to be tested. 
+#' Create this object using the function \code{\link{collect_indices}}. If \code{NULL} inequality constraints are not tested.
+#' @param N Integer, computational budget parameter.
+#' @param E Integer, number of bootstrap iterations.
+#' 
+#' @return Named list with two entries: Test statistic (\code{TSTAT}) and p-value (\code{PVAL}).
+#' 
+#' @examples
+#' # Create tree
+#' vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
+#' edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
+#' tree <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+#' 
+#' # Sample data from tree
+#' V(tree)$var = rep(1,8)
+#' E(tree)$corr = rep(0.7,7)
+#' X = sample_from_tree(tree, m=5, n=500)
+#' 
+#' # Determine the representation of the polynomials that have to be tested
+#' res = collect_indices(tree, m=5)
+#' ind_eq = res$ind_eq
+#' ind_ineq1 = res$ind_ineq1
+#' ind_ineq2 = res$ind_ineq2
+#' 
+#' # Apply the test
+#' test_U_stat(X, ind_eq, ind_ineq1, ind_ineq2)
 test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=1000){
   
   

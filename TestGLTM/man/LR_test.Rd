@@ -7,9 +7,8 @@
 LR_test(X, g, paths)
 }
 \arguments{
-\item{X}{Matrix with observed data. 
-Number of columns equal to the number of leaves of the tree (i.e. number of observed variables). 
-Each row corresponds to one sample.}
+\item{X}{Matrix with observed data. Number of columns equal to the number of 
+leaves of the tree (i.e. number of observed variables). Each row corresponds to one sample.}
 
 \item{g}{An igraph object that is a tree. It is assumed that the first m nodes correspond to oberseved nodes. 
 Type 1 indicates that a node is observed. Should be set via \code{V(g)$type==1}.
@@ -21,7 +20,7 @@ Should be computed with the function \code{\link{get_paths}}.
 This is done outside the LR test to accelerate the computation.}
 }
 \value{
-Named list with two entries: The test statistic (\code{TSTAT}) and the p-value (\code{PVAL}).
+Named list with two entries: Test statistic (\code{TSTAT}) and p-value (\code{PVAL}).
 }
 \description{
 Testing the goodness of fit of a given Gaussian latent tree model to observed data.
@@ -40,5 +39,5 @@ V(tree)$var = rep(1,8)
 paths <- get_paths(tree)
 
 # Call the test
-LR_test(X, g, paths)
+LR_test(X, tree, paths)
 }

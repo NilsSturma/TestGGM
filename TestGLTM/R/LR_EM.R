@@ -148,9 +148,8 @@ mle = function(X){
 #' 
 #' Testing the goodness of fit of a given Gaussian latent tree model to observed data.
 #' 
-#' @param X Matrix with observed data. 
-#' Number of columns equal to the number of leaves of the tree (i.e. number of observed variables). 
-#' Each row corresponds to one sample.
+#' @param X Matrix with observed data. Number of columns equal to the number of 
+#' leaves of the tree (i.e. number of observed variables). Each row corresponds to one sample.
 #' @param g An igraph object that is a tree. It is assumed that the first m nodes correspond to oberseved nodes. 
 #' Type 1 indicates that a node is observed. Should be set via \code{V(g)$type==1}.
 #' It is assumed that \code{V(g)$var} is the variance of the observed variables and 
@@ -158,7 +157,7 @@ mle = function(X){
 #' @param paths Nested list with the paths between all nodes. 
 #' Should be computed with the function \code{\link{get_paths}}. 
 #' This is done outside the LR test to accelerate the computation.
-#' @return Named list with two entries: The test statistic (\code{TSTAT}) and the p-value (\code{PVAL}).
+#' @return Named list with two entries: Test statistic (\code{TSTAT}) and p-value (\code{PVAL}).
 #' @examples 
 #' vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
 #' edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
@@ -173,7 +172,7 @@ mle = function(X){
 #' paths <- get_paths(tree)
 #' 
 #' # Call the test
-#' LR_test(X, g, paths)
+#' LR_test(X, tree, paths)
 LR_test = function(X, g, paths){
   
   # returns p value

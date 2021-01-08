@@ -16,8 +16,8 @@ If \code{NULL}, all subsets are considered.
 If a number is given, subsets are choosen randomly by the function \code{\link{random_combs}}.}
 
 \item{nr_3}{Number of considered subsets of size 3. This is optional. 
-If \code{NULL}, all subsets are considered. I
-f a number is given, subsets are choosen randomly by the function \code{\link{random_combs}}.}
+If \code{NULL}, all subsets are considered. 
+If a number is given, subsets are choosen randomly by the function \code{\link{random_combs}}.}
 }
 \value{
 A list with three entries is returned. All entries are matrices. 

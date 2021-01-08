@@ -4,12 +4,17 @@
 \alias{cov_from_graph}
 \title{Covariance matrix of observed variables}
 \usage{
-cov_from_graph(g, paths)
+cov_from_graph(g, m, paths)
 }
 \arguments{
 \item{g}{An igraph object that is a tree. It is assumed that the first m nodes correspond to oberseved nodes. 
 Type 1 indicates that a node is observed. Should be set via \code{V(g)$type==1}.
 It is assumed that \code{V(g)$var} is the variance of the observed variables and that \code{E(g)$corr} represents the edge correlations.}
+
+\item{m}{Integer, number of observed nodes.}
+
+\item{paths}{Nested list with the paths between all nodes. 
+Should be computed with the function \code{\link{get_paths}}.}
 }
 \value{
 Covarianz matrix.
@@ -31,5 +36,5 @@ V(tree)$var = rep(1,8)
 paths <- get_paths(tree)
 
 # Call function
-cov_from_graph(g, paths)
+cov_from_graph(tree, 5, paths)
 }
