@@ -18,7 +18,7 @@ alphas = seq(0.01, 0.99, 0.01)
 
 # Test strategy
 test_strategy = "run-over"  # Possible: "grouping", "run-over", "U-stat", "LR"
-B_range = c(2,3,4,5,6,7,8)  # only relevant if test_strategy=="run-over" 
+B_range = c(10,12,15)  # only relevant if test_strategy=="run-over" 
 N = 5000  # only relevant if test_strategy=="U-stat"
 
 # Tree

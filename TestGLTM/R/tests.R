@@ -149,7 +149,7 @@ test_run_over <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, B=5, E=1000
     test_ineqs = TRUE
     indices_U = matrix(c(1:(nrow(X)-3),2:(nrow(X)-2),3:(nrow(X)-1),4:nrow(X)),
                        ncol=4, byrow=FALSE)
-    H = calculate_H(X, indices_U, ind_eq, ind_ineq1, ind_ineq2)
+    H = calculate_H_not_symmetric(X, indices_U, ind_eq, ind_ineq1, ind_ineq2)
   }
   
   n = dim(H)[1]  # nr of samples
