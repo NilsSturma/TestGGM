@@ -1,10 +1,8 @@
 library(foreach)
 library(doParallel)
-library(MASS) #mvrnorm
+library(MASS)
 library(igraph)
 library(TestGLTM)
-
-# TODO: uncomment everything
 
 setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
 
@@ -14,21 +12,19 @@ setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
 
 # General
 n_range = c(500)
-n=500
 E = 1000
 nr_exp = 200
 alphas = seq(0.01, 0.99, 0.01)
 
 # Test strategy
-test_strategy="grouping"  # "grouping", "run-over", "U-stat", "LR", "U-stat-deg"
-strategies = c("LR")
-#B = 5  # just for test_strategy=="run-over" 
-#N = 5000 # just for test_strategy=="U-stat
+strategies = c("LR")  # Possible: "grouping", "run-over", "U-stat", "LR"
+B = 5  # only relevant if test_strategy=="run-over" 
+N = 5000  # only relevant if test_strategy=="U-stat"
 
 # Tree
-tree = "star_tree"  # "star_tree", "cat_binary"
+tree = "star_tree"  # Possible: "star_tree", "cat_binary"
 m = 20
-setup = 1  # (star_tree)
+setup = 1  # only relevant if tree=="star_tree"
 
 # High dimensionality?
 nr_4 = NULL  # 5000, NULL
@@ -45,16 +41,20 @@ save=TRUE
 # Create tree and collect indices #
 ###################################
 
+# Create tree
 if (tree=="star_tree"){
   g = star_tree(m)
 } else if (tree=="cat_binary"){
   g = cat_binary(m)
 } 
 
+# Plot tree
 plot(g)
 
+# Save all paths between all nodes in the tree (doing this just once reduces computational time)
 paths = get_paths(g)
 
+# Collect the representations of the polynomials that have to be tested
 res = collect_indices(g, m, nr_4, nr_3)
 ind_eq = res$ind_eq
 ind_ineq1 = res$ind_ineq1
@@ -65,6 +65,8 @@ if (only_equalities){
   ind_ineq2 = NULL
   p = dim(ind_eq)[1]
 }
+
+# Check the dimension
 print(p)
 
 
@@ -81,22 +83,24 @@ for (test_strategy in strategies){
     print(paste("strategy=",test_strategy ,sep=""))
     print(paste("n=",n ,sep=""))
     
+    # For every n and every test_strategy initialize the cluster
     cores = 20 #detectCores()
     cl <- makeCluster(cores, outfile = "")
     registerDoParallel(cl)
     
+    # Main loop to compute test sizes
     results <- foreach(nr = 1:nr_exp, 
                        .combine=rbind, 
                        .errorhandling="remove",   # "pass", "stop", "remove"
                        .packages=c("MASS", "TestGLTM", "igraph", "stats")) %dopar% {
       
+      # Print some info
       if((nr%%10) == 0){
         print(nr)
       }
       warnings()
       
       # Generate n independent data sets depending on setup
-      
       if (tree=="star_tree"){
         cov = cov_from_star_tree(g, paths, setup=setup, m=m)
       } else if (tree=="cat_binary"){
@@ -120,6 +124,8 @@ for (test_strategy in strategies){
       } else if (test_strategy=="U-stat"){
         res = test_U_stat(X, ind_eq, ind_ineq1, ind_ineq2, N=N, E=E)
       } 
+      
+      # Rejected?
       result = res$PVAL <= alphas # result: TRUE = rejected
       result = as.numeric(result)
     }
@@ -129,21 +135,20 @@ for (test_strategy in strategies){
       print(paste("ERROR - ", (nr_exp-dim(results)[1]), " tasks where not succesful.", sep=""))
     }
     
+    # Compute the emprical sizes
     sizes = colMeans(results)
+    
+    # Stop the cluster
     stopCluster(cl)
     
     
-    
-    #########################
-    # Plot and save results #
-    #########################
-    
+    # Plot and save results
+    # Create meta information for the plots and the files to be save
     if (only_equalities){
       prefix = "only_equalities"
     } else {
       prefix = format(Sys.time(), "%Y-%m-%d-%H-%M")
     }
-    
     if (tree=="star_tree"){
       name = paste(prefix, "_", "star-tree_setup=", setup, "_n=", n, "_m=", m, sep="")
       subtitle = paste("Star tree n=", n, " m=", m," strategy=", test_strategy, sep="")
@@ -154,11 +159,9 @@ for (test_strategy in strategies){
       title = paste("Emprical test sizes vs. nominal test levels based on ", nr_exp, " experiments. \n Caterpillar tree", sep="")
     }
     
-    #name = paste(format(Sys.time(), "%Y-%m-%d-%H-%M"), "_", "star-tree_setup=", setup, "_N=", N, sep="")
     
     
-    
-    # Plot
+    # Plot & save
     if (save){
       # use "./img/name.png" to save in subdirectory
       name_pdf = paste("./results/", tree, "/", test_strategy, "/sizes/", name, ".pdf", sep="")
@@ -166,7 +169,6 @@ for (test_strategy in strategies){
       saveRDS(sizes, file = name_rds) # read with readRDS()
       pdf(name_pdf) # create pdf file
     }
-    
     plot(alphas, sizes, 
          xlab="Nominal level", ylab="Emprical test size", main=title, sub=subtitle,
          type="p", pch=1)
