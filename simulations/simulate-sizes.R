@@ -13,7 +13,7 @@ setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
 # General
 n_range = c(500)
 E = 1000
-nr_exp = 200
+nr_exp = 500
 alphas = seq(0.01, 0.99, 0.01)
 
 # Test strategy
