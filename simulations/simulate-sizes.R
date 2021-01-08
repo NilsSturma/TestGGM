@@ -37,6 +37,7 @@ only_equalities = FALSE
 save=TRUE
 
 
+
 ###################################
 # Create tree and collect indices #
 ###################################
@@ -75,15 +76,13 @@ print(p)
 # Simulate empirical test sizes #
 #################################
 
-
-
 for (test_strategy in strategies){
   for (n in n_range){
     
     print(paste("strategy=",test_strategy ,sep=""))
     print(paste("n=",n ,sep=""))
     
-    # For every n and every test_strategy initialize the cluster
+    # Initialize the cluster
     cores = 20 #detectCores()
     cl <- makeCluster(cores, outfile = "")
     registerDoParallel(cl)
@@ -95,9 +94,7 @@ for (test_strategy in strategies){
                        .packages=c("MASS", "TestGLTM", "igraph", "stats")) %dopar% {
       
       # Print some info
-      if((nr%%10) == 0){
-        print(nr)
-      }
+      if((nr%%10) == 0){print(nr)}
       warnings()
       
       # Generate n independent data sets depending on setup
@@ -141,9 +138,8 @@ for (test_strategy in strategies){
     # Stop the cluster
     stopCluster(cl)
     
-    
     # Plot and save results
-    # Create meta information for the plots and the files to be save
+    # Create meta information for the plot and the files to be saved
     if (only_equalities){
       prefix = "only_equalities"
     } else {
@@ -158,8 +154,6 @@ for (test_strategy in strategies){
       subtitle = paste("Caterpillar tree n=", n, " m=", m," strategy=", test_strategy, sep="")
       title = paste("Emprical test sizes vs. nominal test levels based on ", nr_exp, " experiments. \n Caterpillar tree", sep="")
     }
-    
-    
     
     # Plot & save
     if (save){
