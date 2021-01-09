@@ -12,25 +12,25 @@ setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
 
 # General
 E = 1000
-nr_exp = 500
+nr_exp = 100
 alpha = 0.05
 
 # Test strategy
-test_strategy="run-over"  # Possible: "grouping", "run-over", "U-stat", "LR"
+test_strategy="U-stat"  # Possible: "grouping", "run-over", "U-stat", "LR"
 B = 5  # only relevant if test_strategy=="run-over"
 N = 5000  # only relevant if test_strategy=="U-stat"
 
 # Tree
 tree = "star_tree"  # Possible: "star_tree", "cat_binary"
 m = 20  
-setup = 1  # only relevant if tree=="star_tree"
+setup = 2  # only relevant if tree=="star_tree"
 
 # Alternative
 beta_2 = c(rep(0,(m-2)),1,1)
-h = 10
+h = 4
 
 # Determine the different sample sizes
-n_range = seq(250,1200, len=20)
+n_range = c(400,600,800,1000,1200)
 
 # High dimensionality?
 nr_4 = NULL  # 5000, NULL
@@ -130,7 +130,7 @@ for (i in (1:length(n_range))){
     } else if (test_strategy=="run-over"){
       res = test_run_over(X, ind_eq, ind_ineq1, ind_ineq2, B=B, E=E)
     } else if (test_strategy=="U-stat"){
-      res = test_U_stat(X, ind_eq, ind_ineq1, ind_ineq2, N=N, E=E,)
+      res = test_U_stat(X, ind_eq, ind_ineq1, ind_ineq2, N=N, E=E)
     }
     
     # Rejected?
