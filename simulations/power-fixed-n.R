@@ -32,7 +32,7 @@ H = seq(1,20,len=20)
 
 # High dimensionality?
 nr_4 = NULL  # 5000, NULL
-nr_3 = NULL  # 250, NULL
+nr_3 = NULL  # 125, NULL
 
 # Test only equalities?
 only_equalities = FALSE

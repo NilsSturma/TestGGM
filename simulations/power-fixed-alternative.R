@@ -12,7 +12,7 @@ setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
 
 # General
 E = 1000
-nr_exp = 100
+nr_exp = 500
 alpha = 0.05
 
 # Test strategy
@@ -34,7 +34,7 @@ n_range = c(400,600,800,1000,1200)
 
 # High dimensionality?
 nr_4 = NULL  # 5000, NULL
-nr_3 = NULL  # 250, NULL
+nr_3 = NULL  # 125, NULL
 
 # Test only equalities?
 only_equalities = FALSE
