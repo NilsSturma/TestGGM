@@ -311,6 +311,52 @@ test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=100
 
 
 
+############# run_over_compute_cov ##############
+
+
+# test_run_over_compute_cov <- function(X, ind_eq, E=1000){
+#   
+#   # Call function to calculate matrix H
+#   indices_U = matrix(c(1:(nrow(X)-1),2:nrow(X)), ncol=2, byrow=FALSE)
+#   H = calculate_H_not_symmetric_eq(X, indices_U, ind_eq)
+#   
+#   # Mean and centering
+#   H_mean = Rfast::colmeans(H)
+#   H_centered = Rfast::transpose(Rfast::transpose(H) - H_mean) # Centering: H_i = (H_i - H_mean)
+#   
+#   # Dimensions
+#   n = dim(X)[1]  # nr of samples
+#   m = dim(X)[2] # number of observed variables
+#   p = dim(H)[2]  # total nr of constraints
+#   
+#   # Sample covariance 
+#   S = matrix(0, nrow=m, ncol=m)
+#   for (i in 1:n){
+#     S = S + X[i,] %*% t(X[i,])
+#   }
+#   S = S/n
+#   
+#   # Estimate limiting covariance matrix
+#   cov = compute_cov_run_over(S, ind_eq)
+#   
+#   # Vector for standardizing
+#   standardizer = diag(cov)**(-1/2)
+# 
+#   # Test statictic
+#   test_stat = sqrt(n-1) * max(abs(standardizer * H_mean))
+#   
+#   # Sample E sets from Z~N(0,cov)
+#   Z = mvrnorm(E, mu=rep(0,nrow(cov)), Sigma=cov)
+#   
+#   # Critical value
+#   results = apply(abs(standardizer * transpose(Z)), 2, max)
+#   
+#   # pval
+#   pval = (1 + sum(results >= test_stat)) / (1+E)
+#   
+#   return(list("PVAL"=pval, "TSTAT"=test_stat))
+# }
+
 
 
 
