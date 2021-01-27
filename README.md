@@ -3,7 +3,8 @@ R package for testing the goodness-of-fit of Gaussian latent tree models.
 - More information via ?TestGLTM.
 - Helper functions are written in `Rcpp`.
 - Algebraic tests are implemented in the file `R/tests.R` and the likelihood-ratio test is implemented in `R/LR_EM.R`.
-Install via `install.packages(TestGLTM_1.0.tar.gz, repos=NULL, type="source")`.
+
+Install via `install.packages("TestGLTM_1.0.tar.gz", repos=NULL, type="source")`.
 
 ## simulations
 R-files to compute empirical test sizes and empirical powers via Monte Carlo simulations. 
