@@ -304,6 +304,57 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// expectation
+double expectation(NumericMatrix S, IntegerVector j);
+RcppExport SEXP _TestGLTM_expectation(SEXP SSEXP, SEXP jSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type S(SSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type j(jSEXP);
+    rcpp_result_gen = Rcpp::wrap(expectation(S, j));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fourth_mom
+double fourth_mom(NumericMatrix S, int a, int b, int c, int d);
+RcppExport SEXP _TestGLTM_fourth_mom(SEXP SSEXP, SEXP aSEXP, SEXP bSEXP, SEXP cSEXP, SEXP dSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type S(SSEXP);
+    Rcpp::traits::input_parameter< int >::type a(aSEXP);
+    Rcpp::traits::input_parameter< int >::type b(bSEXP);
+    Rcpp::traits::input_parameter< int >::type c(cSEXP);
+    Rcpp::traits::input_parameter< int >::type d(dSEXP);
+    rcpp_result_gen = Rcpp::wrap(fourth_mom(S, a, b, c, d));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cov_grouping
+NumericMatrix cov_grouping(NumericMatrix S, IntegerMatrix ind_eq);
+RcppExport SEXP _TestGLTM_cov_grouping(SEXP SSEXP, SEXP ind_eqSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type S(SSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_eq(ind_eqSEXP);
+    rcpp_result_gen = Rcpp::wrap(cov_grouping(S, ind_eq));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cov_run_over
+NumericMatrix cov_run_over(NumericMatrix S, IntegerMatrix ind_eq);
+RcppExport SEXP _TestGLTM_cov_run_over(SEXP SSEXP, SEXP ind_eqSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type S(SSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_eq(ind_eqSEXP);
+    rcpp_result_gen = Rcpp::wrap(cov_run_over(S, ind_eq));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_TestGLTM_findn", (DL_FUNC) &_TestGLTM_findn, 2},
@@ -327,6 +378,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_TestGLTM_bootstrap", (DL_FUNC) &_TestGLTM_bootstrap, 2},
     {"_TestGLTM_bootstrap_m_dep", (DL_FUNC) &_TestGLTM_bootstrap_m_dep, 4},
     {"_TestGLTM_bootstrap_U", (DL_FUNC) &_TestGLTM_bootstrap_U, 5},
+    {"_TestGLTM_expectation", (DL_FUNC) &_TestGLTM_expectation, 2},
+    {"_TestGLTM_fourth_mom", (DL_FUNC) &_TestGLTM_fourth_mom, 5},
+    {"_TestGLTM_cov_grouping", (DL_FUNC) &_TestGLTM_cov_grouping, 2},
+    {"_TestGLTM_cov_run_over", (DL_FUNC) &_TestGLTM_cov_run_over, 2},
     {NULL, NULL, 0}
 };
 

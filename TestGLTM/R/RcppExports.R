@@ -85,3 +85,19 @@ bootstrap_U <- function(E, r, H_centered, G_centered, N) {
     .Call(`_TestGLTM_bootstrap_U`, E, r, H_centered, G_centered, N)
 }
 
+expectation <- function(S, j) {
+    .Call(`_TestGLTM_expectation`, S, j)
+}
+
+fourth_mom <- function(S, a, b, c, d) {
+    .Call(`_TestGLTM_fourth_mom`, S, a, b, c, d)
+}
+
+cov_grouping <- function(S, ind_eq) {
+    .Call(`_TestGLTM_cov_grouping`, S, ind_eq)
+}
+
+cov_run_over <- function(S, ind_eq) {
+    .Call(`_TestGLTM_cov_run_over`, S, ind_eq)
+}
+
