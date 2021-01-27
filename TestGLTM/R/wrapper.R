@@ -13,11 +13,11 @@
 #' # Create tree
 #' vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
 #' edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
-#' tree <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+#' tree <- igraph::graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
 #' 
 #' # Sample data from tree
-#' V(tree)$var = rep(1,8)
-#' E(tree)$corr = rep(0.7,7)
+#' igraph::V(tree)$var = rep(1,8)
+#' igraph::E(tree)$corr = rep(0.7,7)
 #' sample_from_tree(tree, m=5, n=500)
 sample_from_tree <- function(tree, m, n){
   
@@ -26,7 +26,7 @@ sample_from_tree <- function(tree, m, n){
   
   paths = get_paths(tree)
   cov = cov_from_graph(tree, m, paths)
-  X = mvrnorm(n, mu=rep(0,nrow(cov)), Sigma=cov)
+  X = Rfast::rmvnorm(n, mu=rep(0,nrow(cov)), sigma=cov) 
   return(X)
 }
 
@@ -41,7 +41,7 @@ sample_from_tree <- function(tree, m, n){
 #' be the leaves of the tree. Four different test strategies are implmented. 
 #' One is the likelihood ratio test, the other three are algebraic tests. 
 #' In the latter case the test statistic is formed as the maximum of unbiased estimates of the 
-#' polynomials determining the semialgebraic set that defines the parameter space of the model. 
+#' polynomials characterizing the parameter space of the model. 
 #' A Gaussian multiplier bootstrap is used to estimate the limiting distribution of the 
 #' test statistic and to compute the p-value of the test.
 #' 
@@ -70,11 +70,11 @@ sample_from_tree <- function(tree, m, n){
 #' # Create tree
 #' vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
 #' edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
-#' tree <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+#' tree <- igraph::graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
 #' 
 #' # Sample data from tree
-#' V(tree)$var = rep(1,8)
-#' E(tree)$corr = rep(0.7,7)
+#' igraph::V(tree)$var = rep(1,8)
+#' igraph::E(tree)$corr = rep(0.7,7)
 #' X = sample_from_tree(tree, m=5, n=500)
 #' 
 #' # Goodness of fit test

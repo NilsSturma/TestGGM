@@ -28,12 +28,17 @@ Testing the goodness of fit of a given Gaussian latent tree model to observed da
 \examples{
 vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
 edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
-tree <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+tree <- igraph::graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
 plot(tree)
 
+# Sample data from tree
+igraph::V(tree)$var = rep(1,8)
+igraph::E(tree)$corr = rep(0.7,7)
+X = sample_from_tree(tree, m=5, n=500)
+
 # Set starting values
-E(tree)$corr = rep(0.7,7)
-V(tree)$var = rep(1,8)
+igraph::V(tree)$var = rep(1,8)
+igraph::E(tree)$corr = rep(0.7,7)
 
 # Compute all paths
 paths <- get_paths(tree)

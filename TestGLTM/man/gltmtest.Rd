@@ -55,7 +55,7 @@ It supports all Gaussian latent tree models where observed variables are restric
 be the leaves of the tree. Four different test strategies are implmented. 
 One is the likelihood ratio test, the other three are algebraic tests. 
 In the latter case the test statistic is formed as the maximum of unbiased estimates of the 
-polynomials determining the semialgebraic set that defines the parameter space of the model. 
+polynomials characterizing the parameter space of the model. 
 A Gaussian multiplier bootstrap is used to estimate the limiting distribution of the 
 test statistic and to compute the p-value of the test.
 }
@@ -63,11 +63,11 @@ test statistic and to compute the p-value of the test.
 # Create tree
 vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
 edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
-tree <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+tree <- igraph::graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
 
 # Sample data from tree
-V(tree)$var = rep(1,8)
-E(tree)$corr = rep(0.7,7)
+igraph::V(tree)$var = rep(1,8)
+igraph::E(tree)$corr = rep(0.7,7)
 X = sample_from_tree(tree, m=5, n=500)
 
 # Goodness of fit test

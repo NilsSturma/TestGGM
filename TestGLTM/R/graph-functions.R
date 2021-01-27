@@ -26,7 +26,8 @@ random_combs <- function(n, k, nr){
 #' For all subsets of size 4 of the observed nodes of a tree, the function determines if a subset is an elemnt of Q or not.
 #' 
 #' @param g An igraph object that is a tree. It is assumed that the first m nodes correspond to oberseved nodes.
-#' @param nr Number of subsets that are considered. Note that this is optional. If \code{NULL}, all subsets are considered.
+#' @param m Integer, number of observed nodes.
+#' @param nr Integer, number of subsets that are considered. Note that this is optional. If \code{NULL}, all subsets are considered.
 #' @return A list with two entries is returned. Both entries are matrices with 4 columns. 
 #' The first matrix are all subsets that belong to Q, the second are all subsets that do not belong to Q. 
 #' Each row represents one subset. For the matrix Q the order of the elements in a row is important. 
@@ -34,7 +35,7 @@ random_combs <- function(n, k, nr){
 #' @examples
 #' vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
 #' edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
-#' tree <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+#' tree <- igraph::graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
 #' plot(tree)
 #' findQ(tree, 5)
 findQ = function(g, m, nr=NULL){
@@ -55,8 +56,8 @@ findQ = function(g, m, nr=NULL){
     count = 0
     # Find the pair that gives an empty set when the intersection of its component paths is taken
     for (i in 1:3){
-      path1 = igraph::shortest_paths(g, from=V(g)[name==p], to=V(g)[name==others[i]], output="epath", weight=NA)
-      path2 = igraph::shortest_paths(g, from=V(g)[name==others[-i][1]], to=V(g)[name==others[-i][2]], output="epath", weight=NA)  
+      path1 = igraph::shortest_paths(g, from=p, to=others[i], output="epath", weight=NA)
+      path2 = igraph::shortest_paths(g, from=others[-i][1], to=others[-i][2], output="epath", weight=NA)  
       intersection = intersect(unlist(path1$epath), unlist(path2$epath))
       if (length(intersection)==0){
         res = c(p, others[i], others[-i])
@@ -102,7 +103,7 @@ findQ = function(g, m, nr=NULL){
 #' @examples
 #' vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
 #' edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
-#' tree <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+#' tree <- igraph::graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
 #' plot(tree)
 #' collect_indices(tree, 5)
 collect_indices <- function(g, m, nr_4=NULL, nr_3=NULL){
@@ -162,19 +163,19 @@ collect_indices <- function(g, m, nr_4=NULL, nr_3=NULL){
 #' @examples
 #' vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
 #' edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
-#' tree <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+#' tree <- igraph::graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
 #' plot(tree)
 #' res <- get_paths(tree)
 #' 
-#' # Access path from node i to node j
-#' res[[i]][[j]]
+#' # Access path from node 1 to node 2
+#' res[[1]][[2]]
 get_paths = function(g){
-  nr_nodes = length(V(g))
+  nr_nodes = length(igraph::V(g))
   paths = list()
   for (i in 1:nr_nodes){
     p_list = list()
     for (j in 1:nr_nodes){
-      p = igraph::shortest_paths(g, from=V(g)[name==i], to=V(g)[name==j], output="epath", weight=NA)
+      p = igraph::shortest_paths(g, from=i, to=j, output="epath", weight=NA)
       p = c(unlist(p$epath))
       p_list = c(p_list, list(p))
     }
@@ -202,12 +203,12 @@ get_paths = function(g){
 #' @examples 
 #' vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
 #' edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
-#' tree <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+#' tree <- igraph::graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
 #' plot(tree)
 #' 
 #' # Set parameters
-#' E(tree)$corr = rep(0.7,7)
-#' V(tree)$var = rep(1,8)
+#' igraph::E(tree)$corr = rep(0.7,7)
+#' igraph::V(tree)$var = rep(1,8)
 #' 
 #' # Compute all paths
 #' paths <- get_paths(tree)
@@ -216,18 +217,13 @@ get_paths = function(g){
 #' cov_from_graph(tree, 5, paths)
 cov_from_graph = function(g, m, paths){
   
-  # g is an igraph object with the following attributes
-  # type: 1= observed, 2=unobserved
-  # var: variances for all nodes
-  # corr: correlation for all edges in (-1,1)
-  
-  std = sqrt(V(g)$var[V(g)$type==1])
-  m = sum(V(g)$type==1)
+  std = sqrt(igraph::V(g)$var[igraph::V(g)$type==1])
+  m = sum(igraph::V(g)$type==1)
   
   corr = diag(rep(1,m))
   for (i in 1:(m-1)){
     for (j in (i+1):m){
-      corr[i,j] = prod(E(g)$corr[paths[[i]][[j]]])
+      corr[i,j] = prod(igraph::E(g)$corr[paths[[i]][[j]]])
       corr[j,i] = corr[i,j]
     }
   }

@@ -4,13 +4,13 @@ cov_from_graph_large = function(g, paths){
   # V(g)$var: variances for all nodes
   # E(g)$corr: correlation for all edges in (-1,1)
   
-  std = sqrt(V(g)$var)
-  nr_nodes = length(V(g))
+  std = sqrt(igraph::V(g)$var)
+  nr_nodes = length(igraph::V(g))
   
   corr = diag(rep(1,nr_nodes))
   for (i in 1:(nr_nodes-1)){
     for (j in (i+1):nr_nodes){
-      corr[i,j] = prod(E(g)$corr[paths[[i]][[j]]])
+      corr[i,j] = prod(igraph::E(g)$corr[paths[[i]][[j]]])
       corr[j,i] = corr[i,j]
     }
   }
@@ -29,18 +29,18 @@ update_param = function(g, S){
   # S is large covariance matrix of dimensin equal to total number of nodes
   
   # update correlation of all edges
-  edges = get.edgelist(g)
+  edges = igraph::get.edgelist(g)
   for (i in 1:dim(edges)[1]){
     from = as.integer(edges[i,][1])
     to = as.integer(edges[i,][2])
-    E(g)$corr[i] = S[from, to] / ( sqrt(S[from,from]) * sqrt(S[to,to]) )
+    igraph::E(g)$corr[i] = S[from, to] / ( sqrt(S[from,from]) * sqrt(S[to,to]) )
     
   }
   
   # update variance of observed nodes
-  nr_observed = sum(V(g)$type==1) # always the first ones in vertices
+  nr_observed = sum(igraph::V(g)$type==1) # always the first ones in vertices
   for (i in 1:nr_observed){
-    V(g)$var[i] = S[i,i]
+    igraph::V(g)$var[i] = S[i,i]
   }
   return(g)
 }
@@ -161,12 +161,17 @@ mle = function(X){
 #' @examples 
 #' vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
 #' edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
-#' tree <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+#' tree <- igraph::graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
 #' plot(tree)
 #' 
+#' # Sample data from tree
+#' igraph::V(tree)$var = rep(1,8)
+#' igraph::E(tree)$corr = rep(0.7,7)
+#' X = sample_from_tree(tree, m=5, n=500)
+#' 
 #' # Set starting values
-#' E(tree)$corr = rep(0.7,7)
-#' V(tree)$var = rep(1,8)
+#' igraph::V(tree)$var = rep(1,8)
+#' igraph::E(tree)$corr = rep(0.7,7)
 #' 
 #' # Compute all paths
 #' paths <- get_paths(tree)
@@ -177,7 +182,7 @@ LR_test = function(X, g, paths){
   
   # returns p value
   LR_statistic = 2*( mle(X)$loglik - EM(X,g,paths)$loglik )
-  df = choose((dim(X)[2]+1),2) - ( length(E(g)) + sum(V(g)$type==1) )
+  df = choose((dim(X)[2]+1),2) - ( length(igraph::E(g)) + sum(igraph::V(g)$type==1) )
   p_value = 1 - stats::pchisq(LR_statistic, df)
   
   return(list("PVAL"=p_value, "TSTAT"=LR_statistic))

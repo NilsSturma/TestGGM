@@ -17,18 +17,18 @@ nr_exp = 500
 alpha = 0.05
 
 # Test strategy
-strategies = c("LR")  # Possible: "grouping", "run-over", "U-stat", "LR"
+strategies = c("grouping")  # Possible: "grouping", "run-over", "U-stat", "LR", "grouping-cov", "run-over-cov"
 B = 5  # only relevant if test_strategy=="run-over" 
 N = 5000  # only relevant if test_strategy=="U-stat"
 
 # Tree
 tree = "star_tree"  # Possible: "star_tree", "cat_binary"
 m = 20  
-setup = 1  # only relevant if tree=="star_tree"
+setup = 2  # only relevant if tree=="star_tree"
 
 # Determine the alternatives
 beta_2 = c(rep(0,(m-2)),1,1)
-H = seq(1,20,len=20)
+H = seq(0.5,10,len=20)
 
 # High dimensionality?
 nr_4 = NULL  # 5000, NULL
@@ -130,6 +130,10 @@ for (test_strategy in strategies){
         res = test_run_over(X, ind_eq, ind_ineq1, ind_ineq2, B=B, E=E)
       } else if (test_strategy=="U-stat"){
         res = test_U_stat(X, ind_eq, ind_ineq1, ind_ineq2, N=N, E=E)
+      } else if (test_strategy=="grouping-cov"){
+        res = test_grouping_compute_cov(X, ind_eq, E=E) # only possible for equalities
+      } else if (test_strategy=="run-over-cov"){
+        res = test_run_over_compute_cov(X, ind_eq, E=E) # only possible for equalities
       }
       
       # Rejected?

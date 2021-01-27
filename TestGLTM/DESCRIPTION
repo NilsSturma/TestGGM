@@ -12,7 +12,6 @@ Imports:
     igraph,
     CombMSC,
     Rfast,
-    combinat,
     stats
 LinkingTo: Rcpp
 RoxygenNote: 7.1.1

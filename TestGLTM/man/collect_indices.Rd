@@ -32,7 +32,7 @@ If one polynomial is \eqn{\sigma_{pq} \sigma_{rs} - \sigma_{pr} \sigma_{qs}} the
 \examples{
 vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
 edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
-tree <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+tree <- igraph::graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
 plot(tree)
 collect_indices(tree, 5)
 }

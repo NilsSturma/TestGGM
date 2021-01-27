@@ -60,13 +60,13 @@ star_tree <- function(m=10){
 # Sample covariance matrix from star tree depending on setup
 cov_from_star_tree <- function(g, paths, setup=1, m=10){
   if (setup==1){
-    V(g)$var = c(rep(2,m),1)
-    E(g)$corr = rep(sqrt(0.5),m)
+    igraph::V(g)$var = c(rep(2,m),1)
+    igraph::E(g)$corr = rep(sqrt(0.5),m)
     cov = cov_from_graph(g, m, paths)
   } else if (setup==2){
-    beta = c(10,10, rnorm((m-2),0,0.2))
-    V(g)$var = c(beta**2+rep(1/3,m),1)
-    E(g)$corr = beta / sqrt(beta**2+rep(1/3,m))
+    beta = c(10,10, stats::rnorm((m-2),0,0.2))
+    igraph::V(g)$var = c(beta**2+rep(1/3,m),1)
+    igraph::E(g)$corr = beta / sqrt(beta**2+rep(1/3,m))
     cov = cov_from_graph(g, m, paths)
   }
   return(cov)

@@ -1,7 +1,7 @@
 #' Tests the goodness-of-fit of a Gaussian latent tree model
 #' 
 #' This function tests the goodness-of-fit of a given Gaussian latent tree model to observed data.
-#' The parameter space of the model is a semialgebraic set. The involved polynomials are 
+#' The parameter space is characterized by polynomial constraints. The involved polynomials are 
 #' estimated by grouping the data into independent subsets. Each group is used to form an 
 #' unbiased estimate of the polynomials. To test all constraints simultaneously the test statistic 
 #' is the maximum of a scaled average of the estimates.
@@ -24,11 +24,11 @@
 #' # Create tree
 #' vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
 #' edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
-#' tree <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+#' tree <- igraph::graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
 #' 
 #' # Sample data from tree
-#' V(tree)$var = rep(1,8)
-#' E(tree)$corr = rep(0.7,7)
+#' igraph::V(tree)$var = rep(1,8)
+#' igraph::E(tree)$corr = rep(0.7,7)
 #' X = sample_from_tree(tree, m=5, n=500)
 #' 
 #' # Determine the representation of the polynomials that have to be tested
@@ -95,7 +95,7 @@ test_grouping <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000){
 #' Tests the goodness-of-fit of a Gaussian latent tree model
 #' 
 #' This function tests the goodness-of-fit of a given Gaussian latent tree model to observed data.
-#' The parameter space of the model is a semialgebraic set. The involved polynomials are 
+#' The parameter space is characterized by polynomial constraints. The involved polynomials are 
 #' estimated by considering overlapping subsets of the data 
 #' (\code{\{X_1, X_2, X_3, X_4\}, \{X_2, X_3, X_4, X_5\}, ...}). Each subset is used to form an 
 #' unbiased estimate of the polynomials. To test all constraints simultaneously the test statistic 
@@ -120,11 +120,11 @@ test_grouping <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000){
 #' # Create tree
 #' vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
 #' edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
-#' tree <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+#' tree <- igraph::graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
 #' 
 #' # Sample data from tree
-#' V(tree)$var = rep(1,8)
-#' E(tree)$corr = rep(0.7,7)
+#' igraph::V(tree)$var = rep(1,8)
+#' igraph::E(tree)$corr = rep(0.7,7)
 #' X = sample_from_tree(tree, m=5, n=500)
 #' 
 #' # Determine the representation of the polynomials that have to be tested
@@ -195,7 +195,7 @@ test_run_over <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, B=5, E=1000
 #' Tests the goodness-of-fit of a Gaussian latent tree model
 #' 
 #' This function tests the goodness-of-fit of a given Gaussian latent tree model to observed data.
-#' The parameter space of the model is a semialgebraic set. The involved polynomials are 
+#' The parameter space of the model is characterized by polynomial constraints. The involved polynomials are 
 #' estimated by considering subsets of the data. The number of subsets as well as the subsets itself 
 #' are chosen randomly. Each subset is used to form an unbiased estimate of the polynomials. 
 #' To test all constraints simultaneously the test statistic is the maximum of a scaled average 
@@ -219,11 +219,11 @@ test_run_over <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, B=5, E=1000
 #' # Create tree
 #' vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
 #' edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
-#' tree <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+#' tree <- igraph::graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
 #' 
 #' # Sample data from tree
-#' V(tree)$var = rep(1,8)
-#' E(tree)$corr = rep(0.7,7)
+#' igraph::V(tree)$var = rep(1,8)
+#' igraph::E(tree)$corr = rep(0.7,7)
 #' X = sample_from_tree(tree, m=5, n=500)
 #' 
 #' # Determine the representation of the polynomials that have to be tested
@@ -255,7 +255,7 @@ test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=100
   N = min(0.7*choose(n,r), N)
   
   # determine N_hat by Bernoulli sampling
-  N_hat = rbinom(1, choose(n,r), (N / choose(n,r)))
+  N_hat = stats::rbinom(1, choose(n,r), (N / choose(n,r)))
   
   # Choose randomly N_hat unique subsets with cardinality r of {1,...,n}
   indices = random_combs(n,r,N_hat)

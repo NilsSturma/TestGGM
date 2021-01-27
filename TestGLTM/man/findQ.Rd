@@ -9,7 +9,9 @@ findQ(g, m, nr = NULL)
 \arguments{
 \item{g}{An igraph object that is a tree. It is assumed that the first m nodes correspond to oberseved nodes.}
 
-\item{nr}{Number of subsets that are considered. Note that this is optional. If \code{NULL}, all subsets are considered.}
+\item{m}{Integer, number of observed nodes.}
+
+\item{nr}{Integer, number of subsets that are considered. Note that this is optional. If \code{NULL}, all subsets are considered.}
 }
 \value{
 A list with two entries is returned. Both entries are matrices with 4 columns. 
@@ -23,7 +25,7 @@ For all subsets of size 4 of the observed nodes of a tree, the function determin
 \examples{
 vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
 edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
-tree <- graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
+tree <- igraph::graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
 plot(tree)
 findQ(tree, 5)
 }
