@@ -532,9 +532,9 @@ if (save){pdf(name, width=width,height=height)}
 
 plot(H, run_over, 
      xlab="Nominal level", ylab="Empirical power", #main=title, sub=subtitle,
-     type="p", pch=ro_pch, cex=ro_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
+     type="p", pch=ro_pch, cex=1.5*ro_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
 
-points(H, run_over_compute_cov, type="p", pch=17, cex=ro_cex)
+points(H, run_over_compute_cov, type="p", pch=17, cex=1.5*ro_cex)
 legend("bottomright", legend=c("batched-mean estimator", "g(S)"), bty="n", lwd=lwd_legend, 
        cex=cex_legend, lty=c(NA, NA), pch=c(ro_pch, 17))
 
