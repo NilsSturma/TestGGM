@@ -22,8 +22,8 @@ N = 5000  # only relevant if test_strategy=="U-stat"
 
 # Tree
 tree = "star_tree"  # Possible: "star_tree", "cat_binary"
-m = 20
-setup = 1  # only relevant if tree=="star_tree"
+m = 10
+setup = 2  # only relevant if tree=="star_tree"
 
 # High dimensionality?
 nr_4 = NULL  # 5000, NULL

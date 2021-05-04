@@ -3,7 +3,8 @@
 #################
 alphas = seq(0.01, 0.99, 0.01)
 save = TRUE
-setwd("C:/Users/Nils/Documents/Studium/TUM/09_Masterarbeit/master-thesis-tests")
+setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
+#setwd("C:/Users/Nils/Documents/Studium/TUM/09_Masterarbeit/master-thesis-tests")
 
 width=8
 height=6
@@ -32,8 +33,33 @@ cex_legend = 1.3
 
 lwd_legend = 1
 
+###############
+# p values LR #
+###############
 
+S1M20 = readRDS("results/star_tree/LR/p-values/setup=1_n=500_m=20_exp=5000.rds")
+name = paste("results/final_plots/", "pval-LR-setup1-m20.pdf", sep="")
+if (save){pdf(name, width=8, height=8)}
+par(mar=c(7,4,4,1)+.1)
+hist(S1M20, breaks=seq(0,1,0.05), xlab="p-value", ylab="", freq=FALSE, main="", 
+     cex.lab=2*cex_lab, cex.axis=2*cex_axis, cex.main=2*cex_main, cex.sub=2*cex_sub, mgp=c(5,2,0)) 
+if (save){dev.off()}
 
+S1M200 = readRDS("results/star_tree/LR/p-values/setup=1_n=500_m=200_exp=5000.rds")
+name = paste("results/final_plots/", "pval-LR-setup1-m200.pdf", sep="")
+if (save){pdf(name, width=8, height=8)}
+par(mar=c(7,4,4,1)+.1)
+hist(S1M200, breaks=seq(0,1,0.05), xlab="p-value", ylab="", freq=FALSE, main="", 
+     cex.lab=2*cex_lab, cex.axis=2*cex_axis, cex.main=2*cex_main, cex.sub=2*cex_sub, mgp=c(5,2,0)) 
+if (save){dev.off()}
+
+S2M20 = readRDS("results/star_tree/LR/p-values/setup=2_n=500_m=20_exp=5000.rds")
+name = paste("results/final_plots/", "pval-LR-setup2-m20.pdf", sep="")
+if (save){pdf(name, width=8, height=8)}
+par(mar=c(7,4,4,1)+.1)
+hist(S2M20, breaks=seq(0,1,0.05), xlab="p-value", ylab="", freq=FALSE, main="", 
+     cex.lab=2*cex_lab, cex.axis=2*cex_axis, cex.main=2*cex_main, cex.sub=2*cex_sub, mgp=c(5,2,0)) 
+if (save){dev.off()}
 
 
 
