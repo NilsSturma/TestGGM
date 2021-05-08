@@ -1,26 +1,3 @@
-#' Randomly sample tuples from a set of integers
-#' 
-#' Randomly sample k-tuples of k elements from the set 1:n
-#' 
-#' @param n Integer, determines the length of the set 1:n to select the k-tuples from.
-#' @param k Integer, length of the tuples.
-#' @param nr Integer, number of k-tuples being sampled.
-#' @return Matrix with \code{nr} rows and \code{k} columns. Each row is a k-tuple of elements from 1:n.
-#' @examples random_combs(5,3,10)
-random_combs <- function(n, k, nr){
-  sub_sets = list()
-  while (length(sub_sets) < nr){
-    sub_sets = c(sub_sets, list(sort(sample(1:n, k, replace=FALSE))))
-    sub_sets = unique(sub_sets)
-  }
-  return(matrix(unlist(sub_sets), ncol = k, byrow = TRUE))
-}
-
-
-
-
-
-
 #' Determine the set Q
 #' 
 #' For all subsets of size 4 of the observed nodes of a tree, the function determines if a subset is an elemnt of Q or not.

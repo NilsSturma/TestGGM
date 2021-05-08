@@ -258,7 +258,7 @@ test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=100
   N_hat = stats::rbinom(1, choose(n,r), (N / choose(n,r)))
   
   # Choose randomly N_hat unique subsets with cardinality r of {1,...,n}
-  indices = random_combs(n,r,N_hat)
+  indices = matrix(unlist(random_combs(n,r,N_hat)[[1]]), ncol = r, byrow = TRUE)
   
   # Compute matrix H
   if (test_ineqs){
