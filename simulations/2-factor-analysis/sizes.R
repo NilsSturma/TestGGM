@@ -3,6 +3,7 @@ library(stats)
 library(foreach)
 library(TestGLTM)
 library(doParallel)
+source("utils.R")
 setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
 
 
@@ -12,7 +13,7 @@ setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
 
 
 # Sample size
-n_range = c(1000)
+n_range = c(500)
 alphas = seq(0.01, 0.99, 0.01)
 
 # Test parameters
@@ -31,24 +32,6 @@ cores = 20
 save = TRUE
 
 
-
-####################################
-## Covariance in different setups ##
-####################################
-create_cov <- function(setup="regular", m=20){
-  if (setup=="regular"){
-    factors = 2
-    beta = matrix(stats::rnorm(2*m),m,2)
-    Sigma = rep(1,m)
-    cov = diag(Sigma) + beta %*% t(beta)
-  } else {
-    beta_1 = rep(1,m)#stats::rnorm(m,0,1)
-    beta_2 = c(10,10, stats::rnorm((m-2),0,0.2))
-    Sigma = rep(1/3,m)
-    cov = diag(Sigma) + beta_1 %*% t(beta_1) + beta_2 %*% t(beta_2)
-  }
-  return(cov)
-}
 
 
 
@@ -80,7 +63,7 @@ for (strategy in strategies){
          warnings()
          
          # Sample parameters and data 
-         cov = create_cov(setup, m)
+         cov = create_cov(setup, m, n)
          X = mvrnorm(n, mu=rep(0,nrow(cov)), Sigma=cov)
          
          # Call test
@@ -110,7 +93,7 @@ for (strategy in strategies){
         pdf(name_pdf)
       }
       plot(alphas, sizes, 
-           xlab="Nominal level", ylab="Empirical test size",
+           xlab="Nominal level", ylab="Empirical test size", sub=subtitle,
            type="p", pch=1, ylim=c(0,1))
       abline(coef = c(0,1))
       if (save){dev.off()}
