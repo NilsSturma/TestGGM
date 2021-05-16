@@ -1,7 +1,6 @@
 # Covariance in different setups
 create_cov <- function(setup="regular", m, n, h=0){
   if (setup=="regular"){
-    factors = 2
     beta = matrix(stats::rnorm(2*m),m,2)
     Sigma = rep(1,m)
     cov = diag(Sigma) + beta %*% t(beta)

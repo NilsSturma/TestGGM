@@ -14,9 +14,9 @@ NumericVector h_tilde_fac(NumericVector X1,
     h_tilde[j] = X1[ind(j,0)] *  X1[ind(j,3)] * X2[ind(j,1)] * X2[ind(j,4)] * X3[ind(j,2)] * X3[ind(j,5)]
                + X1[ind(j,0)] *  X1[ind(j,4)] * X2[ind(j,1)] * X2[ind(j,5)] * X3[ind(j,2)] * X3[ind(j,3)]
                + X1[ind(j,0)] *  X1[ind(j,5)] * X2[ind(j,1)] * X2[ind(j,3)] * X3[ind(j,2)] * X3[ind(j,4)] 
-               - X1[ind(j,2)] *  X1[ind(j,3)] * X2[ind(j,1)] * X2[ind(j,4)] * X3[ind(j,0)] * X3[ind(j,5)] 
-               - X1[ind(j,2)] *  X1[ind(j,4)] * X2[ind(j,1)] * X2[ind(j,5)] * X3[ind(j,0)] * X3[ind(j,3)] 
-               - X1[ind(j,2)] *  X1[ind(j,5)] * X2[ind(j,1)] * X2[ind(j,3)] * X3[ind(j,0)] * X3[ind(j,4)];
+               - X3[ind(j,2)] *  X3[ind(j,3)] * X2[ind(j,1)] * X2[ind(j,4)] * X1[ind(j,0)] * X1[ind(j,5)] 
+               - X3[ind(j,2)] *  X3[ind(j,4)] * X2[ind(j,1)] * X2[ind(j,5)] * X1[ind(j,0)] * X1[ind(j,3)] 
+               - X3[ind(j,2)] *  X3[ind(j,5)] * X2[ind(j,1)] * X2[ind(j,3)] * X1[ind(j,0)] * X1[ind(j,4)];
   }
   return(h_tilde);
 }

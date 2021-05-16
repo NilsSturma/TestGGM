@@ -1,10 +1,15 @@
 library(MASS)
 library(stats)
+library(rlist)
 library(foreach)
 library(TestGLTM)
 library(doParallel)
-source("utils.R")
 setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
+source("./simulations/2-factor-analysis/utils.R")
+
+
+
+
 
 
 ################
@@ -18,21 +23,56 @@ alpha = 0.05
 
 # Test parameters
 E = 1000
-strategies = c("LR", "indep", "Ustat")  # Possible: "Ustat", "indep", "LR"
+strategies = c("Ustat")  # Possible: "Ustat", "indep", "LR"
 N = 5000
 
 # Setup
 m=20
 setups= c("regular")  #do singular with H = seq(0.5,10,0.5) as well
 nr_minors=10000
+randomized=TRUE
 
 # Determine range of alternatives
 H = seq(1,20,1)
 
 # Parameter for simulations
-nr_exp = 500
+nr_exp = 300
 cores = 20
 save = TRUE
+
+
+create_minors <- function(m, randomized=FALSE, nr_minors=10000){
+  
+  if (randomized){
+    # choose sets of indices
+    A = matrix(unlist(random_combs(m,6,nr_minors)[[1]]), 
+               ncol = 6, byrow = TRUE)
+    # shuffle each row
+    A = t(apply(A, 1, sample))
+    ind_minors = cbind(t(apply(A[,1:3],1,sort)), t(apply(A[,4:6],1,sort)))
+    
+  } else {
+    sub_sets = subsets(m,6,1:m)
+    L = list()
+    for (s in 1:dim(sub_sets)[1]){
+      set = sub_sets[s,]
+      for (i in 2:5){
+        for (j in (i+1):6){
+          C = set[c(1,i,j)]
+          B = setdiff(set, C)
+          L = list.append(L, c(C,B))
+        }
+      }
+    }
+    ind_minors = matrix(unlist(L), ncol = 6, byrow = TRUE)
+  }
+  
+  
+  return(ind_minors)
+}
+ind_minors = create_minors(m, randomized=randomized, nr_minors=nr_minors)
+
+
 
 
 for (strategy in strategies){
@@ -62,16 +102,16 @@ for (strategy in strategies){
          if((nr%%10) == 0){print(nr)}
          
          # Generate n indep datasets from the alternative
-         cov = create_cov(setup, m, n, h=h)
+         cov = create_cov(setup, m, n, h)
          X = mvrnorm(n, mu=rep(0,nrow(cov)), Sigma=cov)
          
          # Call test
          if (strategy=="LR"){
            res = factanal(X, 2)
          } else if (strategy=="indep"){
-           res = test_indep_factors(X, nr_minors, E=E)
+           res = test_indep_factors(X, ind_minors, E=E)
          } else if (strategy=="Ustat"){
-           res = test_U_stat_factors(X, nr_minors, N=N, E=E)
+           res = test_U_stat_factors(X, ind_minors, N=N, E=E)
          }
          powers[nr] = (res$PVAL <= alpha) # result: TRUE = rejected
        }
@@ -91,9 +131,8 @@ for (strategy in strategies){
       pdf(name_pdf)
     }
     plot(H, results, 
-         xlab="h", ylab="power", sub=subtitle,
+         xlab="h", ylab="Empirical power", sub=subtitle,
          type="p", pch=1, ylim=c(0,1))
-    abline(coef = c(0,1))
     if (save){dev.off()}
   }
 }

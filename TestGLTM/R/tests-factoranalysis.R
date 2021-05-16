@@ -7,12 +7,14 @@ random_minors <- function(m, factors, nr){
   # shuffle each row
   A = t(apply(A, 1, sample))
   
+  A = cbind(t(apply(A[,1:(factors+1)],1,sort)), t(apply(A[,(factors+2):(2*(factors+1))],1,sort)))
+  
   return(A)
 }
 
 
 
-test_indep_factors <- function(X, nr_minors, E=1000){
+test_indep_factors <- function(X, ind_minors, E=1000){
   
   m = dim(X)[2] # nr of observed variables
   
@@ -21,7 +23,7 @@ test_indep_factors <- function(X, nr_minors, E=1000){
   indices = matrix(1:N, ncol=3)
   
   # randomly choose minors to test
-  ind_minors = random_minors(m,2,nr_minors)
+  #ind_minors = random_minors(m,2,nr_minors)
   
   # Calculate matrix H of estimates
   H = H_factors(X, indices, ind_minors)
@@ -57,7 +59,7 @@ test_indep_factors <- function(X, nr_minors, E=1000){
 
 
 
-test_U_stat_factors <- function(X, nr_minors, N=5000, E=1000){
+test_U_stat_factors <- function(X, ind_minors, N=5000, E=1000){
   
   
   n = dim(X)[1]  # nr of samples
@@ -73,7 +75,7 @@ test_U_stat_factors <- function(X, nr_minors, N=5000, E=1000){
   indices = matrix(unlist(random_combs(n,r,N_hat)[[1]]), ncol = r, byrow = TRUE)
   
   # randomly choose minors to test
-  ind_minors = random_minors(m,2,nr_minors)
+  #ind_minors = random_minors(m,2,nr_minors)
   
   # Calculate matrix H of estimates
   H = H_factors(X, indices, ind_minors)
