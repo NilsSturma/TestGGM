@@ -28,15 +28,15 @@ N = 5000
 
 # Setup
 m=20
-setups= c("regular")  #do singular with H = seq(0.5,10,0.5) as well
+setups= c("singular")  #do singular with H = seq(0.5,10,0.5) as well
 nr_minors=10000
 randomized=TRUE
 
 # Determine range of alternatives
-H = seq(1,20,1)
+H = seq(1,10,0.5)
 
 # Parameter for simulations
-nr_exp = 300
+nr_exp = 10
 cores = 20
 save = TRUE
 
@@ -127,7 +127,7 @@ for (strategy in strategies){
     if (save){
       name_pdf = paste("./results/2-factor/power/", strategy, "/vary-alternative_", name, ".pdf", sep="")
       name_rds = paste("./results/2-factor/power/", strategy, "/vary-alternative_", name, ".rds", sep="")
-      saveRDS(sizes, file = name_rds)
+      saveRDS(results, file = name_rds)
       pdf(name_pdf)
     }
     plot(H, results, 
