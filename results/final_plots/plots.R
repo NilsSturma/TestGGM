@@ -3,8 +3,8 @@
 #################
 alphas = seq(0.01, 0.99, 0.01)
 save = TRUE
-setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
-#setwd("C:/Users/Nils/Documents/Studium/TUM/09_Masterarbeit/master-thesis-tests")
+#setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
+setwd("C:/Users/Nils/Documents/Studium/TUM/09_Masterarbeit/master-thesis-tests")
 
 width=8
 height=6
@@ -21,8 +21,8 @@ u_cex = 0.7
 
 lr_name = "LR"
 gr_name = "Test 1"
-ro_name = "Test 2"
-u_name = "Test 3"
+#ro_name = "Test 2"
+u_name = "Test 2"
 
 
 cex_lab = 1.3
@@ -430,7 +430,7 @@ name = paste("results/final_plots/", "power-fixed-n_star-tree_setup-2.pdf", sep=
 H = seq(0.5,10,len=20)
 
 grouping = readRDS("results/star_tree/grouping/power-fixed-n/2020-12-18-19-38_setup=2_n=500_m=20.rds")
-run_over = readRDS("results/star_tree/run-over/power-fixed-n/2020-12-19-03-33_setup=2_n=500_m=20.rds")
+#run_over = readRDS("results/star_tree/run-over/power-fixed-n/2020-12-19-03-33_setup=2_n=500_m=20.rds")
 U_stat= readRDS("results/star_tree/U-stat/power-fixed-n/2020-12-25-17-16_setup=2_n=500_m=20.rds")
 
 
@@ -439,10 +439,10 @@ if (save){pdf(name, width=width,height=height)}
 plot(H, grouping, 
      xlab="h", ylab="Empirical power", ylim = c(0,1), #main=title, sub=subtitle, 
      type="p", pch=gr_pch, cex=1.5*gr_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
-points(H, run_over, type="p", pch=ro_pch, cex=1.5*ro_cex)
+#points(H, run_over, type="p", pch=ro_pch, cex=1.5*ro_cex)
 points(H, U_stat, type="p", pch=u_pch, cex=1.5*u_cex)
-legend("bottomright", legend=c(gr_name, ro_name, u_name), bty="n", lwd=lwd_legend, 
-       cex=cex_legend, lty=c(NA, NA, NA), pch=c(gr_pch, ro_pch, u_pch))
+legend("bottomright", legend=c(gr_name, u_name), bty="n", lwd=lwd_legend, 
+       cex=cex_legend, lty=c(NA, NA), pch=c(gr_pch, u_pch))
 
 if (save){dev.off()}
 
