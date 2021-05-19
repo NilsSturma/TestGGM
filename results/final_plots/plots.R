@@ -4,7 +4,7 @@
 alphas = seq(0.01, 0.99, 0.01)
 save = TRUE
 #setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
-setwd("C:/Users/Nils/Documents/Studium/TUM/09_Masterarbeit/master-thesis-tests")
+setwd("C:/Users/Nils/Documents/git/master-thesis-tests")
 
 width=8
 height=6
@@ -455,7 +455,7 @@ H = seq(1,20,len=20)
 
 LR = readRDS("results/star_tree/LR/power-fixed-n/2021-01-04-18-30_setup=1_n=500_m=20.rds")
 grouping = readRDS("results/star_tree/grouping/power-fixed-n/2021-01-04-19-21_setup=1_n=500_m=20.rds")
-run_over = readRDS("results/star_tree/run-over/power-fixed-n/2021-01-05-04-05_setup=1_n=500_m=20.rds")
+#run_over = readRDS("results/star_tree/run-over/power-fixed-n/2021-01-05-04-05_setup=1_n=500_m=20.rds")
 U_stat= readRDS("results/star_tree/U-stat/power-fixed-n/2021-01-06-14-28_setup=1_n=500_m=20.rds")
 
 
@@ -464,11 +464,34 @@ if (save){pdf(name, width=width,height=height)}
 plot(H, grouping, 
      xlab="h", ylab="Empirical power", ylim = c(0,1), #main=title, sub=subtitle, 
      type="p", pch=gr_pch, cex=1.5*gr_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
-points(H, run_over, type="p", pch=ro_pch, cex=1.5*ro_cex)
+#points(H, run_over, type="p", pch=ro_pch, cex=1.5*ro_cex)
 points(H, LR, type="p", pch=lr_pch, cex=1.5*lr_cex)
 points(H, U_stat, type="p", pch=u_pch, cex=1.5*u_cex)
-legend("topleft", legend=c(lr_name, gr_name, ro_name, u_name), bty="n", lwd=lwd_legend, 
-       cex=cex_legend, lty=c(NA, NA, NA, NA), pch=c(lr_pch, gr_pch, ro_pch, u_pch))
+legend("topleft", legend=c(lr_name, gr_name, u_name), bty="n", lwd=lwd_legend, 
+       cex=cex_legend, lty=c(NA, NA, NA), pch=c(lr_pch, gr_pch, u_pch))
+
+if (save){dev.off()}
+
+############### 2-factor # regular ###############
+name = paste("results/final_plots/", "power-2-factor-regular.pdf", sep="")
+H = seq(1,20,len=20)
+
+LR = readRDS("results/2-factor/power/LR/vary-alternative_regular_n=500_m=20.rds")
+#grouping = readRDS("results/star_tree/grouping/power-fixed-n/2021-01-04-19-21_setup=1_n=500_m=20.rds")
+#run_over = readRDS("results/star_tree/run-over/power-fixed-n/2021-01-05-04-05_setup=1_n=500_m=20.rds")
+U_stat= readRDS("results/2-factor/power/Ustat/vary-alternative_regular_n=500_m=20.rds")
+
+
+if (save){pdf(name, width=width,height=height)}
+
+plot(H, LR, 
+     xlab="h", ylab="Empirical power", ylim = c(0,1), #main=title, sub=subtitle, 
+     type="p", pch=lr_pch, cex=1.5*lr_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
+#points(H, run_over, type="p", pch=ro_pch, cex=1.5*ro_cex)
+#points(H, LR, type="p", pch=lr_pch, cex=1.5*lr_cex)
+points(H, U_stat, type="p", pch=u_pch, cex=1.5*u_cex)
+legend("topleft", legend=c(lr_name, u_name), bty="n", lwd=lwd_legend, 
+       cex=cex_legend, lty=c(NA, NA), pch=c(lr_pch, u_pch))
 
 if (save){dev.off()}
 
