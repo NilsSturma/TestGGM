@@ -23,20 +23,20 @@ alpha = 0.05
 
 # Test parameters
 E = 1000
-strategies = c("Ustat")  # Possible: "Ustat", "indep", "LR"
+strategies = c("indep")  # Possible: "Ustat", "indep", "LR"
 N = 5000
 
 # Setup
 m=20
-setups= c("regular")  #do singular with H = seq(0.5,10,0.5) as well
+setups= c("regular", "singular")  #do singular with H = seq(0.5,10,0.5) as well
 nr_minors=10000
 randomized=TRUE
 
 # Determine range of alternatives
-H = seq(1,20,1)
+H = seq(1,60,1)
 
 # Parameter for simulations
-nr_exp = 300
+nr_exp = 500
 cores = 20
 save = TRUE
 
@@ -122,12 +122,12 @@ for (strategy in strategies){
     stopCluster(cl)
     
     # Plot and save results
-    name = paste(setup, "_n=", n, "_m=", m, sep="")
+    name = paste("hlarge_", setup, "_n=", n, "_m=", m, sep="")
     subtitle = paste("Based on ", nr_exp, " experiments.", sep="")
     if (save){
       name_pdf = paste("./results/2-factor/power/", strategy, "/vary-alternative_", name, ".pdf", sep="")
       name_rds = paste("./results/2-factor/power/", strategy, "/vary-alternative_", name, ".rds", sep="")
-      saveRDS(sizes, file = name_rds)
+      saveRDS(results, file = name_rds)
       pdf(name_pdf)
     }
     plot(H, results, 
