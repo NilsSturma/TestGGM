@@ -18,7 +18,7 @@ source("./simulations/2-factor-analysis/utils.R")
 
 
 # Sample size
-n = 500
+n = 15000
 alpha = 0.05
 
 # Test parameters
@@ -33,44 +33,44 @@ nr_minors=10000
 randomized=TRUE
 
 # Determine range of alternatives
-H = seq(1,60,1)
+H = seq(1,20,1)
 
 # Parameter for simulations
-nr_exp = 500
+nr_exp = 100
 cores = 20
 save = TRUE
 
 
-create_minors <- function(m, randomized=FALSE, nr_minors=10000){
-  
-  if (randomized){
-    # choose sets of indices
-    A = matrix(unlist(random_combs(m,6,nr_minors)[[1]]), 
-               ncol = 6, byrow = TRUE)
-    # shuffle each row
-    A = t(apply(A, 1, sample))
-    ind_minors = cbind(t(apply(A[,1:3],1,sort)), t(apply(A[,4:6],1,sort)))
-    
-  } else {
-    sub_sets = subsets(m,6,1:m)
-    L = list()
-    for (s in 1:dim(sub_sets)[1]){
-      set = sub_sets[s,]
-      for (i in 2:5){
-        for (j in (i+1):6){
-          C = set[c(1,i,j)]
-          B = setdiff(set, C)
-          L = list.append(L, c(C,B))
-        }
-      }
-    }
-    ind_minors = matrix(unlist(L), ncol = 6, byrow = TRUE)
-  }
-  
-  
-  return(ind_minors)
-}
-ind_minors = create_minors(m, randomized=randomized, nr_minors=nr_minors)
+# create_minors <- function(m, randomized=FALSE, nr_minors=10000){
+#   
+#   if (randomized){
+#     # choose sets of indices
+#     A = matrix(unlist(random_combs(m,6,nr_minors)[[1]]), 
+#                ncol = 6, byrow = TRUE)
+#     # shuffle each row
+#     A = t(apply(A, 1, sample))
+#     ind_minors = cbind(t(apply(A[,1:3],1,sort)), t(apply(A[,4:6],1,sort)))
+#     
+#   } else {
+#     sub_sets = subsets(m,6,1:m)
+#     L = list()
+#     for (s in 1:dim(sub_sets)[1]){
+#       set = sub_sets[s,]
+#       for (i in 2:5){
+#         for (j in (i+1):6){
+#           C = set[c(1,i,j)]
+#           B = setdiff(set, C)
+#           L = list.append(L, c(C,B))
+#         }
+#       }
+#     }
+#     ind_minors = matrix(unlist(L), ncol = 6, byrow = TRUE)
+#   }
+#   
+#   
+#   return(ind_minors)
+# }
+# ind_minors = create_minors(m, randomized=randomized, nr_minors=nr_minors)
 
 
 
@@ -109,9 +109,9 @@ for (strategy in strategies){
          if (strategy=="LR"){
            res = factanal(X, 2)
          } else if (strategy=="indep"){
-           res = test_indep_factors(X, ind_minors, E=E)
+           res = test_indep_factors(X, nr_minors, E=E)
          } else if (strategy=="Ustat"){
-           res = test_U_stat_factors(X, ind_minors, N=N, E=E)
+           res = test_U_stat_factors(X, nr_minors, N=N, E=E)
          }
          powers[nr] = (res$PVAL <= alpha) # result: TRUE = rejected
        }
@@ -122,7 +122,7 @@ for (strategy in strategies){
     stopCluster(cl)
     
     # Plot and save results
-    name = paste("hlarge_", setup, "_n=", n, "_m=", m, sep="")
+    name = paste("nlarge_", setup, "_n=", n, "_m=", m, sep="")
     subtitle = paste("Based on ", nr_exp, " experiments.", sep="")
     if (save){
       name_pdf = paste("./results/2-factor/power/", strategy, "/vary-alternative_", name, ".pdf", sep="")

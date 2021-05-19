@@ -18,18 +18,18 @@ alphas = seq(0.01, 0.99, 0.01)
 
 # Test parameters
 E = 1000
-strategies = c("LR", "indep", "Ustat")  # Possible: "Ustat", "indep", "LR"
+strategies = c("LR")  # Possible: "Ustat", "indep", "LR"
 N = 5000
 
 # Setup
 m=200
-setups= c("regular")
+setups= c("regular")  # Possible: regular, singular
 nr_minors=10000
 
 # Parameter for simulations
 nr_exp = 500
 cores = 20
-save = TRUE
+save = FALSE
 
 
 
@@ -63,7 +63,7 @@ for (strategy in strategies){
          warnings()
          
          # Sample parameters and data 
-         cov = create_cov(setup, m, n)
+         cov = create_cov(setup, m, n, h=0)
          X = mvrnorm(n, mu=rep(0,nrow(cov)), Sigma=cov)
          
          # Call test

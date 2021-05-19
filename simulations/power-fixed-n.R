@@ -13,22 +13,22 @@ setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
 # General
 n = 500
 E = 1000
-nr_exp = 500
+nr_exp = 300
 alpha = 0.05
 
 # Test strategy
-strategies = c("grouping")  # Possible: "grouping", "run-over", "U-stat", "LR", "grouping-cov", "run-over-cov"
+strategies = c("LR")  # Possible: "grouping", "run-over", "U-stat", "LR", "grouping-cov", "run-over-cov"
 B = 5  # only relevant if test_strategy=="run-over" 
 N = 5000  # only relevant if test_strategy=="U-stat"
 
 # Tree
-tree = "star_tree"  # Possible: "star_tree", "cat_binary"
+tree = "cat_binary"  # Possible: "star_tree", "cat_binary"
 m = 20  
 setup = 2  # only relevant if tree=="star_tree"
 
 # Determine the alternatives
 beta_2 = c(rep(0,(m-2)),1,1)
-H = seq(0.5,10,len=20)
+H = seq(1.5,30,1.5)
 
 # High dimensionality?
 nr_4 = NULL  # 5000, NULL
