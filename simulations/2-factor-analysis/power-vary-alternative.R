@@ -18,17 +18,17 @@ source("./simulations/2-factor-analysis/utils.R")
 
 
 # Sample size
-n = 15000
+n = 500
 alpha = 0.05
 
 # Test parameters
 E = 1000
-strategies = c("indep")  # Possible: "Ustat", "indep", "LR"
+strategies = c("LR")  # Possible: "Ustat", "indep", "LR"
 N = 5000
 
 # Setup
 m=20
-setups= c("regular", "singular")  #do singular with H = seq(0.5,10,0.5) as well
+setups= c("regular")  #do singular with H = seq(0.5,10,0.5) as well
 nr_minors=10000
 randomized=TRUE
 
@@ -36,8 +36,8 @@ randomized=TRUE
 H = seq(1,20,1)
 
 # Parameter for simulations
-nr_exp = 100
-cores = 20
+nr_exp = 500
+cores = 4
 save = TRUE
 
 
@@ -122,7 +122,7 @@ for (strategy in strategies){
     stopCluster(cl)
     
     # Plot and save results
-    name = paste("nlarge_", setup, "_n=", n, "_m=", m, sep="")
+    name = paste(setup, "_n=", n, "_m=", m, sep="")
     subtitle = paste("Based on ", nr_exp, " experiments.", sep="")
     if (save){
       name_pdf = paste("./results/2-factor/power/", strategy, "/vary-alternative_", name, ".pdf", sep="")
