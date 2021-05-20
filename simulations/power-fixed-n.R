@@ -17,22 +17,22 @@ nr_exp = 300
 alpha = 0.05
 
 # Test strategy
-strategies = c("LR")  # Possible: "grouping", "run-over", "U-stat", "LR", "grouping-cov", "run-over-cov"
+strategies = c("indep")  # Possible: "grouping", "run-over", "U-stat", "LR", "grouping-cov", "run-over-cov"
 B = 5  # only relevant if test_strategy=="run-over" 
 N = 5000  # only relevant if test_strategy=="U-stat"
 
 # Tree
-tree = "cat_binary"  # Possible: "star_tree", "cat_binary"
+tree = "star_tree"  # Possible: "star_tree", "cat_binary"
 m = 20  
-setup = 2  # only relevant if tree=="star_tree"
+setup = 1  # only relevant if tree=="star_tree"
 
 # Determine the alternatives
 beta_2 = c(rep(0,(m-2)),1,1)
-H = seq(1.5,30,1.5)
+H = seq(1,20,1)
 
 # High dimensionality?
-nr_4 = NULL  # 5000, NULL
-nr_3 = NULL  # 125, NULL
+nr_4 = 5000  # 5000, NULL
+nr_3 = 125  # 125, NULL
 
 # Test only equalities?
 only_equalities = FALSE

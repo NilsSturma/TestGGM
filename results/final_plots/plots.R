@@ -429,8 +429,9 @@ if (save){dev.off()}
 name = paste("results/final_plots/", "power-fixed-n_star-tree_setup-2.pdf", sep="")
 H = seq(0.5,10,len=20)
 
+
+LR = readRDS("results/star_tree/LR/power-fixed-n/2020-12-19-00-38_setup=2_n=500_m=20.rds")
 grouping = readRDS("results/star_tree/grouping/power-fixed-n/2020-12-18-19-38_setup=2_n=500_m=20.rds")
-#run_over = readRDS("results/star_tree/run-over/power-fixed-n/2020-12-19-03-33_setup=2_n=500_m=20.rds")
 U_stat= readRDS("results/star_tree/U-stat/power-fixed-n/2020-12-25-17-16_setup=2_n=500_m=20.rds")
 
 
@@ -439,10 +440,10 @@ if (save){pdf(name, width=width,height=height)}
 plot(H, grouping, 
      xlab="h", ylab="Empirical power", ylim = c(0,1), #main=title, sub=subtitle, 
      type="p", pch=gr_pch, cex=1.5*gr_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
-#points(H, run_over, type="p", pch=ro_pch, cex=1.5*ro_cex)
+points(H, LR, type="p", pch=lr_pch, cex=1.5*lr_cex)
 points(H, U_stat, type="p", pch=u_pch, cex=1.5*u_cex)
-legend("bottomright", legend=c(gr_name, u_name), bty="n", lwd=lwd_legend, 
-       cex=cex_legend, lty=c(NA, NA), pch=c(gr_pch, u_pch))
+legend("bottomright", legend=c(lr_name, gr_name, u_name), bty="n", lwd=lwd_legend, 
+       cex=cex_legend, lty=c(NA, NA, NA), pch=c(lr_pch, gr_pch, u_pch))
 
 if (save){dev.off()}
 
@@ -455,7 +456,6 @@ H = seq(1,20,len=20)
 
 LR = readRDS("results/star_tree/LR/power-fixed-n/2021-01-04-18-30_setup=1_n=500_m=20.rds")
 grouping = readRDS("results/star_tree/grouping/power-fixed-n/2021-01-04-19-21_setup=1_n=500_m=20.rds")
-#run_over = readRDS("results/star_tree/run-over/power-fixed-n/2021-01-05-04-05_setup=1_n=500_m=20.rds")
 U_stat= readRDS("results/star_tree/U-stat/power-fixed-n/2021-01-06-14-28_setup=1_n=500_m=20.rds")
 
 
@@ -464,13 +464,38 @@ if (save){pdf(name, width=width,height=height)}
 plot(H, grouping, 
      xlab="h", ylab="Empirical power", ylim = c(0,1), #main=title, sub=subtitle, 
      type="p", pch=gr_pch, cex=1.5*gr_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
-#points(H, run_over, type="p", pch=ro_pch, cex=1.5*ro_cex)
 points(H, LR, type="p", pch=lr_pch, cex=1.5*lr_cex)
 points(H, U_stat, type="p", pch=u_pch, cex=1.5*u_cex)
-legend("topleft", legend=c(lr_name, gr_name, u_name), bty="n", lwd=lwd_legend, 
+legend("bottomright", legend=c(lr_name, gr_name, u_name), bty="n", lwd=lwd_legend, 
        cex=cex_legend, lty=c(NA, NA, NA), pch=c(lr_pch, gr_pch, u_pch))
 
 if (save){dev.off()}
+
+
+############### fixed-n # caterpillar ###############
+name = paste("results/final_plots/", "power-fixed-n_caterpillar.pdf", sep="")
+H = seq(1.5,30,1.5)
+
+LR = readRDS("results/cat_binary/LR/power-fixed-n/2021-05-20-02-15_caterpillar_n=500.rds")
+grouping = readRDS("results/cat_binary/grouping/power-fixed-n/2020-12-20-19-32_caterpillar_n=500.rds")
+U_stat= readRDS("results/cat_binary/U-stat/power-fixed-n/2020-12-30-21-19_caterpillar_n=500.rds")
+
+
+if (save){pdf(name, width=width,height=height)}
+
+plot(H, grouping, 
+     xlab="h", ylab="Empirical power", ylim = c(0,1), #main=title, sub=subtitle, 
+     type="p", pch=gr_pch, cex=1.5*gr_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
+points(H, LR, type="p", pch=lr_pch, cex=1.5*lr_cex)
+points(H, U_stat, type="p", pch=u_pch, cex=1.5*u_cex)
+legend("bottomright", legend=c(lr_name, gr_name, u_name), bty="n", lwd=lwd_legend, 
+       cex=cex_legend, lty=c(NA, NA, NA), pch=c(lr_pch, gr_pch, u_pch))
+
+if (save){dev.off()}
+
+
+
+
 
 ############### 2-factor # regular ###############
 name = paste("results/final_plots/", "power-2-factor-regular.pdf", sep="")
@@ -486,7 +511,7 @@ plot(H, LR,
      xlab="h", ylab="Empirical power", ylim = c(0,1), #main=title, sub=subtitle, 
      type="p", pch=lr_pch, cex=1.5*lr_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
 points(H, U_stat, type="p", pch=u_pch, cex=1.5*u_cex)
-legend("topleft", legend=c(lr_name, u_name), bty="n", lwd=lwd_legend, 
+legend("bottomright", legend=c(lr_name, u_name), bty="n", lwd=lwd_legend, 
        cex=cex_legend, lty=c(NA, NA), pch=c(lr_pch, u_pch))
 
 if (save){dev.off()}
@@ -506,7 +531,7 @@ plot(H, LR,
      xlab="h", ylab="Empirical power", ylim = c(0,1), #main=title, sub=subtitle, 
      type="p", pch=lr_pch, cex=1.5*lr_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
 points(H, U_stat, type="p", pch=u_pch, cex=1.5*u_cex)
-legend("topleft", legend=c(lr_name, u_name), bty="n", lwd=lwd_legend, 
+legend("bottomright", legend=c(lr_name, u_name), bty="n", lwd=lwd_legend, 
        cex=cex_legend, lty=c(NA, NA), pch=c(lr_pch, u_pch))
 
 if (save){dev.off()}
