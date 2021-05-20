@@ -20,7 +20,7 @@ findQ = function(g, m, nr=NULL){
   if (is.null(nr)){
     sub_sets = CombMSC::subsets(m,4,1:m)
   } else {
-    sub_sets = random_combs(m,4,nr)
+    sub_sets = matrix(unlist(random_combs(m,4,nr)[[1]]), ncol = 4, byrow = TRUE)
   }
   
   Q = list()
@@ -92,7 +92,7 @@ collect_indices <- function(g, m, nr_4=NULL, nr_3=NULL){
   if (is.null(nr_3)){
     sub_sets3 = CombMSC::subsets(m,3,1:m)
   } else {
-    sub_sets3 = random_combs(m,3,nr_3)
+    sub_sets3 = matrix(unlist(random_combs(m,3,nr_3)[[1]]), ncol = 3, byrow = TRUE)
   }
   
   ind_eq = list()  # Equality constraints (2) (a) and (b)
