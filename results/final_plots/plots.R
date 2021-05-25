@@ -472,26 +472,7 @@ legend("bottomright", legend=c(lr_name, gr_name, u_name), bty="n", lwd=lwd_legen
 if (save){dev.off()}
 
 
-############### fixed-n # caterpillar ###############
-name = paste("results/final_plots/", "power-fixed-n_caterpillar.pdf", sep="")
-H = seq(1.5,30,1.5)
-
-LR = readRDS("results/cat_binary/LR/power-fixed-n/2021-05-20-02-15_caterpillar_n=500.rds")
-grouping = readRDS("results/cat_binary/grouping/power-fixed-n/2020-12-20-19-32_caterpillar_n=500.rds")
-U_stat= readRDS("results/cat_binary/U-stat/power-fixed-n/2020-12-30-21-19_caterpillar_n=500.rds")
-
-
-if (save){pdf(name, width=width,height=height)}
-
-plot(H, grouping, 
-     xlab="h", ylab="Empirical power", ylim = c(0,1), #main=title, sub=subtitle, 
-     type="p", pch=gr_pch, cex=1.5*gr_cex,  cex.lab=cex_lab, cex.axis=cex_axis, cex.main=cex_main, cex.sub=cex_sub)
-points(H, LR, type="p", pch=lr_pch, cex=1.5*lr_cex)
-points(H, U_stat, type="p", pch=u_pch, cex=1.5*u_cex)
-legend("bottomright", legend=c(lr_name, gr_name, u_name), bty="n", lwd=lwd_legend, 
-       cex=cex_legend, lty=c(NA, NA, NA), pch=c(lr_pch, gr_pch, u_pch))
-
-if (save){dev.off()}
+citation()
 
 
 
