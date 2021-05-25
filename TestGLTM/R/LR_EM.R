@@ -61,6 +61,7 @@ EM = function(X, edges, paths, Omega_0, Rho_0, tol=1e-4, maxiter=1000){
   m = dim(X)[2]
   S = cov_from_graph_large(Omega_0, Rho_0, paths)
   l_0 = loglik(S[1:m,1:m], X)
+  i=1
   while (i <= maxiter){
     
     # E-step
@@ -136,8 +137,8 @@ LR_test = function(X, g, paths){
   mode(edges) = "integer"
   
   # starting values
-  Omega_0 = V(g)$var[1:m]
-  Rho_0 = E(g)$corr
+  Omega_0 = igraph::V(g)$var[1:m]
+  Rho_0 = igraph::E(g)$corr
   
   # expectation maximation
   res = EM(X, edges, paths, Omega_0, Rho_0)

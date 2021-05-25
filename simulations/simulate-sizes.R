@@ -13,7 +13,7 @@ library(TestGLTM)
 # General
 n_range = c(500)
 E = 1000
-nr_exp = 200
+nr_exp = 500
 alphas = seq(0.01, 0.99, 0.01)
 
 # Test strategy
@@ -23,7 +23,7 @@ N = 5000  # only relevant if test_strategy=="U-stat"
 
 # Tree
 tree = "cat_binary"  # Possible: "star_tree", "cat_binary"
-m = 200
+m = 20
 setup = 1  # only relevant if tree=="star_tree"
 
 # High dimensionality?
@@ -130,6 +130,7 @@ for (test_strategy in strategies){
       # Rejected?
       result = (res$PVAL <= alphas) # result: TRUE = rejected
       result = as.numeric(result)
+      result
     }
     
     # Check if every task was successful
