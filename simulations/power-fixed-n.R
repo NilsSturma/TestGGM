@@ -22,7 +22,7 @@ B = 5  # only relevant if test_strategy=="run-over"
 N = 5000  # only relevant if test_strategy=="U-stat"
 
 # Tree
-tree = "star_tree"  # Possible: "star_tree", "cat_binary"
+tree = "cat_binary"  # Possible: "star_tree", "cat_binary"
 m = 200  
 setup = 1  # only relevant if tree=="star_tree"
 
@@ -38,7 +38,7 @@ nr_3 = 125  # 125, NULL
 only_equalities = FALSE
 
 # Saving
-save=FALSE
+save=TRUE
 
 
 
