@@ -4,7 +4,7 @@ library(MASS)
 library(igraph)
 library(TestGLTM)
 
-#setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
+setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
 
 #################
 # Set variables #
@@ -13,7 +13,7 @@ library(TestGLTM)
 # General
 n_range = c(500)
 E = 1000
-nr_exp = 500
+nr_exp = 100
 alphas = seq(0.01, 0.99, 0.01)
 
 # Test strategy
@@ -26,15 +26,15 @@ tree = "cat_binary"  # Possible: "star_tree", "cat_binary"
 m = 20
 setup = 1  # only relevant if tree=="star_tree"
 
-# High dimensionality?
-nr_4 = NULL  # 5000, NULL
-nr_3 = NULL  # 125, NULL
+# # High dimensionality?
+# nr_4 = NULL  # 5000, NULL
+# nr_3 = NULL  # 125, NULL
 
-# Test only equalities?
+# # Test only equalities?
 only_equalities = FALSE
 
 # Saving
-save=FALSE
+save=TRUE
 
 
 
@@ -55,20 +55,20 @@ plot(g)
 # Save all paths between all nodes in the tree (doing this just once reduces computational time)
 paths = get_paths(g)
 
-# Collect the representations of the polynomials that have to be tested
-res = collect_indices(g, m, nr_4, nr_3)
-ind_eq = res$ind_eq
-ind_ineq1 = res$ind_ineq1
-ind_ineq2 = res$ind_ineq2
-p = dim(ind_eq)[1] + dim(ind_ineq1)[1] + dim(ind_ineq2)[1]
-if (only_equalities){
-  ind_ineq1 = NULL
-  ind_ineq2 = NULL
-  p = dim(ind_eq)[1]
-}
-
-# Check the dimension
-print(p)
+# # Collect the representations of the polynomials that have to be tested
+# res = collect_indices(g, m, nr_4, nr_3)
+# ind_eq = res$ind_eq
+# ind_ineq1 = res$ind_ineq1
+# ind_ineq2 = res$ind_ineq2
+# p = dim(ind_eq)[1] + dim(ind_ineq1)[1] + dim(ind_ineq2)[1]
+# if (only_equalities){
+#   ind_ineq1 = NULL
+#   ind_ineq2 = NULL
+#   p = dim(ind_eq)[1]
+# }
+# 
+# # Check the dimension
+# print(p)
 
 
 
@@ -90,7 +90,7 @@ for (test_strategy in strategies){
     # Main loop to compute test sizes
     results <- foreach(nr = 1:nr_exp, 
                        .combine=rbind, 
-                       .errorhandling="remove",   # "pass", "stop", "remove"
+                       .errorhandling="stop",   # "pass", "stop", "remove"
                        .packages=c("MASS", "TestGLTM", "igraph", "stats")) %dopar% {
       
       # Print some info
@@ -112,7 +112,7 @@ for (test_strategy in strategies){
         if (tree=="star_tree"){
           res = factanal(X, 1)
         } else if (tree=="cat_binary"){
-          res = LR_test(X,g,paths)
+          res = LR_test(X,g,paths,sampling=TRUE,nr_starts=50)
         }
       } else if (test_strategy=="grouping"){
         res = test_grouping(X, ind_eq, ind_ineq1, ind_ineq2, E=E)

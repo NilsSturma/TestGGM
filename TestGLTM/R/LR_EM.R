@@ -57,7 +57,7 @@ M_step = function(S, edges, paths, nr_obs){
 
 
 
-EM = function(X, edges, paths, Omega_0, Rho_0, tol=1e-4, maxiter=1000){
+EM = function(X, edges, paths, Omega_0, Rho_0, tol=1e-5, maxiter=10000){
   m = dim(X)[2]
   S = cov_from_graph_large(Omega_0, Rho_0, paths)
   l_0 = loglik(S[1:m,1:m], X)
@@ -96,6 +96,23 @@ mle = function(X){
 }
 
 
+# sample uniformly from interval [-b,-a] u [a,b]
+sample_edge_corrs <- function(n,a,b){
+  y <- runif(n, 0, (2*(b-a)))
+  res = rep(0,n)
+  for (i in 1:n){
+    if (y[i] < (b-a)){
+      res[i] = -b + y[i]
+    } else {
+      res[i] = a + y[i] -(b-a)
+    }
+  }
+  return(res)
+}
+
+
+
+
 #' Likelihood ratio test for the goodness of fit of a Gaussian latent tree model
 #' 
 #' Testing the goodness of fit of a given Gaussian latent tree model to observed data.
@@ -130,18 +147,35 @@ mle = function(X){
 #' 
 #' # Call the test
 #' LR_test(X, tree, paths)
-LR_test = function(X, g, paths){
+LR_test = function(X, g, paths, sampling=FALSE, nr_starts=100, a=0.5, b=0.9, c=0.5, d=1.5){
+  
+  m = dim(X)[2]
   
   # compute list of edges
   edges = igraph::get.edgelist(g)
   mode(edges) = "integer"
   
-  # starting values
-  Omega_0 = igraph::V(g)$var[1:m]
-  Rho_0 = igraph::E(g)$corr
+  # starting values and call expectation maximation
   
-  # expectation maximation
-  res = EM(X, edges, paths, Omega_0, Rho_0)
+  
+  if (sampling){
+    for (nr in 1:nr_starts){
+      Omega_0 = runif(m,c,d)
+      Rho_0 = sample_edge_corrs(dim(edges)[1],a,b)
+      r = EM(X, edges, paths, Omega_0, Rho_0)
+      if (nr==1){
+        res = r
+      } else {
+        if (r$loglik > res$loglik){res = r}
+      }
+    }
+  } else {
+      Omega_0 = igraph::V(g)$var[1:m]
+      Rho_0 = igraph::E(g)$corr
+      res = EM(X, edges, paths, Omega_0, Rho_0)
+  }
+  
+  
   
   # returns p value
   LR_statistic = 2*( mle(X)$loglik - res$loglik )
