@@ -125,3 +125,11 @@ permutations <- function(n) {
     .Call(`_TestGLTM_permutations`, n)
 }
 
+update_param <- function(S, edges, nr_obs) {
+    .Call(`_TestGLTM_update_param`, S, edges, nr_obs)
+}
+
+cov_from_graph_large <- function(Omega, Rho, paths) {
+    .Call(`_TestGLTM_cov_from_graph_large`, Omega, Rho, paths)
+}
+

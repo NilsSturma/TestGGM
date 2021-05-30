@@ -436,6 +436,32 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// update_param
+List update_param(NumericMatrix S, NumericMatrix edges, int nr_obs);
+RcppExport SEXP _TestGLTM_update_param(SEXP SSEXP, SEXP edgesSEXP, SEXP nr_obsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type S(SSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type edges(edgesSEXP);
+    Rcpp::traits::input_parameter< int >::type nr_obs(nr_obsSEXP);
+    rcpp_result_gen = Rcpp::wrap(update_param(S, edges, nr_obs));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cov_from_graph_large
+NumericMatrix cov_from_graph_large(NumericVector Omega, NumericVector Rho, List paths);
+RcppExport SEXP _TestGLTM_cov_from_graph_large(SEXP OmegaSEXP, SEXP RhoSEXP, SEXP pathsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type Omega(OmegaSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type Rho(RhoSEXP);
+    Rcpp::traits::input_parameter< List >::type paths(pathsSEXP);
+    rcpp_result_gen = Rcpp::wrap(cov_from_graph_large(Omega, Rho, paths));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_TestGLTM_h_tilde", (DL_FUNC) &_TestGLTM_h_tilde, 7},
@@ -469,6 +495,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_TestGLTM_findn", (DL_FUNC) &_TestGLTM_findn, 2},
     {"_TestGLTM_compute_S", (DL_FUNC) &_TestGLTM_compute_S, 3},
     {"_TestGLTM_permutations", (DL_FUNC) &_TestGLTM_permutations, 1},
+    {"_TestGLTM_update_param", (DL_FUNC) &_TestGLTM_update_param, 3},
+    {"_TestGLTM_cov_from_graph_large", (DL_FUNC) &_TestGLTM_cov_from_graph_large, 3},
     {NULL, NULL, 0}
 };
 

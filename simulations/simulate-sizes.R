@@ -4,7 +4,7 @@ library(MASS)
 library(igraph)
 library(TestGLTM)
 
-setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
+#setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
 
 #################
 # Set variables #
@@ -13,18 +13,18 @@ setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
 # General
 n_range = c(500)
 E = 1000
-nr_exp = 200
+nr_exp = 500
 alphas = seq(0.01, 0.99, 0.01)
 
 # Test strategy
-strategies = c("U-stat")  # Possible: "grouping", "run-over", "U-stat", "LR", "grouping-cov", "run-over-cov"
+strategies = c("LR")  # Possible: "grouping", "run-over", "U-stat", "LR", "grouping-cov", "run-over-cov"
 B = 5  # only relevant if test_strategy=="run-over" 
-N = 2000  # only relevant if test_strategy=="U-stat"
+N = 5000  # only relevant if test_strategy=="U-stat"
 
 # Tree
-tree = "star_tree"  # Possible: "star_tree", "cat_binary"
-m = 10
-setup = 2  # only relevant if tree=="star_tree"
+tree = "cat_binary"  # Possible: "star_tree", "cat_binary"
+m = 20
+setup = 1  # only relevant if tree=="star_tree"
 
 # High dimensionality?
 nr_4 = NULL  # 5000, NULL
@@ -101,7 +101,7 @@ for (test_strategy in strategies){
       if (tree=="star_tree"){
         cov = cov_from_star_tree(g, paths, setup=setup, m=m)
       } else if (tree=="cat_binary"){
-        V(g)$var = rep(1,(m+(m-2)))
+        V(g)$var = rep(1,(m+(m-2))) #parameters & starting values of EM algo
         E(g)$corr = rep(0.7,(m+(m-3)))
         cov = cov_from_graph(g, m, paths)
       }
@@ -130,6 +130,7 @@ for (test_strategy in strategies){
       # Rejected?
       result = (res$PVAL <= alphas) # result: TRUE = rejected
       result = as.numeric(result)
+      result
     }
     
     # Check if every task was successful

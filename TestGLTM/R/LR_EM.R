@@ -1,52 +1,3 @@
-cov_from_graph_large = function(g, paths){
-  
-  # g is an igraph object with the following attributes
-  # V(g)$var: variances for all nodes
-  # E(g)$corr: correlation for all edges in (-1,1)
-  
-  std = sqrt(igraph::V(g)$var)
-  nr_nodes = length(igraph::V(g))
-  
-  corr = diag(rep(1,nr_nodes))
-  for (i in 1:(nr_nodes-1)){
-    for (j in (i+1):nr_nodes){
-      corr[i,j] = prod(igraph::E(g)$corr[paths[[i]][[j]]])
-      corr[j,i] = corr[i,j]
-    }
-  }
-  cov = (diag(std) %*% corr %*% diag(std))
-  return(cov)
-}
-
-
-
-
-update_param = function(g, S){
-  
-  # g is an igraph object with the following attributes
-  # V(g)$var: variances for all nodes
-  # E(g)$corr: correlation for all edges in (-1,1)
-  # S is large covariance matrix of dimensin equal to total number of nodes
-  
-  # update correlation of all edges
-  edges = igraph::get.edgelist(g)
-  for (i in 1:dim(edges)[1]){
-    from = as.integer(edges[i,][1])
-    to = as.integer(edges[i,][2])
-    igraph::E(g)$corr[i] = S[from, to] / ( sqrt(S[from,from]) * sqrt(S[to,to]) )
-    
-  }
-  
-  # update variance of observed nodes
-  nr_observed = sum(igraph::V(g)$type==1) # always the first ones in vertices
-  for (i in 1:nr_observed){
-    igraph::V(g)$var[i] = S[i,i]
-  }
-  return(g)
-}
-
-
-
 # From pzwiernik/structuralEM
 loglik = function(cov, X){
   
@@ -97,26 +48,27 @@ E_step <- function(X,S){
 
 
 
-M_step = function(g, S, paths){
-  g = update_param(g,S)
-  S = cov_from_graph_large(g, paths)
+
+M_step = function(S, edges, paths, nr_obs){
+  params = update_param(S, edges, nr_obs)
+  S = cov_from_graph_large(params[["Omega"]], params[["Rho"]], paths)
   return(S)
 }
 
 
 
-EM = function(X,g,paths,tol=1e-4, maxiter=200){
-  m = dim(X)[2] # number of observed nodes
-  S = cov_from_graph_large(g, paths)
+EM = function(X, edges, paths, Omega_0, Rho_0, tol=1e-4, maxiter=1000){
+  m = dim(X)[2]
+  S = cov_from_graph_large(Omega_0, Rho_0, paths)
   l_0 = loglik(S[1:m,1:m], X)
-  i=0
+  i=1
   while (i <= maxiter){
     
     # E-step
     S = E_step(X,S)
     
     # M-step
-    S = M_step(g,S, paths)
+    S = M_step(S,edges,paths,m)
     
     # Evaluate loglik 
     l_1 = loglik(S[1:m,1:m], X)
@@ -130,7 +82,7 @@ EM = function(X,g,paths,tol=1e-4, maxiter=200){
       i = i+1
     }
   }
-  return(list(loglik = l_1, Sigma=S[1:m,1:m]))
+  return(list(loglik = l_1, Sigma=S[1:m,1:m], it=i))
 }
 
 
@@ -180,11 +132,21 @@ mle = function(X){
 #' LR_test(X, tree, paths)
 LR_test = function(X, g, paths){
   
+  # compute list of edges
+  edges = igraph::get.edgelist(g)
+  mode(edges) = "integer"
+  
+  # starting values
+  Omega_0 = igraph::V(g)$var[1:m]
+  Rho_0 = igraph::E(g)$corr
+  
+  # expectation maximation
+  res = EM(X, edges, paths, Omega_0, Rho_0)
+  
   # returns p value
-  LR_statistic = 2*( mle(X)$loglik - EM(X,g,paths)$loglik )
+  LR_statistic = 2*( mle(X)$loglik - res$loglik )
   df = choose((dim(X)[2]+1),2) - ( length(igraph::E(g)) + sum(igraph::V(g)$type==1) )
   p_value = 1 - stats::pchisq(LR_statistic, df)
   
-  return(list("PVAL"=p_value, "TSTAT"=LR_statistic))
+  return(list("PVAL"=p_value, "TSTAT"=LR_statistic, "iterations"=res$it))
 }
-

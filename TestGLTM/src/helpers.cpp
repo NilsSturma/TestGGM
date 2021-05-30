@@ -17,7 +17,7 @@ List random_combs(int n, int k, int nr){
   std::set<int> s;
   IntegerVector w(k);
   
-  while(sub_sets.size() < nr){
+  while(sub_sets.size() < (unsigned)nr){
     w = sample(v,k);
     for (int i = 0; i < k; i++) {
       s.insert(w[i]);
@@ -91,4 +91,70 @@ IntegerMatrix permutations(int n){
   }
   return res;
 }
+
+
+
+
+// [[Rcpp::export]]
+List update_param(NumericMatrix S, NumericMatrix edges, int nr_obs){
+  
+  //update edge parameter
+  NumericVector Rho(edges.nrow());
+  for(int i=0; i < edges.nrow(); i++){
+    Rho[i] = S((edges(i,0)-1),(edges(i,1)-1)) 
+      / (sqrt(S((edges(i,0)-1),(edges(i,0)-1))) * sqrt(S((edges(i,1)-1),(edges(i,1)-1))));
+  }
+  
+  //update observed variances
+  NumericVector Omega(nr_obs);
+  for(int i=0; i < nr_obs; i++){
+    Omega[i] = S(i,i);
+  }
+  
+  List res;
+  res["Rho"] = Rho;
+  res["Omega"] = Omega;
+  
+  return res;
+}
+
+
+// [[Rcpp::export]]
+NumericMatrix cov_from_graph_large(NumericVector Omega, NumericVector Rho, List paths){
+  
+  // create vector of standard deviations
+  int nr_obs = Omega.length();
+  int nr_hidden = paths.length() - nr_obs;
+  int nr_total = nr_obs+nr_hidden;
+  NumericVector std(nr_total);
+  for (int i=0; i < nr_obs; i++){
+    std[i] = sqrt(Omega[i]);
+  }
+  for (int i=0; i < nr_hidden; i++){
+    std[nr_obs+i] = 1;
+  }
+  
+  // create large covariance matrix
+  double prod = 1;
+  NumericMatrix cov(nr_total, nr_total);
+  
+  for (int i=0; i < nr_total; i++){
+    cov(i,i) = std[i] * std[i];
+  }
+  for (int i=0; i < (nr_total-1); i++){
+    List paths_from_i = paths[i];
+    for(int j=1; j < nr_total; j++){
+      prod = 1;
+      IntegerVector path = paths_from_i[j];  //this vector has always a different length
+      for (int k=0; k < path.length(); k++){
+        prod = prod * Rho[(path[k]-1)];
+      }
+      cov(i,j) = std[i] * std[j] * prod;
+      cov(j,i) = cov(i,j);
+    }
+  }
+  return cov;
+}
+
+
 
