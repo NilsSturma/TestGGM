@@ -13,7 +13,7 @@ setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
 # General
 n = 500
 E = 1000
-nr_exp = 300
+nr_exp = 10
 alpha = 0.05
 
 # Test strategy
@@ -28,7 +28,7 @@ setup = 1  # only relevant if tree=="star_tree"
 
 # Determine the alternatives
 beta_2 = c(rep(0,(m-2)),1,1)
-H = seq(1,20,1)
+H = seq(2.5,50,2.5)
 
 # High dimensionality?
 nr_4 = 5000  # 5000, NULL
@@ -54,7 +54,7 @@ if (tree=="star_tree"){
 } 
 
 # Plot tree
-plot(g)
+# plot(g)
 
 # Save all paths between all nodes in the tree (doing this just once reduces computational time)
 paths = get_paths(g)
@@ -102,7 +102,8 @@ for (test_strategy in strategies){
     for (nr in 1:nr_exp){
       
       # Print some info
-      if((nr%%20) == 0){print(nr)}
+      #if((nr%%20) == 0){print(nr)}
+      print(nr)
       
       # Calculate covariance matric of alternative (depends on h)
       if (tree=="star_tree"){

@@ -4,23 +4,44 @@
 \alias{LR_test}
 \title{Likelihood ratio test for the goodness of fit of a Gaussian latent tree model}
 \usage{
-LR_test(X, g, paths)
+LR_test(
+  X,
+  g,
+  paths,
+  sampling = FALSE,
+  nr_starts = 100,
+  a = 0.5,
+  b = 0.9,
+  c = 0.5,
+  d = 1.5
+)
 }
 \arguments{
 \item{X}{Matrix with observed data. Number of columns equal to the number of 
 leaves of the tree (i.e. number of observed variables). Each row corresponds to one sample.}
 
 \item{g}{An igraph object that is a tree. It is assumed that the first m nodes correspond to oberseved nodes. 
-Type 1 indicates that a node is observed. Should be set via \code{V(g)$type==1}.
 It is assumed that \code{V(g)$var} is the variance of the observed variables and 
-that \code{E(g)$corr} represents the edge correlations. Should be initialized with starting values.}
+that \code{E(g)$corr} represents the edge correlations. Should be initialized with starting values if \code{sampling==FAlSE}.}
 
 \item{paths}{Nested list with the paths between all nodes. 
 Should be computed with the function \code{\link{get_paths}}. 
 This is done outside the LR test to accelerate the computation.}
+
+\item{sampling}{Boolean. If TRUE, random sampling of starting values is incorporated.}
+
+\item{nr_starts}{Integer determining the number of different starting values. Only used if \code{sampling==TRUE}.}
+
+\item{a}{Edge correlations are sampled from the union of intervals \code{[-b,-a]} and \code{[a,b]}. Only used if \code{sampling==TRUE}.}
+
+\item{b}{Edge correlations are sampled from the union of intervals \code{[-b,-a]} and \code{[a,b]}. Only used if \code{sampling==TRUE}.}
+
+\item{c}{Variances are sampled from the interval \code{[c,d]}. Only used if \code{sampling==TRUE}.}
+
+\item{d}{Variances are sampled from the interval \code{[c,d]}. Only used if \code{sampling==TRUE}.}
 }
 \value{
-Named list with two entries: Test statistic (\code{TSTAT}) and p-value (\code{PVAL}).
+Named list with three entries: Test statistic (\code{TSTAT}), p-value (\code{PVAL}) and number of iterations (\code{it}).
 }
 \description{
 Testing the goodness of fit of a given Gaussian latent tree model to observed data.

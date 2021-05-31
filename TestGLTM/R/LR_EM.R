@@ -96,7 +96,7 @@ mle = function(X){
 }
 
 
-# sample uniformly from interval [-b,-a] u [a,b]
+# sample uniformly from union of intervals [-b,-a] u [a,b]
 sample_edge_corrs <- function(n,a,b){
   y <- runif(n, 0, (2*(b-a)))
   res = rep(0,n)
@@ -120,13 +120,18 @@ sample_edge_corrs <- function(n,a,b){
 #' @param X Matrix with observed data. Number of columns equal to the number of 
 #' leaves of the tree (i.e. number of observed variables). Each row corresponds to one sample.
 #' @param g An igraph object that is a tree. It is assumed that the first m nodes correspond to oberseved nodes. 
-#' Type 1 indicates that a node is observed. Should be set via \code{V(g)$type==1}.
 #' It is assumed that \code{V(g)$var} is the variance of the observed variables and 
-#' that \code{E(g)$corr} represents the edge correlations. Should be initialized with starting values.
+#' that \code{E(g)$corr} represents the edge correlations. Should be initialized with starting values if \code{sampling==FAlSE}.
 #' @param paths Nested list with the paths between all nodes. 
 #' Should be computed with the function \code{\link{get_paths}}. 
 #' This is done outside the LR test to accelerate the computation.
-#' @return Named list with two entries: Test statistic (\code{TSTAT}) and p-value (\code{PVAL}).
+#' @param sampling Boolean. If TRUE, random sampling of starting values is incorporated.
+#' @param nr_starts Integer determining the number of different starting values. Only used if \code{sampling==TRUE}.
+#' @param a Edge correlations are sampled from the union of intervals \code{[-b,-a]} and \code{[a,b]}. Only used if \code{sampling==TRUE}.
+#' @param b Edge correlations are sampled from the union of intervals \code{[-b,-a]} and \code{[a,b]}. Only used if \code{sampling==TRUE}.
+#' @param c Variances are sampled from the interval \code{[c,d]}. Only used if \code{sampling==TRUE}.
+#' @param d Variances are sampled from the interval \code{[c,d]}. Only used if \code{sampling==TRUE}.
+#' @return Named list with three entries: Test statistic (\code{TSTAT}), p-value (\code{PVAL}) and number of iterations (\code{it}).
 #' @examples 
 #' vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
 #' edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
@@ -156,8 +161,6 @@ LR_test = function(X, g, paths, sampling=FALSE, nr_starts=100, a=0.5, b=0.9, c=0
   mode(edges) = "integer"
   
   # starting values and call expectation maximation
-  
-  
   if (sampling){
     for (nr in 1:nr_starts){
       Omega_0 = runif(m,c,d)

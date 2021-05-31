@@ -11,9 +11,9 @@ setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
 #################
 
 # General
-n_range = c(500)
+n_range = c(100,250,500,1000)
 E = 1000
-nr_exp = 100
+nr_exp = 500
 alphas = seq(0.01, 0.99, 0.01)
 
 # Test strategy
@@ -112,7 +112,7 @@ for (test_strategy in strategies){
         if (tree=="star_tree"){
           res = factanal(X, 1)
         } else if (tree=="cat_binary"){
-          res = LR_test(X,g,paths,sampling=TRUE,nr_starts=50)
+          res = LR_test(X,g,paths,sampling=TRUE,nr_starts=200)
         }
       } else if (test_strategy=="grouping"){
         res = test_grouping(X, ind_eq, ind_ineq1, ind_ineq2, E=E)
