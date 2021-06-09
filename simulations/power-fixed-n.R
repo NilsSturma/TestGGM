@@ -13,29 +13,29 @@ setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
 # General
 n = 500
 E = 1000
-nr_exp = 20
+nr_exp = 500
 alpha = 0.05
 
 # Test strategy
-strategies = c("LR")  # Possible: "grouping", "run-over", "U-stat", "LR", "grouping-cov", "run-over-cov"
+strategies = c("LR", "grouping", "U-stat")  # Possible: "grouping", "run-over", "U-stat", "LR", "grouping-cov", "run-over-cov"
 B = 5  # only relevant if test_strategy=="run-over" 
 N = 5000  # only relevant if test_strategy=="U-stat"
 
 # Tree
-tree = "cat_binary"  # Possible: "star_tree", "cat_binary"
-m = 200  
-setup = 1  # only relevant if tree=="star_tree"
+tree = "star_tree"  # Possible: "star_tree", "cat_binary"
+m = 20  
+setup = 2  # only relevant if tree=="star_tree"
 
 # Determine the alternatives
 beta_2 = c(rep(0,(m-2)),1,1)
-H = seq(2.5,50,2.5)
+H = seq(0.3,6,0.3)
 
 # High dimensionality?
-# nr_4 = 5000  # 5000, NULL
-# nr_3 = 125  # 125, NULL
+nr_4 = NULL  # 5000, NULL
+nr_3 = NULL  # 125, NULL
 
 # Test only equalities?
-# only_equalities = FALSE
+only_equalities = FALSE
 
 # Saving
 save=TRUE
@@ -59,20 +59,20 @@ plot(g)
 # Save all paths between all nodes in the tree (doing this just once reduces computational time)
 paths = get_paths(g)
 
-# # Collect the representations of the polynomials that have to be tested
-# res = collect_indices(g, m, nr_4, nr_3)
-# ind_eq = res$ind_eq
-# ind_ineq1 = res$ind_ineq1
-# ind_ineq2 = res$ind_ineq2
-# p = dim(ind_eq)[1] + dim(ind_ineq1)[1] + dim(ind_ineq2)[1]
-# if (only_equalities){
-#   ind_ineq1 = NULL
-#   ind_ineq2 = NULL
-#   p = dim(ind_eq)[1]
-# }
-# 
-# # Check the dimension
-# print(p)
+# Collect the representations of the polynomials that have to be tested
+res = collect_indices(g, m, nr_4, nr_3)
+ind_eq = res$ind_eq
+ind_ineq1 = res$ind_ineq1
+ind_ineq2 = res$ind_ineq2
+p = dim(ind_eq)[1] + dim(ind_ineq1)[1] + dim(ind_ineq2)[1]
+if (only_equalities){
+  ind_ineq1 = NULL
+  ind_ineq2 = NULL
+  p = dim(ind_eq)[1]
+}
+
+# Check the dimension
+print(p)
 
 
 
@@ -102,8 +102,7 @@ for (test_strategy in strategies){
     for (nr in 1:nr_exp){
       
       # Print some info
-      #if((nr%%20) == 0){print(nr)}
-      print(nr)
+      if((nr%%20) == 0){print(nr)}
       
       # Calculate covariance matric of alternative (depends on h)
       if (tree=="star_tree"){

@@ -23,21 +23,21 @@ alpha = 0.05
 
 # Test parameters
 E = 1000
-strategies = c("LR")  # Possible: "Ustat", "indep", "LR"
+strategies = c("LR", "indep", "Ustat")  # Possible: "Ustat", "indep", "LR"
 N = 5000
 
 # Setup
 m=20
-setups= c("regular")  #do singular with H = seq(0.5,10,0.5) as well
+setups= c("singular")  #do singular with H = seq(0.5,10,0.5) as well
 nr_minors=10000
 randomized=TRUE
 
 # Determine range of alternatives
-H = seq(1,20,1)
+H = seq(0.3,6,0.3)
 
 # Parameter for simulations
 nr_exp = 500
-cores = 4
+cores = 20
 save = TRUE
 
 
