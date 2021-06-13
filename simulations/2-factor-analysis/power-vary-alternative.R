@@ -36,7 +36,7 @@ randomized=TRUE
 H = seq(0.3,6,0.3)
 
 # Parameter for simulations
-nr_exp = 500
+nr_exp = 300
 cores = 20
 save = TRUE
 
