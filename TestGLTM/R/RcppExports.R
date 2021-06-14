@@ -17,8 +17,8 @@ calculate_H_not_symmetric <- function(X, indices_U, ind_eq, ind_ineq1, ind_ineq2
     .Call(`_TestGLTM_calculate_H_not_symmetric`, X, indices_U, ind_eq, ind_ineq1, ind_ineq2)
 }
 
-g <- function(X, i, L, ind_eq, ind_ineq1, ind_ineq2, perm) {
-    .Call(`_TestGLTM_g`, X, i, L, ind_eq, ind_ineq1, ind_ineq2, perm)
+calculate_g <- function(X, i, L, ind_eq, ind_ineq1, ind_ineq2, perm) {
+    .Call(`_TestGLTM_calculate_g`, X, i, L, ind_eq, ind_ineq1, ind_ineq2, perm)
 }
 
 calculate_G <- function(X, L, ind_eq, ind_ineq1, ind_ineq2) {

@@ -3,8 +3,8 @@
 #################
 alphas = seq(0.01, 0.99, 0.01)
 save = TRUE
-#setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
-setwd("C:/Users/Nils/Documents/git/master-thesis-tests")
+setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
+#setwd("C:/Users/Nils/Documents/git/master-thesis-tests")
 
 width=8
 height=6
@@ -427,12 +427,12 @@ if (save){dev.off()}
 
 ############### fixed-n # star-tree setup 2 ###############
 name = paste("results/final_plots/", "power-fixed-n_star-tree_setup-2.pdf", sep="")
-H = seq(0.5,10,len=20)
+H = seq(0.3,6,0.3)
 
 
-LR = readRDS("results/star_tree/LR/power-fixed-n/2020-12-19-00-38_setup=2_n=500_m=20.rds")
-grouping = readRDS("results/star_tree/grouping/power-fixed-n/2020-12-18-19-38_setup=2_n=500_m=20.rds")
-U_stat= readRDS("results/star_tree/U-stat/power-fixed-n/2020-12-25-17-16_setup=2_n=500_m=20.rds")
+LR = readRDS("results/star_tree/LR/power-fixed-n/2021-06-09-09-32_setup=2_n=500_m=20.rds")
+grouping = readRDS("results/star_tree/grouping/power-fixed-n/2021-06-09-15-47_setup=2_n=500_m=20.rds")
+U_stat= readRDS("results/star_tree/U-stat/power-fixed-n/2021-06-14-09-03_setup=2_n=500_m=20.rds")
 
 
 if (save){pdf(name, width=width,height=height)}

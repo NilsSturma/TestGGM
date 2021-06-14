@@ -13,12 +13,12 @@ setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
 # General
 n = 500
 E = 1000
-nr_exp = 500
+nr_exp = 100
 alpha = 0.05
 
 # Test strategy
-strategies = c("LR", "grouping", "U-stat")  # Possible: "grouping", "run-over", "U-stat", "LR", "grouping-cov", "run-over-cov"
-B = 5  # only relevant if test_strategy=="run-over" 
+strategies = c("U-stat")  # Possible: "grouping", "run-over", "U-stat", "LR", "grouping-cov", "run-over-cov"
+# B = 5  # only relevant if test_strategy=="run-over" 
 N = 5000  # only relevant if test_strategy=="U-stat"
 
 # Tree
@@ -102,7 +102,9 @@ for (test_strategy in strategies){
     for (nr in 1:nr_exp){
       
       # Print some info
-      if((nr%%20) == 0){print(nr)}
+      #if((nr%%20) == 0){print(nr)}
+      print(nr)
+      print(Sys.time())
       
       # Calculate covariance matric of alternative (depends on h)
       if (tree=="star_tree"){

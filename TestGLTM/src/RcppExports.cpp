@@ -67,9 +67,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// g
-NumericVector g(NumericMatrix X, int i, int L, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2, IntegerMatrix perm);
-RcppExport SEXP _TestGLTM_g(SEXP XSEXP, SEXP iSEXP, SEXP LSEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP, SEXP permSEXP) {
+// calculate_g
+NumericVector calculate_g(NumericMatrix X, int i, int L, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2, IntegerMatrix perm);
+RcppExport SEXP _TestGLTM_calculate_g(SEXP XSEXP, SEXP iSEXP, SEXP LSEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP, SEXP permSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -80,7 +80,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq1(ind_ineq1SEXP);
     Rcpp::traits::input_parameter< IntegerMatrix >::type ind_ineq2(ind_ineq2SEXP);
     Rcpp::traits::input_parameter< IntegerMatrix >::type perm(permSEXP);
-    rcpp_result_gen = Rcpp::wrap(g(X, i, L, ind_eq, ind_ineq1, ind_ineq2, perm));
+    rcpp_result_gen = Rcpp::wrap(calculate_g(X, i, L, ind_eq, ind_ineq1, ind_ineq2, perm));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -468,7 +468,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_TestGLTM_h", (DL_FUNC) &_TestGLTM_h, 5},
     {"_TestGLTM_calculate_H", (DL_FUNC) &_TestGLTM_calculate_H, 5},
     {"_TestGLTM_calculate_H_not_symmetric", (DL_FUNC) &_TestGLTM_calculate_H_not_symmetric, 5},
-    {"_TestGLTM_g", (DL_FUNC) &_TestGLTM_g, 7},
+    {"_TestGLTM_calculate_g", (DL_FUNC) &_TestGLTM_calculate_g, 7},
     {"_TestGLTM_calculate_G", (DL_FUNC) &_TestGLTM_calculate_G, 5},
     {"_TestGLTM_compute_S_small", (DL_FUNC) &_TestGLTM_compute_S_small, 4},
     {"_TestGLTM_g_small", (DL_FUNC) &_TestGLTM_g_small, 8},

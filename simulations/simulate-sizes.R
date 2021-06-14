@@ -11,9 +11,9 @@ setwd("/dss/dsshome1/lxc0D/ge73wex3/master-thesis-tests")
 #################
 
 # General
-n_range = c(100,250,500,1000)
+n_range = c(500)
 E = 1000
-nr_exp = 500
+nr_exp = 20
 alphas = seq(0.01, 0.99, 0.01)
 
 # Test strategy
@@ -23,15 +23,15 @@ N = 5000  # only relevant if test_strategy=="U-stat"
 
 # Tree
 tree = "cat_binary"  # Possible: "star_tree", "cat_binary"
-m = 20
-setup = 1  # only relevant if tree=="star_tree"
+m = 200
+# setup = 1  # only relevant if tree=="star_tree"
 
 # # High dimensionality?
 # nr_4 = NULL  # 5000, NULL
 # nr_3 = NULL  # 125, NULL
 
 # # Test only equalities?
-only_equalities = FALSE
+# only_equalities = FALSE
 
 # Saving
 save=TRUE

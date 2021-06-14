@@ -283,7 +283,7 @@ test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=100
   
   # Diagonal of the sample covariance of H
   cov_H_diag = Rfast::colsums(H_centered**2) / N_hat
-  cov_G_diag = Rfast::colsums(G_centered**2) / n
+  # cov_G_diag = Rfast::colsums(G_centered**2) / n
   cov_diag = cov_H_diag
   
   # Vector for standardizing

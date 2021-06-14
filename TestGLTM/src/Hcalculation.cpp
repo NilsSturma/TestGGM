@@ -94,7 +94,7 @@ NumericMatrix calculate_H_not_symmetric(NumericMatrix X,
 
 
 // [[Rcpp::export]]
-NumericVector g(NumericMatrix X,
+NumericVector calculate_g(NumericMatrix X,
                 int i,
                 int L,
                 IntegerMatrix ind_eq, 
@@ -132,7 +132,7 @@ NumericMatrix calculate_G(NumericMatrix X,
   perm = perm - 1;
 
   for (int i = 1; i <= n; i++){
-    G((i-1),_) = g(X, i, L, ind_eq, ind_ineq1, ind_ineq2, perm);
+    G((i-1),_) = calculate_g(X, i, L, ind_eq, ind_ineq1, ind_ineq2, perm);
   }
   return(G);
 }
