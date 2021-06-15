@@ -502,12 +502,12 @@ if (save){dev.off()}
 
 ############### 2-factor # singular ###############
 name = paste("results/final_plots/", "power-2-factor-singular.pdf", sep="")
-H = seq(0.5,10,len=20)
+H = seq(0.3,6,0.3)
 
 
-LR = readRDS("results/2-factor/power/LR/vary-alternative_singular_n=500_m=20.rds")
-indep = readRDS("results/2-factor/power/indep/vary-alternative_singular_n=500_m=20.rds")
-U_stat= readRDS("results/2-factor/power/Ustat/vary-alternative_singular_n=500_m=20.rds")
+LR = readRDS("results/2-factor/power/LR/vary-alternative_singular_n=500_m=20_v2.rds")
+indep = readRDS("results/2-factor/power/indep/vary-alternative_singular_n=500_m=20_v2.rds")
+U_stat= readRDS("results/2-factor/power/Ustat/vary-alternative_singular_n=500_m=20_v2.rds")
 
 
 if (save){pdf(name, width=width,height=height)}
