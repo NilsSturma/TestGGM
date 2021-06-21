@@ -2,134 +2,134 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 h_tilde <- function(X1, X2, X3, X4, ind_eq, ind_ineq1, ind_ineq2) {
-    .Call(`_TestGLTM_h_tilde`, X1, X2, X3, X4, ind_eq, ind_ineq1, ind_ineq2)
+    .Call(`_TestGGM_h_tilde`, X1, X2, X3, X4, ind_eq, ind_ineq1, ind_ineq2)
 }
 
 h <- function(L, ind_eq, ind_ineq1, ind_ineq2, perm) {
-    .Call(`_TestGLTM_h`, L, ind_eq, ind_ineq1, ind_ineq2, perm)
+    .Call(`_TestGGM_h`, L, ind_eq, ind_ineq1, ind_ineq2, perm)
 }
 
 calculate_H <- function(X, indices_U, ind_eq, ind_ineq1, ind_ineq2) {
-    .Call(`_TestGLTM_calculate_H`, X, indices_U, ind_eq, ind_ineq1, ind_ineq2)
+    .Call(`_TestGGM_calculate_H`, X, indices_U, ind_eq, ind_ineq1, ind_ineq2)
 }
 
 calculate_H_not_symmetric <- function(X, indices_U, ind_eq, ind_ineq1, ind_ineq2) {
-    .Call(`_TestGLTM_calculate_H_not_symmetric`, X, indices_U, ind_eq, ind_ineq1, ind_ineq2)
+    .Call(`_TestGGM_calculate_H_not_symmetric`, X, indices_U, ind_eq, ind_ineq1, ind_ineq2)
 }
 
 calculate_g <- function(X, i, L, ind_eq, ind_ineq1, ind_ineq2, perm) {
-    .Call(`_TestGLTM_calculate_g`, X, i, L, ind_eq, ind_ineq1, ind_ineq2, perm)
+    .Call(`_TestGGM_calculate_g`, X, i, L, ind_eq, ind_ineq1, ind_ineq2, perm)
 }
 
 calculate_G <- function(X, L, ind_eq, ind_ineq1, ind_ineq2) {
-    .Call(`_TestGLTM_calculate_G`, X, L, ind_eq, ind_ineq1, ind_ineq2)
+    .Call(`_TestGGM_calculate_G`, X, L, ind_eq, ind_ineq1, ind_ineq2)
 }
 
 compute_S_small <- function(n, i, L, K) {
-    .Call(`_TestGLTM_compute_S_small`, n, i, L, K)
+    .Call(`_TestGGM_compute_S_small`, n, i, L, K)
 }
 
 g_small <- function(X, i, L, n1, ind_eq, ind_ineq1, ind_ineq2, perm) {
-    .Call(`_TestGLTM_g_small`, X, i, L, n1, ind_eq, ind_ineq1, ind_ineq2, perm)
+    .Call(`_TestGGM_g_small`, X, i, L, n1, ind_eq, ind_ineq1, ind_ineq2, perm)
 }
 
 calculate_G_small <- function(X, L, n1, ind_eq, ind_ineq1, ind_ineq2) {
-    .Call(`_TestGLTM_calculate_G_small`, X, L, n1, ind_eq, ind_ineq1, ind_ineq2)
+    .Call(`_TestGGM_calculate_G_small`, X, L, n1, ind_eq, ind_ineq1, ind_ineq2)
 }
 
 h_tilde_eq <- function(X1, X2, ind_eq) {
-    .Call(`_TestGLTM_h_tilde_eq`, X1, X2, ind_eq)
+    .Call(`_TestGGM_h_tilde_eq`, X1, X2, ind_eq)
 }
 
 h_eq <- function(L, ind_eq, perm) {
-    .Call(`_TestGLTM_h_eq`, L, ind_eq, perm)
+    .Call(`_TestGGM_h_eq`, L, ind_eq, perm)
 }
 
 calculate_H_eq <- function(X, indices_U, ind_eq) {
-    .Call(`_TestGLTM_calculate_H_eq`, X, indices_U, ind_eq)
+    .Call(`_TestGGM_calculate_H_eq`, X, indices_U, ind_eq)
 }
 
 calculate_H_not_symmetric_eq <- function(X, indices_U, ind_eq) {
-    .Call(`_TestGLTM_calculate_H_not_symmetric_eq`, X, indices_U, ind_eq)
+    .Call(`_TestGGM_calculate_H_not_symmetric_eq`, X, indices_U, ind_eq)
 }
 
 g_eq <- function(X, i, L, ind_eq, perm) {
-    .Call(`_TestGLTM_g_eq`, X, i, L, ind_eq, perm)
+    .Call(`_TestGGM_g_eq`, X, i, L, ind_eq, perm)
 }
 
 calculate_G_eq <- function(X, L, ind_eq) {
-    .Call(`_TestGLTM_calculate_G_eq`, X, L, ind_eq)
+    .Call(`_TestGGM_calculate_G_eq`, X, L, ind_eq)
 }
 
 bootstrap <- function(E, H_centered) {
-    .Call(`_TestGLTM_bootstrap`, E, H_centered)
+    .Call(`_TestGGM_bootstrap`, E, H_centered)
 }
 
 bootstrap_m_dep <- function(E, B, omega, Y_centered) {
-    .Call(`_TestGLTM_bootstrap_m_dep`, E, B, omega, Y_centered)
+    .Call(`_TestGGM_bootstrap_m_dep`, E, B, omega, Y_centered)
 }
 
 bootstrap_U <- function(E, r, H_centered, G_centered, N) {
-    .Call(`_TestGLTM_bootstrap_U`, E, r, H_centered, G_centered, N)
+    .Call(`_TestGGM_bootstrap_U`, E, r, H_centered, G_centered, N)
 }
 
 expectation <- function(S, j) {
-    .Call(`_TestGLTM_expectation`, S, j)
+    .Call(`_TestGGM_expectation`, S, j)
 }
 
 fourth_mom <- function(S, a, b, c, d) {
-    .Call(`_TestGLTM_fourth_mom`, S, a, b, c, d)
+    .Call(`_TestGGM_fourth_mom`, S, a, b, c, d)
 }
 
 cov_grouping <- function(S, ind_eq) {
-    .Call(`_TestGLTM_cov_grouping`, S, ind_eq)
+    .Call(`_TestGGM_cov_grouping`, S, ind_eq)
 }
 
 cov_run_over <- function(S, ind_eq) {
-    .Call(`_TestGLTM_cov_run_over`, S, ind_eq)
+    .Call(`_TestGGM_cov_run_over`, S, ind_eq)
 }
 
 h_tilde_fac <- function(X1, X2, X3, ind) {
-    .Call(`_TestGLTM_h_tilde_fac`, X1, X2, X3, ind)
+    .Call(`_TestGGM_h_tilde_fac`, X1, X2, X3, ind)
 }
 
 h_fac <- function(L, ind, perm) {
-    .Call(`_TestGLTM_h_fac`, L, ind, perm)
+    .Call(`_TestGGM_h_fac`, L, ind, perm)
 }
 
 H_factors <- function(X, indices, ind) {
-    .Call(`_TestGLTM_H_factors`, X, indices, ind)
+    .Call(`_TestGGM_H_factors`, X, indices, ind)
 }
 
 g_fac <- function(X, i, L, ind, perm) {
-    .Call(`_TestGLTM_g_fac`, X, i, L, ind, perm)
+    .Call(`_TestGGM_g_fac`, X, i, L, ind, perm)
 }
 
 G_factors <- function(X, L, ind) {
-    .Call(`_TestGLTM_G_factors`, X, L, ind)
+    .Call(`_TestGGM_G_factors`, X, L, ind)
 }
 
 random_combs <- function(n, k, nr) {
-    .Call(`_TestGLTM_random_combs`, n, k, nr)
+    .Call(`_TestGGM_random_combs`, n, k, nr)
 }
 
 findn <- function(N, D) {
-    .Call(`_TestGLTM_findn`, N, D)
+    .Call(`_TestGGM_findn`, N, D)
 }
 
 compute_S <- function(n, i, L) {
-    .Call(`_TestGLTM_compute_S`, n, i, L)
+    .Call(`_TestGGM_compute_S`, n, i, L)
 }
 
 permutations <- function(n) {
-    .Call(`_TestGLTM_permutations`, n)
+    .Call(`_TestGGM_permutations`, n)
 }
 
 update_param <- function(S, edges, nr_obs) {
-    .Call(`_TestGLTM_update_param`, S, edges, nr_obs)
+    .Call(`_TestGGM_update_param`, S, edges, nr_obs)
 }
 
 cov_from_graph_large <- function(Omega, Rho, paths) {
-    .Call(`_TestGLTM_cov_from_graph_large`, Omega, Rho, paths)
+    .Call(`_TestGGM_cov_from_graph_large`, Omega, Rho, paths)
 }
 

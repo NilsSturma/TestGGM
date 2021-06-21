@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // h_tilde
 NumericVector h_tilde(NumericVector X1, NumericVector X2, NumericVector X3, NumericVector X4, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2);
-RcppExport SEXP _TestGLTM_h_tilde(SEXP X1SEXP, SEXP X2SEXP, SEXP X3SEXP, SEXP X4SEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP) {
+RcppExport SEXP _TestGGM_h_tilde(SEXP X1SEXP, SEXP X2SEXP, SEXP X3SEXP, SEXP X4SEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -24,7 +24,7 @@ END_RCPP
 }
 // h
 NumericVector h(List L, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2, IntegerMatrix perm);
-RcppExport SEXP _TestGLTM_h(SEXP LSEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP, SEXP permSEXP) {
+RcppExport SEXP _TestGGM_h(SEXP LSEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP, SEXP permSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -39,7 +39,7 @@ END_RCPP
 }
 // calculate_H
 NumericMatrix calculate_H(NumericMatrix X, IntegerMatrix indices_U, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2);
-RcppExport SEXP _TestGLTM_calculate_H(SEXP XSEXP, SEXP indices_USEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP) {
+RcppExport SEXP _TestGGM_calculate_H(SEXP XSEXP, SEXP indices_USEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -54,7 +54,7 @@ END_RCPP
 }
 // calculate_H_not_symmetric
 NumericMatrix calculate_H_not_symmetric(NumericMatrix X, IntegerMatrix indices_U, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2);
-RcppExport SEXP _TestGLTM_calculate_H_not_symmetric(SEXP XSEXP, SEXP indices_USEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP) {
+RcppExport SEXP _TestGGM_calculate_H_not_symmetric(SEXP XSEXP, SEXP indices_USEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -69,7 +69,7 @@ END_RCPP
 }
 // calculate_g
 NumericVector calculate_g(NumericMatrix X, int i, int L, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2, IntegerMatrix perm);
-RcppExport SEXP _TestGLTM_calculate_g(SEXP XSEXP, SEXP iSEXP, SEXP LSEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP, SEXP permSEXP) {
+RcppExport SEXP _TestGGM_calculate_g(SEXP XSEXP, SEXP iSEXP, SEXP LSEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP, SEXP permSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -86,7 +86,7 @@ END_RCPP
 }
 // calculate_G
 NumericMatrix calculate_G(NumericMatrix X, int L, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2);
-RcppExport SEXP _TestGLTM_calculate_G(SEXP XSEXP, SEXP LSEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP) {
+RcppExport SEXP _TestGGM_calculate_G(SEXP XSEXP, SEXP LSEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -101,7 +101,7 @@ END_RCPP
 }
 // compute_S_small
 IntegerMatrix compute_S_small(int n, int i, int L, int K);
-RcppExport SEXP _TestGLTM_compute_S_small(SEXP nSEXP, SEXP iSEXP, SEXP LSEXP, SEXP KSEXP) {
+RcppExport SEXP _TestGGM_compute_S_small(SEXP nSEXP, SEXP iSEXP, SEXP LSEXP, SEXP KSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -115,7 +115,7 @@ END_RCPP
 }
 // g_small
 NumericVector g_small(NumericMatrix X, int i, int L, int n1, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2, IntegerMatrix perm);
-RcppExport SEXP _TestGLTM_g_small(SEXP XSEXP, SEXP iSEXP, SEXP LSEXP, SEXP n1SEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP, SEXP permSEXP) {
+RcppExport SEXP _TestGGM_g_small(SEXP XSEXP, SEXP iSEXP, SEXP LSEXP, SEXP n1SEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP, SEXP permSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -133,7 +133,7 @@ END_RCPP
 }
 // calculate_G_small
 NumericMatrix calculate_G_small(NumericMatrix X, int L, int n1, IntegerMatrix ind_eq, IntegerMatrix ind_ineq1, IntegerMatrix ind_ineq2);
-RcppExport SEXP _TestGLTM_calculate_G_small(SEXP XSEXP, SEXP LSEXP, SEXP n1SEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP) {
+RcppExport SEXP _TestGGM_calculate_G_small(SEXP XSEXP, SEXP LSEXP, SEXP n1SEXP, SEXP ind_eqSEXP, SEXP ind_ineq1SEXP, SEXP ind_ineq2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -149,7 +149,7 @@ END_RCPP
 }
 // h_tilde_eq
 NumericVector h_tilde_eq(NumericVector X1, NumericVector X2, IntegerMatrix ind_eq);
-RcppExport SEXP _TestGLTM_h_tilde_eq(SEXP X1SEXP, SEXP X2SEXP, SEXP ind_eqSEXP) {
+RcppExport SEXP _TestGGM_h_tilde_eq(SEXP X1SEXP, SEXP X2SEXP, SEXP ind_eqSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -162,7 +162,7 @@ END_RCPP
 }
 // h_eq
 NumericVector h_eq(List L, IntegerMatrix ind_eq, IntegerMatrix perm);
-RcppExport SEXP _TestGLTM_h_eq(SEXP LSEXP, SEXP ind_eqSEXP, SEXP permSEXP) {
+RcppExport SEXP _TestGGM_h_eq(SEXP LSEXP, SEXP ind_eqSEXP, SEXP permSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -175,7 +175,7 @@ END_RCPP
 }
 // calculate_H_eq
 NumericMatrix calculate_H_eq(NumericMatrix X, IntegerMatrix indices_U, IntegerMatrix ind_eq);
-RcppExport SEXP _TestGLTM_calculate_H_eq(SEXP XSEXP, SEXP indices_USEXP, SEXP ind_eqSEXP) {
+RcppExport SEXP _TestGGM_calculate_H_eq(SEXP XSEXP, SEXP indices_USEXP, SEXP ind_eqSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -188,7 +188,7 @@ END_RCPP
 }
 // calculate_H_not_symmetric_eq
 NumericMatrix calculate_H_not_symmetric_eq(NumericMatrix X, IntegerMatrix indices_U, IntegerMatrix ind_eq);
-RcppExport SEXP _TestGLTM_calculate_H_not_symmetric_eq(SEXP XSEXP, SEXP indices_USEXP, SEXP ind_eqSEXP) {
+RcppExport SEXP _TestGGM_calculate_H_not_symmetric_eq(SEXP XSEXP, SEXP indices_USEXP, SEXP ind_eqSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -201,7 +201,7 @@ END_RCPP
 }
 // g_eq
 NumericVector g_eq(NumericMatrix X, int i, int L, IntegerMatrix ind_eq, IntegerMatrix perm);
-RcppExport SEXP _TestGLTM_g_eq(SEXP XSEXP, SEXP iSEXP, SEXP LSEXP, SEXP ind_eqSEXP, SEXP permSEXP) {
+RcppExport SEXP _TestGGM_g_eq(SEXP XSEXP, SEXP iSEXP, SEXP LSEXP, SEXP ind_eqSEXP, SEXP permSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -216,7 +216,7 @@ END_RCPP
 }
 // calculate_G_eq
 NumericMatrix calculate_G_eq(NumericMatrix X, int L, IntegerMatrix ind_eq);
-RcppExport SEXP _TestGLTM_calculate_G_eq(SEXP XSEXP, SEXP LSEXP, SEXP ind_eqSEXP) {
+RcppExport SEXP _TestGGM_calculate_G_eq(SEXP XSEXP, SEXP LSEXP, SEXP ind_eqSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -229,7 +229,7 @@ END_RCPP
 }
 // bootstrap
 NumericMatrix bootstrap(int E, NumericMatrix H_centered);
-RcppExport SEXP _TestGLTM_bootstrap(SEXP ESEXP, SEXP H_centeredSEXP) {
+RcppExport SEXP _TestGGM_bootstrap(SEXP ESEXP, SEXP H_centeredSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -241,7 +241,7 @@ END_RCPP
 }
 // bootstrap_m_dep
 NumericMatrix bootstrap_m_dep(int E, int B, int omega, NumericMatrix Y_centered);
-RcppExport SEXP _TestGLTM_bootstrap_m_dep(SEXP ESEXP, SEXP BSEXP, SEXP omegaSEXP, SEXP Y_centeredSEXP) {
+RcppExport SEXP _TestGGM_bootstrap_m_dep(SEXP ESEXP, SEXP BSEXP, SEXP omegaSEXP, SEXP Y_centeredSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -255,7 +255,7 @@ END_RCPP
 }
 // bootstrap_U
 List bootstrap_U(int E, int r, NumericMatrix H_centered, NumericMatrix G_centered, int N);
-RcppExport SEXP _TestGLTM_bootstrap_U(SEXP ESEXP, SEXP rSEXP, SEXP H_centeredSEXP, SEXP G_centeredSEXP, SEXP NSEXP) {
+RcppExport SEXP _TestGGM_bootstrap_U(SEXP ESEXP, SEXP rSEXP, SEXP H_centeredSEXP, SEXP G_centeredSEXP, SEXP NSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -270,7 +270,7 @@ END_RCPP
 }
 // expectation
 double expectation(NumericMatrix S, IntegerVector j);
-RcppExport SEXP _TestGLTM_expectation(SEXP SSEXP, SEXP jSEXP) {
+RcppExport SEXP _TestGGM_expectation(SEXP SSEXP, SEXP jSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -282,7 +282,7 @@ END_RCPP
 }
 // fourth_mom
 double fourth_mom(NumericMatrix S, int a, int b, int c, int d);
-RcppExport SEXP _TestGLTM_fourth_mom(SEXP SSEXP, SEXP aSEXP, SEXP bSEXP, SEXP cSEXP, SEXP dSEXP) {
+RcppExport SEXP _TestGGM_fourth_mom(SEXP SSEXP, SEXP aSEXP, SEXP bSEXP, SEXP cSEXP, SEXP dSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -297,7 +297,7 @@ END_RCPP
 }
 // cov_grouping
 NumericMatrix cov_grouping(NumericMatrix S, IntegerMatrix ind_eq);
-RcppExport SEXP _TestGLTM_cov_grouping(SEXP SSEXP, SEXP ind_eqSEXP) {
+RcppExport SEXP _TestGGM_cov_grouping(SEXP SSEXP, SEXP ind_eqSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -309,7 +309,7 @@ END_RCPP
 }
 // cov_run_over
 NumericMatrix cov_run_over(NumericMatrix S, IntegerMatrix ind_eq);
-RcppExport SEXP _TestGLTM_cov_run_over(SEXP SSEXP, SEXP ind_eqSEXP) {
+RcppExport SEXP _TestGGM_cov_run_over(SEXP SSEXP, SEXP ind_eqSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -321,7 +321,7 @@ END_RCPP
 }
 // h_tilde_fac
 NumericVector h_tilde_fac(NumericVector X1, NumericVector X2, NumericVector X3, IntegerMatrix ind);
-RcppExport SEXP _TestGLTM_h_tilde_fac(SEXP X1SEXP, SEXP X2SEXP, SEXP X3SEXP, SEXP indSEXP) {
+RcppExport SEXP _TestGGM_h_tilde_fac(SEXP X1SEXP, SEXP X2SEXP, SEXP X3SEXP, SEXP indSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -335,7 +335,7 @@ END_RCPP
 }
 // h_fac
 NumericVector h_fac(List L, IntegerMatrix ind, IntegerMatrix perm);
-RcppExport SEXP _TestGLTM_h_fac(SEXP LSEXP, SEXP indSEXP, SEXP permSEXP) {
+RcppExport SEXP _TestGGM_h_fac(SEXP LSEXP, SEXP indSEXP, SEXP permSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -348,7 +348,7 @@ END_RCPP
 }
 // H_factors
 NumericMatrix H_factors(NumericMatrix X, IntegerMatrix indices, IntegerMatrix ind);
-RcppExport SEXP _TestGLTM_H_factors(SEXP XSEXP, SEXP indicesSEXP, SEXP indSEXP) {
+RcppExport SEXP _TestGGM_H_factors(SEXP XSEXP, SEXP indicesSEXP, SEXP indSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -361,7 +361,7 @@ END_RCPP
 }
 // g_fac
 NumericVector g_fac(NumericMatrix X, int i, int L, IntegerMatrix ind, IntegerMatrix perm);
-RcppExport SEXP _TestGLTM_g_fac(SEXP XSEXP, SEXP iSEXP, SEXP LSEXP, SEXP indSEXP, SEXP permSEXP) {
+RcppExport SEXP _TestGGM_g_fac(SEXP XSEXP, SEXP iSEXP, SEXP LSEXP, SEXP indSEXP, SEXP permSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -376,7 +376,7 @@ END_RCPP
 }
 // G_factors
 NumericMatrix G_factors(NumericMatrix X, int L, IntegerMatrix ind);
-RcppExport SEXP _TestGLTM_G_factors(SEXP XSEXP, SEXP LSEXP, SEXP indSEXP) {
+RcppExport SEXP _TestGGM_G_factors(SEXP XSEXP, SEXP LSEXP, SEXP indSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -389,7 +389,7 @@ END_RCPP
 }
 // random_combs
 List random_combs(int n, int k, int nr);
-RcppExport SEXP _TestGLTM_random_combs(SEXP nSEXP, SEXP kSEXP, SEXP nrSEXP) {
+RcppExport SEXP _TestGGM_random_combs(SEXP nSEXP, SEXP kSEXP, SEXP nrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -402,7 +402,7 @@ END_RCPP
 }
 // findn
 int findn(int N, int D);
-RcppExport SEXP _TestGLTM_findn(SEXP NSEXP, SEXP DSEXP) {
+RcppExport SEXP _TestGGM_findn(SEXP NSEXP, SEXP DSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -414,7 +414,7 @@ END_RCPP
 }
 // compute_S
 IntegerMatrix compute_S(int n, int i, int L);
-RcppExport SEXP _TestGLTM_compute_S(SEXP nSEXP, SEXP iSEXP, SEXP LSEXP) {
+RcppExport SEXP _TestGGM_compute_S(SEXP nSEXP, SEXP iSEXP, SEXP LSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -427,7 +427,7 @@ END_RCPP
 }
 // permutations
 IntegerMatrix permutations(int n);
-RcppExport SEXP _TestGLTM_permutations(SEXP nSEXP) {
+RcppExport SEXP _TestGGM_permutations(SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -438,7 +438,7 @@ END_RCPP
 }
 // update_param
 List update_param(NumericMatrix S, NumericMatrix edges, int nr_obs);
-RcppExport SEXP _TestGLTM_update_param(SEXP SSEXP, SEXP edgesSEXP, SEXP nr_obsSEXP) {
+RcppExport SEXP _TestGGM_update_param(SEXP SSEXP, SEXP edgesSEXP, SEXP nr_obsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -451,7 +451,7 @@ END_RCPP
 }
 // cov_from_graph_large
 NumericMatrix cov_from_graph_large(NumericVector Omega, NumericVector Rho, List paths);
-RcppExport SEXP _TestGLTM_cov_from_graph_large(SEXP OmegaSEXP, SEXP RhoSEXP, SEXP pathsSEXP) {
+RcppExport SEXP _TestGGM_cov_from_graph_large(SEXP OmegaSEXP, SEXP RhoSEXP, SEXP pathsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -464,43 +464,43 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_TestGLTM_h_tilde", (DL_FUNC) &_TestGLTM_h_tilde, 7},
-    {"_TestGLTM_h", (DL_FUNC) &_TestGLTM_h, 5},
-    {"_TestGLTM_calculate_H", (DL_FUNC) &_TestGLTM_calculate_H, 5},
-    {"_TestGLTM_calculate_H_not_symmetric", (DL_FUNC) &_TestGLTM_calculate_H_not_symmetric, 5},
-    {"_TestGLTM_calculate_g", (DL_FUNC) &_TestGLTM_calculate_g, 7},
-    {"_TestGLTM_calculate_G", (DL_FUNC) &_TestGLTM_calculate_G, 5},
-    {"_TestGLTM_compute_S_small", (DL_FUNC) &_TestGLTM_compute_S_small, 4},
-    {"_TestGLTM_g_small", (DL_FUNC) &_TestGLTM_g_small, 8},
-    {"_TestGLTM_calculate_G_small", (DL_FUNC) &_TestGLTM_calculate_G_small, 6},
-    {"_TestGLTM_h_tilde_eq", (DL_FUNC) &_TestGLTM_h_tilde_eq, 3},
-    {"_TestGLTM_h_eq", (DL_FUNC) &_TestGLTM_h_eq, 3},
-    {"_TestGLTM_calculate_H_eq", (DL_FUNC) &_TestGLTM_calculate_H_eq, 3},
-    {"_TestGLTM_calculate_H_not_symmetric_eq", (DL_FUNC) &_TestGLTM_calculate_H_not_symmetric_eq, 3},
-    {"_TestGLTM_g_eq", (DL_FUNC) &_TestGLTM_g_eq, 5},
-    {"_TestGLTM_calculate_G_eq", (DL_FUNC) &_TestGLTM_calculate_G_eq, 3},
-    {"_TestGLTM_bootstrap", (DL_FUNC) &_TestGLTM_bootstrap, 2},
-    {"_TestGLTM_bootstrap_m_dep", (DL_FUNC) &_TestGLTM_bootstrap_m_dep, 4},
-    {"_TestGLTM_bootstrap_U", (DL_FUNC) &_TestGLTM_bootstrap_U, 5},
-    {"_TestGLTM_expectation", (DL_FUNC) &_TestGLTM_expectation, 2},
-    {"_TestGLTM_fourth_mom", (DL_FUNC) &_TestGLTM_fourth_mom, 5},
-    {"_TestGLTM_cov_grouping", (DL_FUNC) &_TestGLTM_cov_grouping, 2},
-    {"_TestGLTM_cov_run_over", (DL_FUNC) &_TestGLTM_cov_run_over, 2},
-    {"_TestGLTM_h_tilde_fac", (DL_FUNC) &_TestGLTM_h_tilde_fac, 4},
-    {"_TestGLTM_h_fac", (DL_FUNC) &_TestGLTM_h_fac, 3},
-    {"_TestGLTM_H_factors", (DL_FUNC) &_TestGLTM_H_factors, 3},
-    {"_TestGLTM_g_fac", (DL_FUNC) &_TestGLTM_g_fac, 5},
-    {"_TestGLTM_G_factors", (DL_FUNC) &_TestGLTM_G_factors, 3},
-    {"_TestGLTM_random_combs", (DL_FUNC) &_TestGLTM_random_combs, 3},
-    {"_TestGLTM_findn", (DL_FUNC) &_TestGLTM_findn, 2},
-    {"_TestGLTM_compute_S", (DL_FUNC) &_TestGLTM_compute_S, 3},
-    {"_TestGLTM_permutations", (DL_FUNC) &_TestGLTM_permutations, 1},
-    {"_TestGLTM_update_param", (DL_FUNC) &_TestGLTM_update_param, 3},
-    {"_TestGLTM_cov_from_graph_large", (DL_FUNC) &_TestGLTM_cov_from_graph_large, 3},
+    {"_TestGGM_h_tilde", (DL_FUNC) &_TestGGM_h_tilde, 7},
+    {"_TestGGM_h", (DL_FUNC) &_TestGGM_h, 5},
+    {"_TestGGM_calculate_H", (DL_FUNC) &_TestGGM_calculate_H, 5},
+    {"_TestGGM_calculate_H_not_symmetric", (DL_FUNC) &_TestGGM_calculate_H_not_symmetric, 5},
+    {"_TestGGM_calculate_g", (DL_FUNC) &_TestGGM_calculate_g, 7},
+    {"_TestGGM_calculate_G", (DL_FUNC) &_TestGGM_calculate_G, 5},
+    {"_TestGGM_compute_S_small", (DL_FUNC) &_TestGGM_compute_S_small, 4},
+    {"_TestGGM_g_small", (DL_FUNC) &_TestGGM_g_small, 8},
+    {"_TestGGM_calculate_G_small", (DL_FUNC) &_TestGGM_calculate_G_small, 6},
+    {"_TestGGM_h_tilde_eq", (DL_FUNC) &_TestGGM_h_tilde_eq, 3},
+    {"_TestGGM_h_eq", (DL_FUNC) &_TestGGM_h_eq, 3},
+    {"_TestGGM_calculate_H_eq", (DL_FUNC) &_TestGGM_calculate_H_eq, 3},
+    {"_TestGGM_calculate_H_not_symmetric_eq", (DL_FUNC) &_TestGGM_calculate_H_not_symmetric_eq, 3},
+    {"_TestGGM_g_eq", (DL_FUNC) &_TestGGM_g_eq, 5},
+    {"_TestGGM_calculate_G_eq", (DL_FUNC) &_TestGGM_calculate_G_eq, 3},
+    {"_TestGGM_bootstrap", (DL_FUNC) &_TestGGM_bootstrap, 2},
+    {"_TestGGM_bootstrap_m_dep", (DL_FUNC) &_TestGGM_bootstrap_m_dep, 4},
+    {"_TestGGM_bootstrap_U", (DL_FUNC) &_TestGGM_bootstrap_U, 5},
+    {"_TestGGM_expectation", (DL_FUNC) &_TestGGM_expectation, 2},
+    {"_TestGGM_fourth_mom", (DL_FUNC) &_TestGGM_fourth_mom, 5},
+    {"_TestGGM_cov_grouping", (DL_FUNC) &_TestGGM_cov_grouping, 2},
+    {"_TestGGM_cov_run_over", (DL_FUNC) &_TestGGM_cov_run_over, 2},
+    {"_TestGGM_h_tilde_fac", (DL_FUNC) &_TestGGM_h_tilde_fac, 4},
+    {"_TestGGM_h_fac", (DL_FUNC) &_TestGGM_h_fac, 3},
+    {"_TestGGM_H_factors", (DL_FUNC) &_TestGGM_H_factors, 3},
+    {"_TestGGM_g_fac", (DL_FUNC) &_TestGGM_g_fac, 5},
+    {"_TestGGM_G_factors", (DL_FUNC) &_TestGGM_G_factors, 3},
+    {"_TestGGM_random_combs", (DL_FUNC) &_TestGGM_random_combs, 3},
+    {"_TestGGM_findn", (DL_FUNC) &_TestGGM_findn, 2},
+    {"_TestGGM_compute_S", (DL_FUNC) &_TestGGM_compute_S, 3},
+    {"_TestGGM_permutations", (DL_FUNC) &_TestGGM_permutations, 1},
+    {"_TestGGM_update_param", (DL_FUNC) &_TestGGM_update_param, 3},
+    {"_TestGGM_cov_from_graph_large", (DL_FUNC) &_TestGGM_cov_from_graph_large, 3},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_TestGLTM(DllInfo *dll) {
+RcppExport void R_init_TestGGM(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

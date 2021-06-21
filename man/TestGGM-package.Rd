@@ -1,12 +1,12 @@
-\name{TestGLTM-package}
-\alias{TestGLTM-package}
-\alias{TestGLTM}
+\name{TestGGM-package}
+\alias{TestGGM-package}
+\alias{TestGGM}
 \docType{package}
 \title{
-  Testing Gaussian Latent Tree Models
+  Testing Gaussian Graphical Models
 }
 \description{
-  Tests the goodness-of-fit of Gaussian latent tree models. Three algebraic testing methodologies are implemented as well as the likelihood ratio test using the EM-algorithm. Supports all Gaussian latent tree models where the observed variables correspond to the leaves of the tree.
+  Tests the goodness-of-fit of Gaussian latent tree models and the two-factor analysis model. Three algebraic testing methodologies are implemented as well as the likelihood ratio test using the EM-algorithm. Supports all Gaussian latent tree models where the observed variables correspond to the leaves of the tree as well as the factor analysis model.
 }
 \author{
 Nils Sturma <nils.sturma@tum.de>
