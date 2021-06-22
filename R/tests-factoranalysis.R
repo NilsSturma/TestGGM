@@ -1,4 +1,26 @@
+#' Randomly chooses a set of minors
+#' 
+#' Randomly samples indices of minors without replacement.
+#' 
+#' @param m Integer, number of observed nodes (and dimension of (m x m)-matrix).
+#' @param factors Integer, number of hidden factors.
+#' @param nr Integer, number of (\code{factors+1 x factors+1}) minors to sample.
+#' 
+#' @return Matrix with \code{nr} rows and \code{2*factors+2} columns. Each row corresponds to one minor.
+#' The first \code{factors+1} columns correspond to the row-indices of the minor, 
+#' the last \code{factors+1} columns correspond to the column-indices of the minor.
+#' 
+#' @examples
+#' random_minors(20,2,10000)
 random_minors <- function(m, factors, nr){
+  
+  if ((2*(factors+1)) > m){
+    stop("There is no (factors+1 x factors+1)-minor in a (m x m)-matrix.")
+  }
+  
+  if (choose(m,(2*(factors+1))) < nr){
+    stop("nr is larger than the number of possible (factors+1 x factors+1)-minors of a (m x m)-matrix.")
+  }
   
   # choose sets of indices
   A = matrix(unlist(random_combs(m,(2*(factors+1)),nr)[[1]]), 
