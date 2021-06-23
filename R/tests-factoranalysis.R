@@ -1,4 +1,4 @@
-#' Randomly chooses a set of minors
+#' Randomly choosing a set of minors
 #' 
 #' Randomly samples indices of minors without replacement.
 #' 
@@ -35,7 +35,37 @@ random_minors <- function(m, factors, nr){
 }
 
 
-
+#' Tests the (3x3)-minor constraints of a 2-factor model by the maximum of a high-dimensional independent sum
+#' 
+#' This function tests the (3x3)-minor constraints of a given 2-factor model to observed data.
+#' The minors are estimated by grouping the data into independent subsets. 
+#' Each group is used to form an unbiased estimate of all minors. 
+#' The test statistic is the maximum of the average of the independent studentized estimates. 
+#' A Gaussian multiplier bootstrap procedure is used to estimate the limiting distribution of 
+#' the test statistic and to compute the p-value of the test.
+#' 
+#' @param X Matrix with observed data. The number of columns corresponds to the number of observed variables. 
+#' Each row corresponds to one sample.
+#' @param nr_minors Integer, number of randomly chosen minors that are tested. 
+#' @param E Integer, number of bootstrap iterations.
+#' 
+#' @return Named list with two entries: Test statistic (\code{TSTAT}) and p-value (\code{PVAL}).
+#' 
+#' @examples
+#' # Covariance matrix corresponding to the two-factor analysis model
+#' m=20
+#' Gamma = matrix(stats::rnorm(2*m),m,2)
+#' Psi = diag(rep(1,m))
+#' cov = Psi + Gamma %*% t(Gamma)
+#' 
+#' # Sample data from the two-factor analysis model
+#' X = MASS::mvrnorm(500, mu=rep(0,nrow(cov)), Sigma=cov)
+#' 
+#' # Apply the test
+#' test_indep_factors(X, 10000)
+#' 
+#' @references 
+#' TO BE WRITTEN
 test_indep_factors <- function(X, nr_minors, E=1000){
   
   m = dim(X)[2] # nr of observed variables
@@ -80,7 +110,38 @@ test_indep_factors <- function(X, nr_minors, E=1000){
 }
 
 
-
+#' Tests the (3x3)-minor constraints of a 2-factor model by the maximum of a high-dimensional U-statistic
+#' 
+#' This function tests the(3x3)-minor constraints of a given 2-factor model to observed data.
+#' The minors are estimated by considering subsets of the data. The number of subsets as well as
+#' the subsets itself are chosen randomly. Each subset is used to form an unbiased estimate of all minors. 
+#' The test statistic is the maximum of the U-statistic formed by the studentized estimates. 
+#' A Gaussian multiplier bootstrap procedure is used to estimate the limiting distribution of 
+#' the test statistic and to compute the p-value of the test.
+#' 
+#' @param X Matrix with observed data. The number of columns corresponds to the number of observed variables. 
+#' Each row corresponds to one sample.
+#' @param nr_minors Integer, number of randomly chosen minors that are tested. 
+#' @param N Integer, computational budget parameter.
+#' @param E Integer, number of bootstrap iterations.
+#' 
+#' @return Named list with two entries: Test statistic (\code{TSTAT}) and p-value (\code{PVAL}).
+#' 
+#' @examples
+#' # Covariance matrix corresponding to the two-factor analysis model
+#' m=20
+#' Gamma = matrix(stats::rnorm(2*m),m,2)
+#' Psi = diag(rep(1,m))
+#' cov = Psi + Gamma %*% t(Gamma)
+#' 
+#' # Sample data from the two-factor analysis model
+#' X = MASS::mvrnorm(500, mu=rep(0,nrow(cov)), Sigma=cov)
+#' 
+#' # Apply the test
+#' test_U_stat_factors(X, 10000)
+#' 
+#' @references 
+#' TO BE WRITTEN
 test_U_stat_factors <- function(X, nr_minors, N=5000, E=1000){
   
   

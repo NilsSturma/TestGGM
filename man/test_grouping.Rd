@@ -2,12 +2,12 @@
 % Please edit documentation in R/tests.R
 \name{test_grouping}
 \alias{test_grouping}
-\title{Tests the goodness-of-fit of a Gaussian latent tree model}
+\title{Tests the goodness-of-fit of a Gaussian latent tree model by the maximum of a high-dimensional independent sum}
 \usage{
 test_grouping(X, ind_eq, ind_ineq1 = NULL, ind_ineq2 = NULL, E = 1000)
 }
 \arguments{
-\item{X}{Matrix with observed data. Number of columns has to be equal to the number of 
+\item{X}{Matrix with observed data. The number of columns has to be equal to the number of 
 leaves of the postulated tree (i.e. number of observed variables). Each row corresponds to one sample.}
 
 \item{ind_eq}{Representation of the equality constraints that have to be tested. 
@@ -28,8 +28,8 @@ Named list with two entries: Test statistic (\code{TSTAT}) and p-value (\code{PV
 This function tests the goodness-of-fit of a given Gaussian latent tree model to observed data.
 The parameter space is characterized by polynomial constraints. The involved polynomials are 
 estimated by grouping the data into independent subsets. Each group is used to form an 
-unbiased estimate of the polynomials. To test all constraints simultaneously the test statistic 
-is the maximum of a scaled average of the estimates.
+unbiased estimate of all polynomials. The test statistic 
+is the maximum of the average of the independent studentized estimates.
 A Gaussian multiplier bootstrap is used to estimate the limiting distribution of the 
 test statistic and to compute the p-value of the test.
 }
@@ -52,4 +52,8 @@ ind_ineq2 = res$ind_ineq2
 
 # Apply the test
 test_grouping(X, ind_eq, ind_ineq1, ind_ineq2)
+
+}
+\references{
+TO BE WRITTEN
 }

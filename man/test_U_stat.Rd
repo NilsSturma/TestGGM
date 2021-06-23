@@ -2,12 +2,12 @@
 % Please edit documentation in R/tests.R
 \name{test_U_stat}
 \alias{test_U_stat}
-\title{Tests the goodness-of-fit of a Gaussian latent tree model}
+\title{Tests the goodness-of-fit of a Gaussian latent tree model by the maximum of a high-dimensional U-statistic}
 \usage{
 test_U_stat(X, ind_eq, ind_ineq1 = NULL, ind_ineq2 = NULL, N = 5000, E = 1000)
 }
 \arguments{
-\item{X}{Matrix with observed data. Number of columns has to be equal to the number of 
+\item{X}{Matrix with observed data. The number of columns has to be equal to the number of 
 leaves of the postulated tree (i.e. number of observed variables). Each row corresponds to one sample.}
 
 \item{ind_eq}{Representation of the equality constraints that have to be tested. 
@@ -31,8 +31,8 @@ This function tests the goodness-of-fit of a given Gaussian latent tree model to
 The parameter space of the model is characterized by polynomial constraints. The involved polynomials are 
 estimated by considering subsets of the data. The number of subsets as well as the subsets itself 
 are chosen randomly. Each subset is used to form an unbiased estimate of the polynomials. 
-To test all constraints simultaneously the test statistic is the maximum of a scaled average 
-of the estimates. A Gaussian multiplier bootstrap is used to estimate the limiting distribution 
+The test statistic is the maximum of the U-statistic formed by 
+the studentized estimates. A Gaussian multiplier bootstrap is used to estimate the limiting distribution 
 of the  test statistic and to compute the p-value of the test.
 }
 \examples{
@@ -54,4 +54,8 @@ ind_ineq2 = res$ind_ineq2
 
 # Apply the test
 test_U_stat(X, ind_eq, ind_ineq1, ind_ineq2)
+
+}
+\references{
+TO BE WRITTEN
 }

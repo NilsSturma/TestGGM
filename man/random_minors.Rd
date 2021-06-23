@@ -2,16 +2,16 @@
 % Please edit documentation in R/tests-factoranalysis.R
 \name{random_minors}
 \alias{random_minors}
-\title{Randomly chooses a set of minors}
+\title{Randomly choosing a set of minors}
 \usage{
 random_minors(m, factors, nr)
 }
 \arguments{
-\item{m}{Integer, number of observed nodes.}
+\item{m}{Integer, number of observed nodes (and dimension of (m x m)-matrix).}
 
 \item{factors}{Integer, number of hidden factors.}
 
-\item{nr}{Integer, number of \code{(factors+1) x (factors+1)} minors to be samples}
+\item{nr}{Integer, number of (\code{factors+1 x factors+1}) minors to sample.}
 }
 \value{
 Matrix with \code{nr} rows and \code{2*factors+2} columns. Each row corresponds to one minor.
@@ -19,7 +19,7 @@ The first \code{factors+1} columns correspond to the row-indices of the minor,
 the last \code{factors+1} columns correspond to the column-indices of the minor.
 }
 \description{
-Randomly samples an indices of minors without replacement.
+Randomly samples indices of minors without replacement.
 }
 \examples{
 random_minors(20,2,10000)

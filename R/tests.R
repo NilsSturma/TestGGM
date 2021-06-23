@@ -1,14 +1,14 @@
-#' Tests the goodness-of-fit of a Gaussian latent tree model
+#' Tests the goodness-of-fit of a Gaussian latent tree model by the maximum of a high-dimensional independent sum
 #' 
 #' This function tests the goodness-of-fit of a given Gaussian latent tree model to observed data.
 #' The parameter space is characterized by polynomial constraints. The involved polynomials are 
 #' estimated by grouping the data into independent subsets. Each group is used to form an 
-#' unbiased estimate of the polynomials. To test all constraints simultaneously the test statistic 
-#' is the maximum of a scaled average of the estimates.
+#' unbiased estimate of all polynomials. The test statistic 
+#' is the maximum of the average of the independent studentized estimates.
 #' A Gaussian multiplier bootstrap is used to estimate the limiting distribution of the 
 #' test statistic and to compute the p-value of the test.
 #' 
-#' @param X Matrix with observed data. Number of columns has to be equal to the number of 
+#' @param X Matrix with observed data. The number of columns has to be equal to the number of 
 #' leaves of the postulated tree (i.e. number of observed variables). Each row corresponds to one sample.
 #' @param ind_eq Representation of the equality constraints that have to be tested. 
 #' Create this object using the function \code{\link{collect_indices}}.
@@ -39,6 +39,9 @@
 #' 
 #' # Apply the test
 #' test_grouping(X, ind_eq, ind_ineq1, ind_ineq2)
+#' 
+#' @references
+#' TO BE WRITTEN
 test_grouping <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000){
   
   if (is.null(ind_ineq1) | is.null(ind_ineq2)){
@@ -92,18 +95,18 @@ test_grouping <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000){
 
 
 
-#' Tests the goodness-of-fit of a Gaussian latent tree model
+#' Tests the goodness-of-fit of a Gaussian latent tree model by the maximum of a high-dimensional m-dependent sum
 #' 
 #' This function tests the goodness-of-fit of a given Gaussian latent tree model to observed data.
 #' The parameter space is characterized by polynomial constraints. The involved polynomials are 
 #' estimated by considering overlapping subsets of the data 
 #' (\code{\{X_1, X_2, X_3, X_4\}, \{X_2, X_3, X_4, X_5\}, ...}). Each subset is used to form an 
-#' unbiased estimate of the polynomials. To test all constraints simultaneously the test statistic 
-#' is the maximum of a scaled average of the estimates.
+#' unbiased estimate of all polynomials. The test statistic 
+#' is the maximum of the average of the m-dependent studentized estimates.
 #' A Gaussian multiplier bootstrap is used to estimate the limiting distribution of the 
 #' test statistic and to compute the p-value of the test.
 #' 
-#' @param X Matrix with observed data. Number of columns has to be equal to the number of 
+#' @param X Matrix with observed data. The number of columns has to be equal to the number of 
 #' leaves of the postulated tree (i.e. number of observed variables). Each row corresponds to one sample.
 #' @param ind_eq Representation of the equality constraints that have to be tested. 
 #' Create this object using the function \code{\link{collect_indices}}.
@@ -111,7 +114,7 @@ test_grouping <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000){
 #' Create this object using the function \code{\link{collect_indices}}. If \code{NULL} inequality constraints are not tested.
 #' @param ind_ineq2 Representation of the inequality constraints in four variables that have to be tested. 
 #' Create this object using the function \code{\link{collect_indices}}. If \code{NULL} inequality constraints are not tested.
-#' @param B  Integer, batch size for the estimate of the covariance matrix.
+#' @param B Integer, batch size for the estimate of the covariance matrix.
 #' @param E Integer, number of bootstrap iterations.
 #' 
 #' @return Named list with two entries: Test statistic (\code{TSTAT}) and p-value (\code{PVAL}).
@@ -135,6 +138,9 @@ test_grouping <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000){
 #' 
 #' # Apply the test
 #' test_run_over(X, ind_eq, ind_ineq1, ind_ineq2)
+#' 
+#' @references
+#' TO BE WRITTEN
 test_run_over <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, B=5, E=1000){
   
   # Call function to calculate matrix H
@@ -192,17 +198,17 @@ test_run_over <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, B=5, E=1000
 
 
 
-#' Tests the goodness-of-fit of a Gaussian latent tree model
+#' Tests the goodness-of-fit of a Gaussian latent tree model by the maximum of a high-dimensional U-statistic
 #' 
 #' This function tests the goodness-of-fit of a given Gaussian latent tree model to observed data.
 #' The parameter space of the model is characterized by polynomial constraints. The involved polynomials are 
 #' estimated by considering subsets of the data. The number of subsets as well as the subsets itself 
 #' are chosen randomly. Each subset is used to form an unbiased estimate of the polynomials. 
-#' To test all constraints simultaneously the test statistic is the maximum of a scaled average 
-#' of the estimates. A Gaussian multiplier bootstrap is used to estimate the limiting distribution 
+#' The test statistic is the maximum of the U-statistic formed by 
+#' the studentized estimates. A Gaussian multiplier bootstrap is used to estimate the limiting distribution 
 #' of the  test statistic and to compute the p-value of the test.
 #' 
-#' @param X Matrix with observed data. Number of columns has to be equal to the number of 
+#' @param X Matrix with observed data. The number of columns has to be equal to the number of 
 #' leaves of the postulated tree (i.e. number of observed variables). Each row corresponds to one sample.
 #' @param ind_eq Representation of the equality constraints that have to be tested. 
 #' Create this object using the function \code{\link{collect_indices}}.
@@ -234,6 +240,9 @@ test_run_over <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, B=5, E=1000
 #' 
 #' # Apply the test
 #' test_U_stat(X, ind_eq, ind_ineq1, ind_ineq2)
+#' 
+#' @references
+#' TO BE WRITTEN
 test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=1000){
   
   
