@@ -33,7 +33,8 @@ m=20
 Gamma = matrix(stats::rnorm(2*m),m,2)
 Psi = diag(rep(1,m))
 cov = Psi + Gamma \%*\% t(Gamma)
-# Sample data from two-factor analysis model
+
+# Sample data from the two-factor analysis model
 X = MASS::mvrnorm(500, mu=rep(0,nrow(cov)), Sigma=cov)
 
 # Apply the test

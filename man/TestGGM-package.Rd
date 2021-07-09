@@ -13,6 +13,9 @@ Nils Sturma <nils.sturma@tum.de>
 }
 %\details{}
 %\keyword{}
+\references{
+TO BE WRITTEN
+}
 \examples{
   \dontrun{
       # Create tree
