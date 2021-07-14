@@ -5,7 +5,8 @@ R package for testing the goodness-of-fit of Gaussian graphical models. Supports
 
 Install via `devtools::install_github("NilsSturma/TestGGM")`. The package implements the tests described in TO BE WRITTEN.
 
-
-- Algebraic tests are implemented in the file `R/tests.R` and the likelihood-ratio test is implemented in `R/LR_EM.R`.
-
+Most important files:
+- `R/tests.R`: algebraic tests for (arbitrary) Gaussian latent tree models 
+- `R/LR_EM.R`: likelihood-ratio test for (arbitrary) Gaussian latent tree models using the EM algorithm
+- `R/tests-factoranalysis.R` algebraic tests for the two-factor analysis model
 
