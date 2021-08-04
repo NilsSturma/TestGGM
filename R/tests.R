@@ -290,7 +290,7 @@ test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=100
   G_mean = Rfast::colmeans(G)
   G_centered = Rfast::transpose(Rfast::transpose(G) - G_mean)
   
-  # Diagonal of the sample covariance of H
+  # Diagonal of the approximate variance of H
   cov_H_diag = Rfast::colsums(H_centered**2) / N_hat
   cov_G_diag = Rfast::colsums(G_centered**2) / n
   #cov_diag = cov_H_diag
