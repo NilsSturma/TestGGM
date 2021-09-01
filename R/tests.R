@@ -324,7 +324,7 @@ test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=100
 min_zero <- function(x){min(x,0)}
 
 
-test_grouping_BSS  <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000, beta=0.005){
+test_grouping_BSS  <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000, alphas=0.05, betas=0.005){
   
   if (is.null(ind_ineq1) | is.null(ind_ineq2)){
     if (!is.null(ind_ineq1) | !is.null(ind_ineq2)){
@@ -359,30 +359,35 @@ test_grouping_BSS  <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000
   marginal_stats = sqrt(n) * H_mean
   marginal_stats[1:p_eq] = abs(marginal_stats[1:p_eq])
   test_stat =  max(standardizer * marginal_stats)
-
-  # Bootstrapping - first step (just inequalities)
-  W = bootstrap(E, H_centered[,(p_eq+1):p])
-  W_standardized = Rfast::transpose(Rfast::transpose(W) * standardizer[(p_eq+1):p])
+  
+  # Bootstrapping
+  W = bootstrap(E, H_centered)
+  
+  # Calculate c_beta for every beta
+  W_standardized = Rfast::transpose(Rfast::transpose(W[,(p_eq+1):p]) * standardizer[(p_eq+1):p])
   bootstrap_res = Rfast::rowMaxs(W_standardized, value = TRUE)
-  c_beta = quantile(bootstrap_res, probs=1-beta)
+  c_betas = as.numeric(quantile(bootstrap_res, probs=1-betas))
   
-  # Calculate nuisance parameter mu_hat (zero for all equalities)
-  mu_hat = H_mean[(p_eq+1):p] + standardizer[(p_eq+1):p] * c_beta/sqrt(n) 
-  mu_hat = sapply(mu_hat, min_zero)
-  mu_hat = c(rep(0, p_eq), mu_hat)
   
-  # Recenter values H_centered by the nuisance parameter mu_hat
-  H_recentered <- Rfast::transpose(Rfast::transpose(H_centered) + mu_hat)
+  results = rep(FALSE, length(alphas))
+  for (i in 1:length(alphas)){
+    
+    # Calculate nuisance parameter lambda (zero for all inequalities)
+    lambda = H_mean[(p_eq+1):p] + standardizer[(p_eq+1):p] * c_betas[i]/sqrt(n) 
+    lambda = sapply(lambda, min_zero)
+    
+    # Bootstrapping - second step
+    W[,1:p_eq] = abs(W[,1:p_eq])
+    W[,(p_eq+1):p] = Rfast::transpose(Rfast::transpose(W[,(p_eq+1):p]) + lambda * sqrt(n))
+    W_standardized = Rfast::transpose(Rfast::transpose(W) * standardizer)
+    maxima = Rfast::rowMaxs(W_standardized, value = TRUE)
+    critical_value = as.numeric(quantile(maxima, probs=1-alphas[i]+betas[i]))
+    
+    # Reject?
+    results[i] = (test_stat > critical_value)
+  }
   
-  # Bootstrapping - second step
-  W = bootstrap(E, H_recentered)
-  W_standardized = Rfast::transpose(Rfast::transpose(W) * standardizer)
-  results = Rfast::rowMaxs(W_standardized, value = TRUE)
-  
-  # pval
-  pval = (1 + sum(results >= test_stat)) / (1+E)
-  
-  return(list("PVAL"=pval, "TSTAT"=test_stat))
+  return(results)
 }
 
 
