@@ -377,10 +377,11 @@ test_grouping_BSS  <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000
     lambda = sapply(lambda, min_zero)
     
     # Bootstrapping - second step
-    W[,1:p_eq] = abs(W[,1:p_eq])
-    W[,(p_eq+1):p] = Rfast::transpose(Rfast::transpose(W[,(p_eq+1):p]) + lambda * sqrt(n))
-    W_standardized = Rfast::transpose(Rfast::transpose(W) * standardizer)
-    maxima = Rfast::rowMaxs(W_standardized, value = TRUE)
+    W2 <- matrix(0, nrow=E, ncol=p)
+    W2[,1:p_eq] = abs(W[,1:p_eq])
+    W2[,(p_eq+1):p] = Rfast::transpose(Rfast::transpose(W[,(p_eq+1):p]) + lambda * sqrt(n))
+    W2_standardized = Rfast::transpose(Rfast::transpose(W2) * standardizer)
+    maxima = Rfast::rowMaxs(W2_standardized, value = TRUE)
     critical_value = as.numeric(quantile(maxima, probs=1-alphas[i]+betas[i]))
     
     # Reject?
