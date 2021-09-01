@@ -305,7 +305,7 @@ test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=100
   test_stat =  max(standardizer * marginal_stats)
   
   # Bootstrap
-  bootstrap_res = bootstrap_U(E, r, H_centered, G_centered, N)
+  bootstrap_res = bootstrap_U(E, r, H_centered, G_centered)
   U_A = bootstrap_res[[1]]
   U_B = bootstrap_res[[2]]
   U = U_A + sqrt(n/N) * U_B
@@ -396,6 +396,100 @@ test_grouping_BSS  <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000
 
 
 
+test_U_stat_BSS <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=1000, alphas=0.05, betas=0.005){
+  
+  
+  n = dim(X)[1]  # nr of samples
+  
+  
+  if (is.null(ind_ineq1) | is.null(ind_ineq2)){
+    if (!is.null(ind_ineq1) | !is.null(ind_ineq2)){
+      stop("ERROR - exactly one set of inequalities is missing. Cannot handle this.")
+    }
+    test_ineqs = FALSE
+    r = 2
+  } else {
+    test_ineqs = TRUE
+    r = 4
+  }
+  
+  
+  N = min(0.7*choose(n,r), N)
+  
+  # determine N_hat by Bernoulli sampling
+  N_hat = stats::rbinom(1, choose(n,r), (N / choose(n,r)))
+  
+  # Choose randomly N_hat unique subsets with cardinality r of {1,...,n}
+  indices = matrix(unlist(random_combs(n,r,N_hat)[[1]]), ncol = r, byrow = TRUE)
+  
+  # Compute matrix H
+  if (test_ineqs){
+    H = calculate_H(X, indices, ind_eq, ind_ineq1, ind_ineq2)
+  } else {
+    H = calculate_H_eq(X, indices, ind_eq)
+  }
+  
+  H_mean = Rfast::colmeans(H)
+  H_centered = Rfast::transpose(Rfast::transpose(H) - H_mean)
+  p = dim(H)[2]  # total nr of constraints
+  p_eq = dim(ind_eq)[1]  # equality constraints
+  
+  # Compute matrix G
+  if (test_ineqs){
+    G = calculate_G(X,L=(r-1), ind_eq, ind_ineq1, ind_ineq2)
+  } else {
+    G = calculate_G_eq(X, L=(r-1), ind_eq)
+  }
+  G_mean = Rfast::colmeans(G)
+  G_centered = Rfast::transpose(Rfast::transpose(G) - G_mean)
+  
+  # Diagonal of the approximate variance of H
+  cov_H_diag = Rfast::colsums(H_centered**2) / N_hat
+  cov_G_diag = Rfast::colsums(G_centered**2) / n
+  cov_diag = r**2 * cov_G_diag + (n/N) * cov_H_diag
+  
+  # Vector for standardizing
+  standardizer = cov_diag**(-1/2)
+  
+  # Test statistic
+  marginal_stats = sqrt(n) * H_mean
+  marginal_stats[1:p_eq] = abs(marginal_stats[1:p_eq])
+  test_stat =  max(standardizer * marginal_stats)
+  
+  # Bootstrap
+  bootstrap_res = bootstrap_U(E, r, H_centered, G_centered)
+  U_A = bootstrap_res[[1]]
+  U_B = bootstrap_res[[2]]
+  U = U_A + sqrt(n/N) * U_B
+  
+  
+  # Calculate c_beta for every beta
+  U_standardized = Rfast::transpose(Rfast::transpose(U[,(p_eq+1):p]) * standardizer[(p_eq+1):p])
+  bootstrap_res = Rfast::rowMaxs(U_standardized, value = TRUE)
+  c_betas = as.numeric(quantile(bootstrap_res, probs=1-betas))
+  
+  
+  results = rep(FALSE, length(alphas))
+  for (i in 1:length(alphas)){
+    
+    # Calculate nuisance parameter lambda (zero for all inequalities)
+    lambda = H_mean[(p_eq+1):p] + standardizer[(p_eq+1):p] * c_betas[i]/sqrt(n) 
+    lambda = sapply(lambda, min_zero)
+    
+    # Bootstrapping - second step
+    U2 <- matrix(0, nrow=E, ncol=p)
+    U2[,1:p_eq] = abs(U[,1:p_eq])
+    U2[,(p_eq+1):p] = Rfast::transpose(Rfast::transpose(U[,(p_eq+1):p]) + lambda * sqrt(n))
+    U2_standardized = Rfast::transpose(Rfast::transpose(U2) * standardizer)
+    maxima = Rfast::rowMaxs(U2_standardized, value = TRUE)
+    critical_value = as.numeric(quantile(maxima, probs=1-alphas[i]+betas[i]))
+    
+    # Reject?
+    results[i] = (test_stat > critical_value)
+  }
+  
+  return(results)
+}
 
 
 

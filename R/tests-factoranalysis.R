@@ -184,7 +184,7 @@ test_U_stat_factors <- function(X, nr_minors, N=5000, E=1000){
   test_stat =  max(standardizer * marginal_stats)
   
   # Bootstrap
-  bootstrap_res = bootstrap_U(E, r, H_centered, G_centered, N)
+  bootstrap_res = bootstrap_U(E, r, H_centered, G_centered)
   U_A = bootstrap_res[[1]]
   U_B = bootstrap_res[[2]]
   U = abs(U_A + sqrt(n/N) * U_B)

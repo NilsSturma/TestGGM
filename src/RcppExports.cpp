@@ -259,8 +259,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // bootstrap_U
-List bootstrap_U(int E, int r, NumericMatrix H_centered, NumericMatrix G_centered, int N);
-RcppExport SEXP _TestGGM_bootstrap_U(SEXP ESEXP, SEXP rSEXP, SEXP H_centeredSEXP, SEXP G_centeredSEXP, SEXP NSEXP) {
+List bootstrap_U(int E, int r, NumericMatrix H_centered, NumericMatrix G_centered);
+RcppExport SEXP _TestGGM_bootstrap_U(SEXP ESEXP, SEXP rSEXP, SEXP H_centeredSEXP, SEXP G_centeredSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -268,8 +268,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type r(rSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type H_centered(H_centeredSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type G_centered(G_centeredSEXP);
-    Rcpp::traits::input_parameter< int >::type N(NSEXP);
-    rcpp_result_gen = Rcpp::wrap(bootstrap_U(E, r, H_centered, G_centered, N));
+    rcpp_result_gen = Rcpp::wrap(bootstrap_U(E, r, H_centered, G_centered));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -486,7 +485,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_TestGGM_calculate_G_eq", (DL_FUNC) &_TestGGM_calculate_G_eq, 3},
     {"_TestGGM_bootstrap", (DL_FUNC) &_TestGGM_bootstrap, 2},
     {"_TestGGM_bootstrap_m_dep", (DL_FUNC) &_TestGGM_bootstrap_m_dep, 4},
-    {"_TestGGM_bootstrap_U", (DL_FUNC) &_TestGGM_bootstrap_U, 5},
+    {"_TestGGM_bootstrap_U", (DL_FUNC) &_TestGGM_bootstrap_U, 4},
     {"_TestGGM_expectation", (DL_FUNC) &_TestGGM_expectation, 2},
     {"_TestGGM_fourth_mom", (DL_FUNC) &_TestGGM_fourth_mom, 5},
     {"_TestGGM_cov_grouping", (DL_FUNC) &_TestGGM_cov_grouping, 2},
