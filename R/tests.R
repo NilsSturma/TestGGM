@@ -373,7 +373,7 @@ min_zero <- function(x){min(x,0)}
 #   for (i in 1:length(alphas)){
 #     
 #     # Calculate nuisance parameter lambda (zero for all inequalities)
-#     lambda = H_mean[(p_eq+1):p] + standardizer[(p_eq+1):p] * c_betas[i]/sqrt(n) 
+#     lambda = H_mean[(p_eq+1):p] + (cov_H_diag[(p_eq+1):p]**(1/2)) * c_betas[i]/sqrt(n) 
 #     lambda = sapply(lambda, min_zero)
 #     
 #     # Bootstrapping - second step
@@ -433,7 +433,7 @@ test_grouping_BSS  <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000
   c_beta= as.numeric(quantile(bootstrap_res, probs=1-beta))
   
   # Calculate nuisance parameter lambda (zero for all inequalities)
-  lambda = H_mean[(p_eq+1):p] + standardizer[(p_eq+1):p] * c_beta/sqrt(n) 
+  lambda = H_mean[(p_eq+1):p] + (cov_H_diag[(p_eq+1):p]**(1/2)) * c_beta/sqrt(n) 
   lambda = sapply(lambda, min_zero)
     
   # Bootstrapping - second step
@@ -531,7 +531,7 @@ test_grouping_BSS  <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000
 #   for (i in 1:length(alphas)){
 #     
 #     # Calculate nuisance parameter lambda (zero for all inequalities)
-#     lambda = H_mean[(p_eq+1):p] + standardizer[(p_eq+1):p] * c_betas[i]/sqrt(n) 
+#     lambda = H_mean[(p_eq+1):p] + (cov_diag[(p_eq+1):p]**(1/2)) * c_betas[i]/sqrt(n) 
 #     lambda = sapply(lambda, min_zero)
 #     
 #     # Bootstrapping - second step
@@ -624,7 +624,7 @@ test_U_stat_BSS <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E
   
     
   # Calculate nuisance parameter lambda (zero for all inequalities)
-  lambda = H_mean[(p_eq+1):p] + standardizer[(p_eq+1):p] * c_beta/sqrt(n) 
+  lambda = H_mean[(p_eq+1):p] + (cov_diag[(p_eq+1):p]**(1/2)) * c_beta/sqrt(n) 
   lambda = sapply(lambda, min_zero)
   
   # Bootstrapping - second step
