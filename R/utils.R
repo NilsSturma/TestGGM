@@ -68,6 +68,11 @@ cov_from_star_tree <- function(g, paths, setup=1, m=10){
     igraph::V(g)$var = c(beta**2+rep(1/3,m),1)
     igraph::E(g)$corr = beta / sqrt(beta**2+rep(1/3,m))
     cov = cov_from_graph(g, m, paths)
+  } else if (setup==3){
+    beta = stats::rnorm(m,0,0.2)
+    igraph::V(g)$var = c(beta**2+rep(1/3,m),1)
+    igraph::E(g)$corr = beta / sqrt(beta**2+rep(1/3,m))
+    cov = cov_from_graph(g, m, paths)
   }
   return(cov)
 }
