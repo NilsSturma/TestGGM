@@ -173,11 +173,13 @@ test_U_stat_factors <- function(X, nr_minors, N=5000, E=1000){
   G_mean = Rfast::colmeans(G)
   G_centered = Rfast::transpose(Rfast::transpose(G) - G_mean)
   
-  # Diagonal of the analogue to sample covariance of H
+  # Diagonal of the approximate variance of H
   cov_H_diag = Rfast::colsums(H_centered**2) / N_hat
+  cov_G_diag = Rfast::colsums(G_centered**2) / n
+  cov_diag = r**2 * cov_G_diag + (n/N) * cov_H_diag
   
   # Vector for standardizing
-  standardizer = cov_H_diag**(-1/2)
+  standardizer = cov_diag**(-1/2)
   
   # Test statistic
   marginal_stats = abs(sqrt(n) * H_mean)
