@@ -319,6 +319,9 @@ test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=100
   return(list("PVAL"=pval, "TSTAT"=test_stat))
 }
 
+#########
+## BSS ##
+#########
 
 # helper function
 min_zero <- function(x){min(x,0)}
@@ -390,70 +393,6 @@ test_grouping_BSS  <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000
 
   return(results)
 }
-
-
-# test_grouping_BSS  <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000, alpha=0.05, beta=0.005){
-# 
-#   if (is.null(ind_ineq1) | is.null(ind_ineq2)){
-#     if (!is.null(ind_ineq1) | !is.null(ind_ineq2)){
-#       stop("ERROR - exactly one set of inequalities is missing. Cannot handle this.")
-#     }
-#     test_ineqs = FALSE
-#     N = findn(nrow(X),2)
-#     indices = matrix(1:N, ncol=2)
-#     H = calculate_H_eq(X, indices, ind_eq)
-#   } else {
-#     test_ineqs = TRUE
-#     N = findn(nrow(X),4)
-#     indices = matrix(1:N, ncol=4)
-#     H = calculate_H(X, indices, ind_eq, ind_ineq1, ind_ineq2)
-#   }
-# 
-#   n = dim(H)[1]
-#   p = dim(H)[2]  # total nr of constraints
-#   p_eq = dim(ind_eq)[1]  # nr of equality constraints
-# 
-#   # Mean and centering
-#   H_mean = Rfast::colmeans(H)
-#   H_centered = Rfast::transpose(Rfast::transpose(H) - H_mean) # Centering: H_i = (H_i - H_mean)
-# 
-#   # Diagonal of the sample covariance of H
-#   cov_H_diag = Rfast::colsums(H_centered**2) / n
-# 
-#   # Vector for standardizing
-#   standardizer = cov_H_diag**(-1/2)
-# 
-#   # Test statistic
-#   marginal_stats = sqrt(n) * H_mean
-#   marginal_stats[1:p_eq] = abs(marginal_stats[1:p_eq])
-#   test_stat =  max(standardizer * marginal_stats)
-# 
-#   # Bootstrapping - first step (only inequalities)
-#   W = bootstrap(E, H_centered[,(p_eq+1):p])
-#   W_standardized = Rfast::transpose(Rfast::transpose(W) * standardizer[(p_eq+1):p])
-#   bootstrap_res = Rfast::rowMaxs(W_standardized, value = TRUE)
-#   c_beta= as.numeric(quantile(bootstrap_res, probs=1-beta))
-# 
-#   # Calculate nuisance parameter lambda (zero for all equalities)
-#   lambda = H_mean[(p_eq+1):p] + (cov_H_diag[(p_eq+1):p]**(1/2)) * c_beta/sqrt(n)
-#   lambda = sapply(lambda, min_zero)
-# 
-#   # Bootstrapping - second step
-#   W = bootstrap(E, H_centered)
-#   W[,1:p_eq] = abs(W[,1:p_eq])
-#   W[,(p_eq+1):p] = Rfast::transpose(Rfast::transpose(W[,(p_eq+1):p]) + lambda * sqrt(n))
-#   W_standardized = Rfast::transpose(Rfast::transpose(W) * standardizer)
-#   maxima = Rfast::rowMaxs(W_standardized, value = TRUE)
-#   critical_value = as.numeric(quantile(maxima, probs=1-alpha+beta))
-# 
-#   # Reject?
-#   result = (test_stat > critical_value)
-# 
-#   return(result)
-# }
-
-
-
 
 
 test_U_stat_BSS <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=1000, alphas=0.05, betas=0.005){
@@ -552,6 +491,122 @@ test_U_stat_BSS <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E
 
   return(results)
 }
+
+
+#########################
+## Complete Ustat Test ##
+#########################
+
+test_complete_Ustat <- function(X, ind_eq, E=1000){
+
+    n = dim(X)[1]
+    p = dim(ind_eq)[1]
+    r = 2
+
+    # Sample covariance
+    S = (1/n) * t(X) %*% X
+
+    # Complete U-statistic
+    U = rep(0, p)
+    for (j in 1:p){
+        U[j] = S[ind_eq[j,1], ind_eq[j,2]] * S[ind_eq[j,3], ind_eq[j,4]] - 
+            S[ind_eq[j,5], ind_eq[j,6]] * S[ind_eq[j,7], ind_eq[j,8]]
+    }
+    U = (n/(n-1)) * U  # scaling to remove bias
+
+    # Compute matrix G
+    G = calculate_G_eq(X, L=1, ind_eq)
+    G_mean = Rfast::colmeans(G)
+    G_centered = Rfast::transpose(Rfast::transpose(G) - G_mean)  # note: U == G_mean
+
+    # Diagonal of the approximate covariance matrix
+    cov_diag = r**2 * (1/n) * Rfast::colsums(G_centered**2)
+
+    # Vector for standardizing
+    standardizer = cov_diag**(-1/2)
+
+    # Test statistic
+    test_stat = max(abs(sqrt(n) * standardizer * U))
+
+    # Bootstrap
+    W = abs(r * bootstrap(E, G_centered))
+    W_standardized = Rfast::transpose(Rfast::transpose(W) * standardizer)
+    results = Rfast::rowMaxs(W_standardized, value = TRUE)
+    
+    # pval
+    pval = (1 + sum(results >= test_stat)) / (1+E)
+
+    return(list("PVAL"=pval, "TSTAT"=test_stat))
+}
+
+
+
+
+#############
+## archive ##
+#############
+
+
+# test_grouping_BSS  <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000, alpha=0.05, beta=0.005){
+# 
+#   if (is.null(ind_ineq1) | is.null(ind_ineq2)){
+#     if (!is.null(ind_ineq1) | !is.null(ind_ineq2)){
+#       stop("ERROR - exactly one set of inequalities is missing. Cannot handle this.")
+#     }
+#     test_ineqs = FALSE
+#     N = findn(nrow(X),2)
+#     indices = matrix(1:N, ncol=2)
+#     H = calculate_H_eq(X, indices, ind_eq)
+#   } else {
+#     test_ineqs = TRUE
+#     N = findn(nrow(X),4)
+#     indices = matrix(1:N, ncol=4)
+#     H = calculate_H(X, indices, ind_eq, ind_ineq1, ind_ineq2)
+#   }
+# 
+#   n = dim(H)[1]
+#   p = dim(H)[2]  # total nr of constraints
+#   p_eq = dim(ind_eq)[1]  # nr of equality constraints
+# 
+#   # Mean and centering
+#   H_mean = Rfast::colmeans(H)
+#   H_centered = Rfast::transpose(Rfast::transpose(H) - H_mean) # Centering: H_i = (H_i - H_mean)
+# 
+#   # Diagonal of the sample covariance of H
+#   cov_H_diag = Rfast::colsums(H_centered**2) / n
+# 
+#   # Vector for standardizing
+#   standardizer = cov_H_diag**(-1/2)
+# 
+#   # Test statistic
+#   marginal_stats = sqrt(n) * H_mean
+#   marginal_stats[1:p_eq] = abs(marginal_stats[1:p_eq])
+#   test_stat =  max(standardizer * marginal_stats)
+# 
+#   # Bootstrapping - first step (only inequalities)
+#   W = bootstrap(E, H_centered[,(p_eq+1):p])
+#   W_standardized = Rfast::transpose(Rfast::transpose(W) * standardizer[(p_eq+1):p])
+#   bootstrap_res = Rfast::rowMaxs(W_standardized, value = TRUE)
+#   c_beta= as.numeric(quantile(bootstrap_res, probs=1-beta))
+# 
+#   # Calculate nuisance parameter lambda (zero for all equalities)
+#   lambda = H_mean[(p_eq+1):p] + (cov_H_diag[(p_eq+1):p]**(1/2)) * c_beta/sqrt(n)
+#   lambda = sapply(lambda, min_zero)
+# 
+#   # Bootstrapping - second step
+#   W = bootstrap(E, H_centered)
+#   W[,1:p_eq] = abs(W[,1:p_eq])
+#   W[,(p_eq+1):p] = Rfast::transpose(Rfast::transpose(W[,(p_eq+1):p]) + lambda * sqrt(n))
+#   W_standardized = Rfast::transpose(Rfast::transpose(W) * standardizer)
+#   maxima = Rfast::rowMaxs(W_standardized, value = TRUE)
+#   critical_value = as.numeric(quantile(maxima, probs=1-alpha+beta))
+# 
+#   # Reject?
+#   result = (test_stat > critical_value)
+# 
+#   return(result)
+# }
+
 
 
 # test_U_stat_BSS <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=1000, alpha=0.05, beta=0.005){

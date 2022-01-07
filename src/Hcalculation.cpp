@@ -16,21 +16,22 @@ NumericVector h_tilde(NumericVector X1,
   const int nr_ind_ineq1 = ind_ineq1.nrow();
   const int nr_ind_ineq2 = ind_ineq2.nrow();
   NumericVector h_tilde(nr_ind_eq+nr_ind_ineq1+nr_ind_ineq2);
+  ind_eq = ind_eq - 1;
   
   for (int j = 0; j < nr_ind_eq; j++) {
-    h_tilde[j] = X1[ind_eq(j,0)-1] *  X1[ind_eq(j,1)-1] * X2[ind_eq(j,2)-1] * X2[ind_eq(j,3)-1] 
-    - X1[ind_eq(j,4)-1] * X1[ind_eq(j,5)-1] * X2[ind_eq(j,6)-1] * X2[ind_eq(j,7)-1];
+    h_tilde[j] = X1[ind_eq(j,0)] *  X1[ind_eq(j,1)] * X2[ind_eq(j,2)] * X2[ind_eq(j,3)] 
+    - X1[ind_eq(j,4)] * X1[ind_eq(j,5)] * X2[ind_eq(j,6)] * X2[ind_eq(j,7)];
   }
   for (int j = 0; j < nr_ind_ineq1; j++) {
-    h_tilde[nr_ind_eq + j] = - X1[ind_ineq1(j,0)-1] *  X1[ind_ineq1(j,1)-1] 
-    * X2[ind_ineq1(j,2)-1] * X2[ind_ineq1(j,3)-1] 
-    * X3[ind_ineq1(j,4)-1] * X3[ind_ineq1(j,5)-1];
+    h_tilde[nr_ind_eq + j] = - X1[ind_ineq1(j,0)] *  X1[ind_ineq1(j,1)] 
+    * X2[ind_ineq1(j,2)] * X2[ind_ineq1(j,3)] 
+    * X3[ind_ineq1(j,4)] * X3[ind_ineq1(j,5)];
   }
   for (int j = 0; j < nr_ind_ineq2; j++) {
-    h_tilde[nr_ind_eq + nr_ind_ineq1 + j] =  X1[ind_ineq2(j,0)-1] * X1[ind_ineq2(j,1)-1] * X2[ind_ineq2(j,0)-1] * X2[ind_ineq2(j,1)-1] 
-    * X3[ind_ineq2(j,2)-1] * X3[ind_ineq2(j,3)-1] * X4[ind_ineq2(j,2)-1] * X4[ind_ineq2(j,3)-1] 
-    - X1[ind_ineq2(j,4)-1] * X1[ind_ineq2(j,5)-1] * X2[ind_ineq2(j,4)-1] * X2[ind_ineq2(j,5)-1] 
-    * X3[ind_ineq2(j,6)-1] * X3[ind_ineq2(j,7)-1] * X4[ind_ineq2(j,6)-1] * X4[ind_ineq2(j,7)-1];
+    h_tilde[nr_ind_eq + nr_ind_ineq1 + j] =  X1[ind_ineq2(j,0)] * X1[ind_ineq2(j,1)] * X2[ind_ineq2(j,0)] * X2[ind_ineq2(j,1)] 
+    * X3[ind_ineq2(j,2)] * X3[ind_ineq2(j,3)] * X4[ind_ineq2(j,2)] * X4[ind_ineq2(j,3)] 
+    - X1[ind_ineq2(j,4)] * X1[ind_ineq2(j,5)] * X2[ind_ineq2(j,4)] * X2[ind_ineq2(j,5)] 
+    * X3[ind_ineq2(j,6)] * X3[ind_ineq2(j,7)] * X4[ind_ineq2(j,6)] * X4[ind_ineq2(j,7)];
   }
   return(h_tilde);
 }
@@ -247,10 +248,11 @@ NumericVector h_tilde_eq(NumericVector X1,
   
   const int nr_ind_eq = ind_eq.nrow();
   NumericVector h_tilde(nr_ind_eq);
+  ind_eq = ind_eq - 1;
   
   for (int j = 0; j < nr_ind_eq; j++) {
-    h_tilde[j] = X1[ind_eq(j,0)-1] *  X1[ind_eq(j,1)-1] * X2[ind_eq(j,2)-1] * X2[ind_eq(j,3)-1] 
-    - X1[ind_eq(j,4)-1] * X1[ind_eq(j,5)-1] * X2[ind_eq(j,6)-1] * X2[ind_eq(j,7)-1];
+    h_tilde[j] = X1[ind_eq(j,0)] *  X1[ind_eq(j,1)] * X2[ind_eq(j,2)] * X2[ind_eq(j,3)] 
+    - X1[ind_eq(j,4)] * X1[ind_eq(j,5)] * X2[ind_eq(j,6)] * X2[ind_eq(j,7)];
   }
   return(h_tilde);
 }

@@ -4,8 +4,8 @@ library(TestGGM)
 
 # General
 n = 5000
-alpha = 0.05
-beta = alpha/10
+alphas = alphas = seq(0.01, 0.99, 0.01)
+betas =  alphas/10
 E = 1000
 
 # Tree
@@ -46,8 +46,10 @@ if (tree=="star_tree"){
 }
 X = mvrnorm(n, mu=rep(0,nrow(cov)), Sigma=cov)
 
-#test_grouping_BSS(X, ind_eq, ind_ineq1, ind_ineq2, E=E, alpha=alpha, beta=beta)
-
+begin = Sys.time()
+test_grouping_BSS(X, ind_eq, ind_ineq1, ind_ineq2, E=E, alphas=alphas, betas=betas)
+end = Sys.time()
+print(end-begin)
 
 #########
 ## BSS ##
