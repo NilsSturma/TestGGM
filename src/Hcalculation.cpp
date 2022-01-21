@@ -17,6 +17,8 @@ NumericVector h_tilde(NumericVector X1,
   const int nr_ind_ineq2 = ind_ineq2.nrow();
   NumericVector h_tilde(nr_ind_eq+nr_ind_ineq1+nr_ind_ineq2);
   ind_eq = ind_eq - 1;
+  ind_ineq1 = ind_ineq1 - 1;
+  ind_ineq2 = ind_ineq2 - 1;
   
   for (int j = 0; j < nr_ind_eq; j++) {
     h_tilde[j] = X1[ind_eq(j,0)] *  X1[ind_eq(j,1)] * X2[ind_eq(j,2)] * X2[ind_eq(j,3)] 

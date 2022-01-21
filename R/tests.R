@@ -542,6 +542,73 @@ test_complete_Ustat <- function(X, ind_eq, E=1000){
 
 
 
+test_U_stat_v2 <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=600, E=1000){
+  
+  
+  n = dim(X)[1]  # nr of samples
+  
+  
+  if (is.null(ind_ineq1) | is.null(ind_ineq2)){
+    if (!is.null(ind_ineq1) | !is.null(ind_ineq2)){
+      stop("ERROR - exactly one set of inequalities is missing. Cannot handle this.")
+    }
+    test_ineqs = FALSE
+    r = 2
+  } else {
+    test_ineqs = TRUE
+    r = 4
+  }
+  
+  
+  if (N > (choose(n,r)/2)){
+    stop("ERROR, N is larger than choose(n,r)/2")
+  } 
+  
+  
+  # determine N_hat by Bernoulli sampling
+  N_hat = stats::rbinom(1, choose(n,r), (N / choose(n,r)))
+  
+  # Choose randomly N_hat unique subsets with cardinality r of {1,...,n}
+  indices = matrix(unlist(random_combs(n,r,N_hat)[[1]]), ncol = r, byrow = TRUE)
+  
+  # Compute matrix H
+  if (test_ineqs){
+    H = calculate_H(X, indices, ind_eq, ind_ineq1, ind_ineq2)
+  } else {
+    H = calculate_H_eq(X, indices, ind_eq)
+  }
+  
+  H_mean = Rfast::colmeans(H)
+  H_centered = Rfast::transpose(Rfast::transpose(H) - H_mean)
+  p = dim(H)[2]  # total nr of constraints
+  p_eq = dim(ind_eq)[1]  # equality constraints
+  
+  # Diagonal of the approximate variance of H
+  cov_H_diag = Rfast::colsums(H_centered**2) / N_hat
+  cov_diag = cov_H_diag
+
+  
+  # Vector for standardizing
+  standardizer = cov_diag**(-1/2)
+  
+  # Test statistic
+  marginal_stats = sqrt(N) * H_mean
+  marginal_stats[1:p_eq] = abs(marginal_stats[1:p_eq])
+  test_stat =  max(standardizer * marginal_stats)
+  
+  # Bootstrap
+  U_B = bootstrap(E, H_centered)
+  U_B[,1:p_eq] = abs(U_B[,1:p_eq])
+  U_B_standardized = Rfast::transpose(Rfast::transpose(U_B) * standardizer)
+  results = Rfast::rowMaxs(U_B_standardized, value = TRUE)
+  
+  # pval
+  pval = (1 + sum(results >= test_stat)) / (1+E)
+  
+  return(list("PVAL"=pval, "TSTAT"=test_stat))
+}
+
+
 #############
 ## archive ##
 #############
