@@ -542,7 +542,7 @@ test_complete_Ustat <- function(X, ind_eq, E=1000){
 
 
 
-test_U_stat_v2 <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=600, E=1000){
+test_U_stat_GammaH <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=600, E=1000){
   
   
   n = dim(X)[1]  # nr of samples

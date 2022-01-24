@@ -10,7 +10,7 @@ E = 1000
 # Tree
 tree = "star_tree"  # Possible: "star_tree", "cat_binary"
 m = 20
-setup = 1
+setup = 2
 
 # Create tree
 if (tree=="star_tree"){
@@ -39,4 +39,4 @@ cov = cov_from_star_tree(g, paths, setup=setup, m=m)
 
 # Apply test
 X = mvrnorm(n, mu=rep(0,nrow(cov)), Sigma=cov)
-test_U_stat_v2(X, ind_eq, ind_ineq1, ind_ineq2, N=125, E=E)
+test_U_stat_GammaH(X, ind_eq, ind_ineq1, ind_ineq2, N=125, E=E)
