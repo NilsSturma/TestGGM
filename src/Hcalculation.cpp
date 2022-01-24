@@ -347,6 +347,3 @@ NumericMatrix calculate_G_eq(NumericMatrix X,
   }
   return(G);
 }
-
-
-
