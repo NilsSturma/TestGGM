@@ -91,8 +91,75 @@ test_grouping <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000){
   return(list("PVAL"=pval, "TSTAT"=test_stat))
 }
 
+test_blockwise <- function(X, block_length=5, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000){
 
+  # Nr of samples
+  n = dim(X)[1]  
+  
+  # Check whether we test only equality constraints or not
+  if (is.null(ind_ineq1) | is.null(ind_ineq2)){
+    if (!is.null(ind_ineq1) | !is.null(ind_ineq2)){
+      stop("ERROR - exactly one set of inequalities is missing. Cannot handle this.")
+    }
+    test_ineqs = FALSE
+    r = 2
+    p = nrow(ind_eq)
+    p_eq = p
+  } else {
+    test_ineqs = TRUE
+    r = 4
+    p = nrow(ind_eq) + nrow(ind_ineq1) + nrow(ind_ineq2)
+    p_eq = nrow(ind_eq)
+  }
 
+  # Get indices for subsets used in test statistic
+  indices = matrix(1:findn(n,block_length), ncol=block_length)
+  q = nrow(indices)
+  n_block = choose(block_length,r)
+  ind_large = matrix(0, nrow=(q*n_block), ncol=r)
+  for (i in 1:q){
+    ind_block = t(combn(indices[i,], r))
+    ind_large[((i-1)*n_block+1):((i-1)*n_block+n_block),] = ind_block 
+  }
+
+  # Compute estimate for each block (U-statistic for each block)
+  if (test_ineqs){
+    H_large = calculate_H(X, ind_large, ind_eq, ind_ineq1, ind_ineq2)
+  } else {
+    H_large = calculate_H_eq(X, ind_large, ind_eq)
+  }
+  m = matrix(0, nrow=q, ncol=nrow(ind_large))
+  for (i in 1:q){
+    m[i,((i-1)*n_block+1):((i-1)*n_block+n_block)] = 1
+  }
+  H = (1/n_block) * m %*% H_large
+  
+  # Mean and centering
+  H_mean = Rfast::colmeans(H)
+  H_centered = Rfast::transpose(Rfast::transpose(H) - H_mean) # Centering: H_i = (H_i - H_mean)
+  
+  # Diagonal of the sample covariance of H
+  cov_H_diag = Rfast::colsums(H_centered**2) / q
+  
+  # Vector for standardizing
+  standardizer = cov_H_diag**(-1/2)
+  
+  # Test statistic
+  marginal_stats = sqrt(q) * H_mean
+  marginal_stats[1:p_eq] = abs(marginal_stats[1:p_eq])
+  test_stat =  max(standardizer * marginal_stats)
+  
+  # Bootstrapping 
+  W = bootstrap(E, H_centered)
+  W[,1:p_eq] = abs(W[,1:p_eq])
+  W_standardized = Rfast::transpose(Rfast::transpose(W) * standardizer)
+  results = Rfast::rowMaxs(W_standardized, value = TRUE)
+  
+  # pval
+  pval = (1 + sum(results >= test_stat)) / (1+E)
+  
+  return(list("PVAL"=pval, "TSTAT"=test_stat))
+}
 
 
 #' Tests the goodness-of-fit of a Gaussian latent tree model by the maximum of a high-dimensional m-dependent sum
