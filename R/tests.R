@@ -64,11 +64,11 @@ test_grouping <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000){
   p_eq = dim(ind_eq)[1]  # nr of equality constraints
   
   # Mean and centering
-  H_mean = Rfast::colmeans(H)
-  H_centered = Rfast::transpose(Rfast::transpose(H) - H_mean) # Centering: H_i = (H_i - H_mean)
+  H_mean = colMeans(H)
+  H_centered = t(t(H) - H_mean) # Centering: H_i = (H_i - H_mean)
   
   # Diagonal of the sample covariance of H
-  cov_H_diag = Rfast::colsums(H_centered**2) / n
+  cov_H_diag = colSums(H_centered**2) / n
   
   # Vector for standardizing
   standardizer = cov_H_diag**(-1/2)
@@ -82,8 +82,8 @@ test_grouping <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000){
   # Bootstrapping 
   W = bootstrap(E, H_centered)
   W[,1:p_eq] = abs(W[,1:p_eq])
-  W_standardized = Rfast::transpose(Rfast::transpose(W) * standardizer)
-  results = Rfast::rowMaxs(W_standardized, value = TRUE)
+  W_standardized = t(t(W) * standardizer)
+  results = matrixStats::rowMaxs(W_standardized)
   
   # pval
   pval = (1 + sum(results >= test_stat)) / (1+E)
@@ -135,11 +135,11 @@ test_blockwise <- function(X, block_length=5, ind_eq, ind_ineq1=NULL, ind_ineq2=
   H = (1/n_block) * m %*% H_large
   
   # Mean and centering
-  H_mean = Rfast::colmeans(H)
-  H_centered = Rfast::transpose(Rfast::transpose(H) - H_mean) # Centering: H_i = (H_i - H_mean)
+  H_mean = colMeans(H)
+  H_centered = t(t(H) - H_mean) # Centering: H_i = (H_i - H_mean)
   
   # Diagonal of the sample covariance of H
-  cov_H_diag = Rfast::colsums(H_centered**2) / q
+  cov_H_diag = colSums(H_centered**2) / q
   
   # Vector for standardizing
   standardizer = cov_H_diag**(-1/2)
@@ -152,8 +152,8 @@ test_blockwise <- function(X, block_length=5, ind_eq, ind_ineq1=NULL, ind_ineq2=
   # Bootstrapping 
   W = bootstrap(E, H_centered)
   W[,1:p_eq] = abs(W[,1:p_eq])
-  W_standardized = Rfast::transpose(Rfast::transpose(W) * standardizer)
-  results = Rfast::rowMaxs(W_standardized, value = TRUE)
+  W_standardized = t(t(W) * standardizer)
+  results = matrixStats::rowMaxs(W_standardized)
   
   # pval
   pval = (1 + sum(results >= test_stat)) / (1+E)
@@ -231,14 +231,14 @@ test_run_over <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, B=5, E=1000
   omega = floor(n/B)
   
   # Mean and centering
-  H_mean = Rfast::colmeans(H)
-  H_centered = Rfast::transpose(Rfast::transpose(H) - H_mean) # Centering: H_i = (H_i - H_mean)
+  H_mean = colMeans(H)
+  H_centered = t(t(H) - H_mean) # Centering: H_i = (H_i - H_mean)
   
   # Diagonal of the batched mean estimator of the covariance of H
   cov_H_diag = rep(0, p)
   for (b in 1:omega){
     L = seq(1+(b-1)*B, b*B)
-    cov_H_diag = cov_H_diag + Rfast::colsums(H_centered[L,])**2
+    cov_H_diag = cov_H_diag + colSums(H_centered[L,])**2
   }
   cov_H_diag = cov_H_diag / (B*omega)
   
@@ -253,8 +253,8 @@ test_run_over <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, B=5, E=1000
   # Bootstrapping 
   W = bootstrap_m_dep(E, B, omega, H_centered)
   W[,1:p_eq] = abs(W[,1:p_eq])
-  W_standardized = Rfast::transpose(Rfast::transpose(W) * standardizer)
-  results = Rfast::rowMaxs(W_standardized, value = TRUE)
+  W_standardized = t(t(W) * standardizer)
+  results = matrixStats::rowMaxs(W_standardized)
   
   # pval
   pval = (1 + sum(results >= test_stat)) / (1+E)
@@ -343,8 +343,8 @@ test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=100
     H = calculate_H_eq(X, indices, ind_eq)
   }
   
-  H_mean = Rfast::colmeans(H)
-  H_centered = Rfast::transpose(Rfast::transpose(H) - H_mean)
+  H_mean = colMeans(H)
+  H_centered = t(t(H) - H_mean)
   p = dim(H)[2]  # total nr of constraints
   p_eq = dim(ind_eq)[1]  # equality constraints
   
@@ -354,12 +354,12 @@ test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=100
   } else {
     G = calculate_G_eq(X, L=(r-1), ind_eq)
   }
-  G_mean = Rfast::colmeans(G)
-  G_centered = Rfast::transpose(Rfast::transpose(G) - G_mean)
+  G_mean = colMeans(G)
+  G_centered = t(t(G) - G_mean)
   
   # Diagonal of the approximate variance of H
-  cov_H_diag = Rfast::colsums(H_centered**2) / N_hat
-  cov_G_diag = Rfast::colsums(G_centered**2) / n
+  cov_H_diag = colSums(H_centered**2) / N_hat
+  cov_G_diag = colSums(G_centered**2) / n
   #cov_diag = cov_H_diag
   cov_diag = r**2 * cov_G_diag + (n/N) * cov_H_diag
   
@@ -377,8 +377,8 @@ test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=100
   U_B = bootstrap_res[[2]]
   U = U_A + sqrt(n/N) * U_B
   U[,1:p_eq] = abs(U[,1:p_eq])
-  U_standardized = Rfast::transpose(Rfast::transpose(U) * standardizer)
-  results = Rfast::rowMaxs(U_standardized, value = TRUE)
+  U_standardized = t(t(U) * standardizer)
+  results = matrixStats::rowMaxs(U_standardized)
   
   # pval
   pval = (1 + sum(results >= test_stat)) / (1+E)
@@ -416,11 +416,11 @@ test_grouping_BSS  <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000
   p_eq = dim(ind_eq)[1]  # nr of equality constraints
 
   # Mean and centering
-  H_mean = Rfast::colmeans(H)
-  H_centered = Rfast::transpose(Rfast::transpose(H) - H_mean) # Centering: H_i = (H_i - H_mean)
+  H_mean = colMeans(H)
+  H_centered = t(t(H) - H_mean) # Centering: H_i = (H_i - H_mean)
 
   # Diagonal of the sample covariance of H
-  cov_H_diag = Rfast::colsums(H_centered**2) / n
+  cov_H_diag = colSums(H_centered**2) / n
 
   # Vector for standardizing
   standardizer = cov_H_diag**(-1/2)
@@ -437,8 +437,8 @@ test_grouping_BSS  <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000
     W = bootstrap(E, H_centered[,(p_eq+1):p])
   
     # Calculate c_beta
-    W_standardized = Rfast::transpose(Rfast::transpose(W) * standardizer[(p_eq+1):p])
-    bootstrap_res = Rfast::rowMaxs(W_standardized, value = TRUE)
+    W_standardized = t(t(W) * standardizer[(p_eq+1):p])
+    bootstrap_res = matrixStats::rowMaxs(W_standardized)
     c_beta = as.numeric(quantile(bootstrap_res, probs=1-betas[i]))
 
 
@@ -449,9 +449,9 @@ test_grouping_BSS  <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000
     # Bootstrapping - second step
     W = bootstrap(E, H_centered)
     W[,1:p_eq] = abs(W[,1:p_eq])
-    W[,(p_eq+1):p] = Rfast::transpose(Rfast::transpose(W[,(p_eq+1):p]) + lambda * sqrt(n))
-    W_standardized = Rfast::transpose(Rfast::transpose(W) * standardizer)
-    maxima = Rfast::rowMaxs(W_standardized, value = TRUE)
+    W[,(p_eq+1):p] = t(t(W[,(p_eq+1):p]) + lambda * sqrt(n))
+    W_standardized = t(t(W) * standardizer)
+    maxima = matrixStats::rowMaxs(W_standardized)
     critical_value = as.numeric(quantile(maxima, probs=1-alphas[i]+betas[i]))
 
     # Reject?
@@ -495,8 +495,8 @@ test_U_stat_BSS <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E
     H = calculate_H_eq(X, indices, ind_eq)
   }
 
-  H_mean = Rfast::colmeans(H)
-  H_centered = Rfast::transpose(Rfast::transpose(H) - H_mean)
+  H_mean = colMeans(H)
+  H_centered = t(t(H) - H_mean)
   p = dim(H)[2]  # total nr of constraints
   p_eq = dim(ind_eq)[1]  # equality constraints
 
@@ -506,12 +506,12 @@ test_U_stat_BSS <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E
   } else {
     G = calculate_G_eq(X, L=(r-1), ind_eq)
   }
-  G_mean = Rfast::colmeans(G)
-  G_centered = Rfast::transpose(Rfast::transpose(G) - G_mean)
+  G_mean = colMeans(G)
+  G_centered = t(t(G) - G_mean)
 
   # Diagonal of the approximate variance of H
-  cov_H_diag = Rfast::colsums(H_centered**2) / N_hat
-  cov_G_diag = Rfast::colsums(G_centered**2) / n
+  cov_H_diag = colSums(H_centered**2) / N_hat
+  cov_G_diag = colSums(G_centered**2) / n
   cov_diag = r**2 * cov_G_diag + (n/N) * cov_H_diag
 
   # Vector for standardizing
@@ -532,8 +532,8 @@ test_U_stat_BSS <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E
     U = U_A + sqrt(n/N) * U_B
   
     # Calculate c_beta
-    U_standardized = Rfast::transpose(Rfast::transpose(U[,(p_eq+1):p]) * standardizer[(p_eq+1):p])
-    bootstrap_res = Rfast::rowMaxs(U_standardized, value = TRUE)
+    U_standardized = t(t(U[,(p_eq+1):p]) * standardizer[(p_eq+1):p])
+    bootstrap_res = matrixStats::rowMaxs(U_standardized)
     c_beta = as.numeric(quantile(bootstrap_res, probs=1-betas[i]))
 
 
@@ -547,9 +547,9 @@ test_U_stat_BSS <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E
     U_B = bootstrap_res[[2]]
     U = U_A + sqrt(n/N) * U_B
     U[,1:p_eq] = abs(U[,1:p_eq])
-    U[,(p_eq+1):p] = Rfast::transpose(Rfast::transpose(U[,(p_eq+1):p]) + lambda * sqrt(n))
-    U_standardized = Rfast::transpose(Rfast::transpose(U) * standardizer)
-    maxima = Rfast::rowMaxs(U_standardized, value = TRUE)
+    U[,(p_eq+1):p] = t(t(U[,(p_eq+1):p]) + lambda * sqrt(n))
+    U_standardized = t(t(U) * standardizer)
+    maxima = matrixStats::rowMaxs(U_standardized)
     critical_value = as.numeric(quantile(maxima, probs=1-alphas[i]+betas[i]))
 
     # Reject?
@@ -583,11 +583,11 @@ test_complete_Ustat <- function(X, ind_eq, E=1000){
 
     # Compute matrix G
     G = calculate_G_eq(X, L=1, ind_eq)
-    G_mean = Rfast::colmeans(G)
-    G_centered = Rfast::transpose(Rfast::transpose(G) - G_mean)  # note: U == G_mean
+    G_mean = colMeans(G)
+    G_centered = t(t(G) - G_mean)  # note: U == G_mean
 
     # Diagonal of the approximate covariance matrix
-    cov_diag = r**2 * (1/n) * Rfast::colsums(G_centered**2)
+    cov_diag = r**2 * (1/n) * colSums(G_centered**2)
 
     # Vector for standardizing
     standardizer = cov_diag**(-1/2)
@@ -597,8 +597,8 @@ test_complete_Ustat <- function(X, ind_eq, E=1000){
 
     # Bootstrap
     W = abs(r * bootstrap(E, G_centered))
-    W_standardized = Rfast::transpose(Rfast::transpose(W) * standardizer)
-    results = Rfast::rowMaxs(W_standardized, value = TRUE)
+    W_standardized = t(t(W) * standardizer)
+    results = matrixStats::rowMaxs(W_standardized)
     
     # pval
     pval = (1 + sum(results >= test_stat)) / (1+E)
@@ -645,13 +645,13 @@ test_U_stat_GammaH <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=600,
     H = calculate_H_eq(X, indices, ind_eq)
   }
   
-  H_mean = Rfast::colmeans(H)
-  H_centered = Rfast::transpose(Rfast::transpose(H) - H_mean)
+  H_mean = colMeans(H)
+  H_centered = t(t(H) - H_mean)
   p = dim(H)[2]  # total nr of constraints
   p_eq = dim(ind_eq)[1]  # equality constraints
   
   # Diagonal of the approximate variance of H
-  cov_H_diag = Rfast::colsums(H_centered**2) / N_hat
+  cov_H_diag = colSums(H_centered**2) / N_hat
   cov_diag = cov_H_diag
 
   
@@ -666,8 +666,8 @@ test_U_stat_GammaH <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=600,
   # Bootstrap
   U_B = bootstrap(E, H_centered)
   U_B[,1:p_eq] = abs(U_B[,1:p_eq])
-  U_B_standardized = Rfast::transpose(Rfast::transpose(U_B) * standardizer)
-  results = Rfast::rowMaxs(U_B_standardized, value = TRUE)
+  U_B_standardized = t(t(U_B) * standardizer)
+  results = matrixStats::rowMaxs(U_B_standardized)
   
   # pval
   pval = (1 + sum(results >= test_stat)) / (1+E)
@@ -703,11 +703,11 @@ test_U_stat_GammaH <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=600,
 #   p_eq = dim(ind_eq)[1]  # nr of equality constraints
 # 
 #   # Mean and centering
-#   H_mean = Rfast::colmeans(H)
-#   H_centered = Rfast::transpose(Rfast::transpose(H) - H_mean) # Centering: H_i = (H_i - H_mean)
+#   H_mean = colMeans(H)
+#   H_centered = t(t(H) - H_mean) # Centering: H_i = (H_i - H_mean)
 # 
 #   # Diagonal of the sample covariance of H
-#   cov_H_diag = Rfast::colsums(H_centered**2) / n
+#   cov_H_diag = colSums(H_centered**2) / n
 # 
 #   # Vector for standardizing
 #   standardizer = cov_H_diag**(-1/2)
@@ -719,8 +719,8 @@ test_U_stat_GammaH <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=600,
 # 
 #   # Bootstrapping - first step (only inequalities)
 #   W = bootstrap(E, H_centered[,(p_eq+1):p])
-#   W_standardized = Rfast::transpose(Rfast::transpose(W) * standardizer[(p_eq+1):p])
-#   bootstrap_res = Rfast::rowMaxs(W_standardized, value = TRUE)
+#   W_standardized = t(t(W) * standardizer[(p_eq+1):p])
+#   bootstrap_res = matrixStats::rowMaxs(W_standardized)
 #   c_beta= as.numeric(quantile(bootstrap_res, probs=1-beta))
 # 
 #   # Calculate nuisance parameter lambda (zero for all equalities)
@@ -730,9 +730,9 @@ test_U_stat_GammaH <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=600,
 #   # Bootstrapping - second step
 #   W = bootstrap(E, H_centered)
 #   W[,1:p_eq] = abs(W[,1:p_eq])
-#   W[,(p_eq+1):p] = Rfast::transpose(Rfast::transpose(W[,(p_eq+1):p]) + lambda * sqrt(n))
-#   W_standardized = Rfast::transpose(Rfast::transpose(W) * standardizer)
-#   maxima = Rfast::rowMaxs(W_standardized, value = TRUE)
+#   W[,(p_eq+1):p] = t(t(W[,(p_eq+1):p]) + lambda * sqrt(n))
+#   W_standardized = t(t(W) * standardizer)
+#   maxima = matrixStats::rowMaxs(W_standardized)
 #   critical_value = as.numeric(quantile(maxima, probs=1-alpha+beta))
 # 
 #   # Reject?
@@ -776,8 +776,8 @@ test_U_stat_GammaH <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=600,
 #     H = calculate_H_eq(X, indices, ind_eq)
 #   }
 # 
-#   H_mean = Rfast::colmeans(H)
-#   H_centered = Rfast::transpose(Rfast::transpose(H) - H_mean)
+#   H_mean = colMeans(H)
+#   H_centered = t(t(H) - H_mean)
 #   p = dim(H)[2]  # total nr of constraints
 #   p_eq = dim(ind_eq)[1]  # equality constraints
 # 
@@ -787,12 +787,12 @@ test_U_stat_GammaH <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=600,
 #   } else {
 #     G = calculate_G_eq(X, L=(r-1), ind_eq)
 #   }
-#   G_mean = Rfast::colmeans(G)
-#   G_centered = Rfast::transpose(Rfast::transpose(G) - G_mean)
+#   G_mean = colMeans(G)
+#   G_centered = t(t(G) - G_mean)
 # 
 #   # Diagonal of the approximate variance of H
-#   cov_H_diag = Rfast::colsums(H_centered**2) / N_hat
-#   cov_G_diag = Rfast::colsums(G_centered**2) / n
+#   cov_H_diag = colSums(H_centered**2) / N_hat
+#   cov_G_diag = colSums(G_centered**2) / n
 #   cov_diag = r**2 * cov_G_diag + (n/N) * cov_H_diag
 # 
 #   # Vector for standardizing
@@ -811,8 +811,8 @@ test_U_stat_GammaH <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=600,
 # 
 # 
 #   # Calculate c_beta
-#   U_standardized = Rfast::transpose(Rfast::transpose(U[,(p_eq+1):p]) * standardizer[(p_eq+1):p])
-#   bootstrap_res = Rfast::rowMaxs(U_standardized, value = TRUE)
+#   U_standardized = t(t(U[,(p_eq+1):p]) * standardizer[(p_eq+1):p])
+#   bootstrap_res = matrixStats::rowMaxs(U_standardized)
 #   c_beta = as.numeric(quantile(bootstrap_res, probs=1-beta))
 # 
 # 
@@ -826,9 +826,9 @@ test_U_stat_GammaH <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=600,
 #   U_B = bootstrap_res[[2]]
 #   U = U_A + sqrt(n/N) * U_B
 #   U[,1:p_eq] = abs(U[,1:p_eq])
-#   U[,(p_eq+1):p] = Rfast::transpose(Rfast::transpose(U[,(p_eq+1):p]) + lambda * sqrt(n))
-#   U_standardized = Rfast::transpose(Rfast::transpose(U) * standardizer)
-#   maxima = Rfast::rowMaxs(U_standardized, value = TRUE)
+#   U[,(p_eq+1):p] = t(t(U[,(p_eq+1):p]) + lambda * sqrt(n))
+#   U_standardized = t(t(U) * standardizer)
+#   maxima = matrixStats::rowMaxs(U_standardized)
 #   critical_value = as.numeric(quantile(maxima, probs=1-alpha+beta))
 # 
 #   # Reject?
@@ -857,8 +857,8 @@ test_U_stat_GammaH <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=600,
 #   H = calculate_H_not_symmetric_eq(X, indices, ind_eq)
 #   
 #   # Mean and centering
-#   H_mean = Rfast::colmeans(H)
-#   H_centered = Rfast::transpose(Rfast::transpose(H) - H_mean) # Centering: H_i = (H_i - H_mean)
+#   H_mean = colMeans(H)
+#   H_centered = t(t(H) - H_mean) # Centering: H_i = (H_i - H_mean)
 #   
 #   # Nr of samples
 #   n = dim(X)[1]
@@ -876,10 +876,10 @@ test_U_stat_GammaH <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=600,
 #   test_stat = sqrt(n/2) * max(abs(standardizer * H_mean))
 #   
 #   # Sample E sets from Z~N(0,cov)
-#   Z = Rfast::rmvnorm(E, mu=rep(0,nrow(cov)), sigma=cov)
+#   Z = MASS::mvrnorm(E, mu=rep(0,nrow(cov)), Sigma=cov)
 #   
 #   # Critical value
-#   results = apply(abs(standardizer * Rfast::transpose(Z)), 2, max)
+#   results = apply(abs(standardizer * t(Z)), 2, max)
 #   
 #   # pval
 #   pval = (1 + sum(results >= test_stat)) / (1+E)
@@ -904,8 +904,8 @@ test_U_stat_GammaH <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=600,
 #   H = calculate_H_not_symmetric_eq(X, indices, ind_eq)
 #   
 #   # Mean and centering
-#   H_mean = Rfast::colmeans(H)
-#   H_centered = Rfast::transpose(Rfast::transpose(H) - H_mean) # Centering: H_i = (H_i - H_mean)
+#   H_mean = colMeans(H)
+#   H_centered = t(t(H) - H_mean) # Centering: H_i = (H_i - H_mean)
 #   
 #   # Nr of samples
 #   n = dim(X)[1]
@@ -923,10 +923,10 @@ test_U_stat_GammaH <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=600,
 #   test_stat = sqrt(n-1) * max(abs(standardizer * H_mean))
 #   
 #   # Sample E sets from Z~N(0,cov)
-#   Z = Rfast::rmvnorm(E, mu=rep(0,nrow(cov)), sigma=cov)
+#   Z = MASS::mvrnorm(E, mu=rep(0,nrow(cov)), Sigma=cov)
 #   
 #   # Critical value
-#   results = apply(abs(standardizer * Rfast::transpose(Z)), 2, max)
+#   results = apply(abs(standardizer * t(Z)), 2, max)
 #   
 #   # pval
 #   pval = (1 + sum(results >= test_stat)) / (1+E)

@@ -26,7 +26,7 @@ sample_from_tree <- function(tree, m, n){
   
   paths = get_paths(tree)
   cov = cov_from_graph(tree, m, paths)
-  X = Rfast::rmvnorm(n, mu=rep(0,nrow(cov)), sigma=cov) 
+  X = MASS::mvrnorm(n, mu=rep(0,nrow(cov)), Sigma=cov) 
   return(X)
 }
 
