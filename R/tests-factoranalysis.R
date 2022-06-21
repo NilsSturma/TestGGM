@@ -84,11 +84,11 @@ test_indep_factors <- function(X, nr_minors, E=1000){
   
   
   # Mean and centering
-  H_mean = Rfast::colmeans(H)
-  H_centered = Rfast::transpose(Rfast::transpose(H) - H_mean) # Centering: H_i = (H_i - H_mean)
+  H_mean = colMeans(H)
+  H_centered = t(t(H) - H_mean) # Centering: H_i = (H_i - H_mean)
   
   # Diagonal of the sample covariance of H
-  cov_H_diag = Rfast::colsums(H_centered**2) / n
+  cov_H_diag = colSums(H_centered**2) / n
   
   # Vector for standardizing
   standardizer = cov_H_diag**(-1/2)
@@ -100,8 +100,8 @@ test_indep_factors <- function(X, nr_minors, E=1000){
   
   # Bootstrapping 
   W = abs(bootstrap(E, H_centered))
-  W_standardized = Rfast::transpose(Rfast::transpose(W) * standardizer)
-  results = Rfast::rowMaxs(W_standardized, value = TRUE)
+  W_standardized = t(t(W) * standardizer)
+  results = matrixStats::rowMaxs(W_standardized)
   
   # pval
   pval = (1 + sum(results >= test_stat)) / (1+E)
@@ -165,17 +165,17 @@ test_U_stat_factors <- function(X, nr_minors, N=5000, E=1000){
   p = dim(H)[2]  # total nr of equality constraints
 
   # Mean and centering
-  H_mean = Rfast::colmeans(H)
-  H_centered = Rfast::transpose(Rfast::transpose(H) - H_mean)
+  H_mean = colMeans(H)
+  H_centered = t(t(H) - H_mean)
   
   # Compute matrix G
   G = G_factors(X,L=(r-1), ind_minors)
-  G_mean = Rfast::colmeans(G)
-  G_centered = Rfast::transpose(Rfast::transpose(G) - G_mean)
+  G_mean = colMeans(G)
+  G_centered = t(t(G) - G_mean)
   
   # Diagonal of the approximate variance of H
-  cov_H_diag = Rfast::colsums(H_centered**2) / N_hat
-  cov_G_diag = Rfast::colsums(G_centered**2) / n
+  cov_H_diag = colSums(H_centered**2) / N_hat
+  cov_G_diag = colSums(G_centered**2) / n
   cov_diag = r**2 * cov_G_diag + (n/N) * cov_H_diag
   
   # Vector for standardizing
@@ -190,8 +190,8 @@ test_U_stat_factors <- function(X, nr_minors, N=5000, E=1000){
   U_A = bootstrap_res[[1]]
   U_B = bootstrap_res[[2]]
   U = abs(U_A + sqrt(n/N) * U_B)
-  U_standardized = Rfast::transpose(Rfast::transpose(U) * standardizer)
-  results = Rfast::rowMaxs(U_standardized, value = TRUE)
+  U_standardized = t(t(U) * standardizer)
+  results = matrixStats::rowMaxs(U_standardized)
   
   # pval
   pval = (1 + sum(results >= test_stat)) / (1+E)
