@@ -2,7 +2,7 @@
 % Please edit documentation in R/tests.R
 \name{test_U_stat}
 \alias{test_U_stat}
-\title{Tests the goodness-of-fit of a Gaussian latent tree model by the maximum of a high-dimensional U-statistic}
+\title{Tests the goodness-of-fit of a Gaussian latent tree model by the maximum of a high-dimensional incomplete U-statistic}
 \usage{
 test_U_stat(X, ind_eq, ind_ineq1 = NULL, ind_ineq2 = NULL, N = 5000, E = 1000)
 }
@@ -29,10 +29,8 @@ Named list with two entries: Test statistic (\code{TSTAT}) and p-value (\code{PV
 \description{
 This function tests the goodness-of-fit of a given Gaussian latent tree model to observed data.
 The parameter space of the model is characterized by polynomial constraints. The involved polynomials are 
-estimated by considering subsets of the data. The number of subsets as well as the subsets itself 
-are chosen randomly. Each subset is used to form an unbiased estimate of the polynomials. 
-The test statistic is the maximum of the U-statistic formed by 
-the studentized estimates. A Gaussian multiplier bootstrap is used to estimate the limiting distribution 
+estimable by a kernel function and the test statistic is the maximum of the corresponding incomplete U-statistic.
+ A Gaussian multiplier bootstrap is used to estimate the limiting distribution 
 of the  test statistic and to compute the p-value of the test.
 }
 \examples{

@@ -2,17 +2,18 @@ Package: TestGGM
 Type: Package
 Title: Testing Gaussian Graphical Models
 Version: 1.0
-Date: 2021-06-21
+Date: 2022-06-21
 Author: Nils Sturma
 Maintainer: Nils Sturma <nils.sturma@tum.de>
-Description: Tests the goodness-of-fit of Gaussian latent tree models and the two-factor analysis model. Three algebraic testing methodologies are implemented as well as the likelihood ratio test using the EM-algorithm. Supports all Gaussian latent tree models where the observed variables correspond to the leaves of the tree as well as the factor analysis model.
+Description: Testing the goodness-of-fit of Gaussian graphical models. Multiple algebraic testing methodologies are implemented as well as the likelihood ratio test using the EM-algorithm. Supports testing all Gaussian latent tree models where the observed variables correspond to the leaves of the tree and the two-factor analysis model.
 License: GPL (>= 2)
 Imports: 
     Rcpp (>= 1.0.5),
     igraph,
     matrixStats,
     MASS,
-    stats
+    stats,
+    utils
 LinkingTo: Rcpp
 RoxygenNote: 7.1.1
 Encoding: UTF-8

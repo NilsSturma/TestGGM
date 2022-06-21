@@ -1,8 +1,8 @@
 #' Determine the set Q
 #' 
-#' For all subsets of size 4 of the observed nodes of a tree, the function determines if a subset is an elemnt of Q or not.
+#' For all subsets of size 4 of the observed nodes of a tree, the function determines if a subset is an element of Q or not.
 #' 
-#' @param g An igraph object that is a tree. It is assumed that the first m nodes correspond to oberseved nodes.
+#' @param g An igraph object that is a tree. It is assumed that the first m nodes correspond to observed nodes.
 #' @param m Integer, number of observed nodes.
 #' @param nr Integer, number of subsets that are considered. Note that this is optional. If \code{NULL}, all subsets are considered.
 #' @return A list with two entries is returned. Both entries are matrices with 4 columns. 
@@ -15,10 +15,11 @@
 #' tree <- igraph::graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
 #' plot(tree)
 #' findQ(tree, 5)
+#' @export
 findQ = function(g, m, nr=NULL){
   
   if (is.null(nr)){
-    sub_sets = t(combn(m,4))
+    sub_sets = t(utils::combn(m,4))
   } else {
     sub_sets = matrix(unlist(random_combs(m,4,nr)[[1]]), ncol = 4, byrow = TRUE)
   }
@@ -65,24 +66,25 @@ findQ = function(g, m, nr=NULL){
 #' The polynomials are represented as a list of indices. Example:
 #' If one polynomial is \eqn{\sigma_{pq} \sigma_{rs} - \sigma_{pr} \sigma_{qs}} then the indices will be \code{p,q,r,s,p,r,q,s}. 
 #' 
-#' @param g An igraph object that is a tree. It is assumed that the first m nodes correspond to oberseved nodes.
+#' @param g An igraph object that is a tree. It is assumed that the first m nodes correspond to observed nodes.
 #' @param m Integer, number of observed nodes.
 #' @param nr_4 Number of considered subsets of size 4. This is optional. 
 #' If \code{NULL}, all subsets are considered. 
-#' If a number is given, subsets are choosen randomly by the function \code{\link{random_combs}}.
+#' If a number is given, subsets are chosen randomly.
 #' @param nr_3 Number of considered subsets of size 3. This is optional. 
 #' If \code{NULL}, all subsets are considered. 
-#' If a number is given, subsets are choosen randomly by the function \code{\link{random_combs}}.
+#' If a number is given, subsets are chosen randomly.
 #' @return A list with three entries is returned. All entries are matrices. 
-#' The first matrx contains the equality constraints and has 8 columns. 
-#' The second matrx contains all inequality constraints where only 6 indices are necessary (i.e. it has 6 columns). 
-#' The third matrx contains the inequality constraints where 8 indices are necessary (i.e. it has 8 columns).
+#' The first matrix contains the equality constraints and has 8 columns. 
+#' The second matrix contains all inequality constraints where only 6 indices are necessary (i.e. it has 6 columns). 
+#' The third matrix contains the inequality constraints where 8 indices are necessary (i.e. it has 8 columns).
 #' @examples
 #' vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
 #' edges <- data.frame(from=c(1,2,3,4,5,6,7), to=c(8,8,6,6,7,7,8))
 #' tree <- igraph::graph_from_data_frame(edges, directed=FALSE, vertices=vertices)
 #' plot(tree)
 #' collect_indices(tree, 5)
+#' @export
 collect_indices <- function(g, m, nr_4=NULL, nr_3=NULL){
   
   res_findQ = findQ(g, m, nr_4)
@@ -90,7 +92,7 @@ collect_indices <- function(g, m, nr_4=NULL, nr_3=NULL){
   not_Q = res_findQ[[2]]
   
   if (is.null(nr_3)){
-    sub_sets3 = t(combn(m,3))
+    sub_sets3 = t(utils::combn(m,3))
   } else {
     sub_sets3 = matrix(unlist(random_combs(m,3,nr_3)[[1]]), ncol = 3, byrow = TRUE)
   }
@@ -146,6 +148,7 @@ collect_indices <- function(g, m, nr_4=NULL, nr_3=NULL){
 #' 
 #' # Access path from node 1 to node 2
 #' res[[1]][[2]]
+#' @export
 get_paths = function(g){
   nr_nodes = length(igraph::V(g))
   paths = list()
@@ -192,6 +195,7 @@ get_paths = function(g){
 #' 
 #' # Call function
 #' cov_from_graph(tree, 5, paths)
+#' @export
 cov_from_graph = function(g, m, paths){
   
   std = sqrt(igraph::V(g)$var[igraph::V(g)$type==1])

@@ -98,7 +98,7 @@ mle = function(X){
 
 # sample uniformly from union of intervals [-b,-a] u [a,b]
 sample_edge_corrs <- function(n,a,b){
-  y <- runif(n, 0, (2*(b-a)))
+  y <- stats::runif(n, 0, (2*(b-a)))
   res = rep(0,n)
   for (i in 1:n){
     if (y[i] < (b-a)){
@@ -152,6 +152,7 @@ sample_edge_corrs <- function(n,a,b){
 #' 
 #' # Call the test
 #' LR_test(X, tree, paths)
+#' @export
 LR_test = function(X, g, paths, sampling=FALSE, nr_starts=100, a=0.5, b=0.9, c=0.5, d=1.5){
   
   m = dim(X)[2]
@@ -163,7 +164,7 @@ LR_test = function(X, g, paths, sampling=FALSE, nr_starts=100, a=0.5, b=0.9, c=0
   # starting values and call expectation maximation
   if (sampling){
     for (nr in 1:nr_starts){
-      Omega_0 = runif(m,c,d)
+      Omega_0 = stats::runif(m,c,d)
       Rho_0 = sample_edge_corrs(dim(edges)[1],a,b)
       r = EM(X, edges, paths, Omega_0, Rho_0)
       if (nr==1){

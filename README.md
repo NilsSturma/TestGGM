@@ -3,7 +3,7 @@ R package for testing the goodness-of-fit of Gaussian graphical models. Supports
 - Gaussian latent tree models
 - Two-factor analysis model
 
-Install via `devtools::install_github("NilsSturma/TestGGM")`. The package implements the tests described in TO BE WRITTEN.
+Install via `devtools::install_github("NilsSturma/TestGGM")`. The package implements the test using incomplete U-statistics described in TO BE WRITTEN. Moreover, it supports similar testing strategies by applying different schemes of forming averages over the kernel estimators.
 
 Most important files:
 - `R/tests.R`: algebraic tests for (arbitrary) Gaussian latent tree models 

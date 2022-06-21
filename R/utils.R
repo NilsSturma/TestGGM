@@ -1,4 +1,4 @@
-# Create an igraph object that is the quinted tree
+# Create an igraph object that is the quintet tree
 quinted_tree <- function(){
   colors <- c("tomato", "gray50")
   vertices <- data.frame(name=seq(1,8),
@@ -11,7 +11,7 @@ quinted_tree <- function(){
 
 
 
-# Create an igraph object that is a binar rooted tree with 12 observed nodes (i.e 10 hidden nodes, 21 edges)
+# Create an igraph object that is a binary rooted tree with 12 observed nodes (i.e 10 hidden nodes, 21 edges)
 binary_rooted <- function(){
   colors <- c("tomato", "gray50")
   name = seq(1,22)

@@ -7,7 +7,7 @@
 findQ(g, m, nr = NULL)
 }
 \arguments{
-\item{g}{An igraph object that is a tree. It is assumed that the first m nodes correspond to oberseved nodes.}
+\item{g}{An igraph object that is a tree. It is assumed that the first m nodes correspond to observed nodes.}
 
 \item{m}{Integer, number of observed nodes.}
 
@@ -20,7 +20,7 @@ Each row represents one subset. For the matrix Q the order of the elements in a 
 A row with entries p,q,r,s means that the element {p,q}|{r,s} is in Q.
 }
 \description{
-For all subsets of size 4 of the observed nodes of a tree, the function determines if a subset is an elemnt of Q or not.
+For all subsets of size 4 of the observed nodes of a tree, the function determines if a subset is an element of Q or not.
 }
 \examples{
 vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent

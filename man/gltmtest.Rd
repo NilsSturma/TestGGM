@@ -21,7 +21,7 @@ gltmtest(
 \item{X}{Matrix with observed data. Number of columns has to be equal to the number of 
 leaves of the tree (i.e. number of observed variables). Each row corresponds to one sample.}
 
-\item{tree}{An igraph object that is a tree. It is assumed that the first \code{m} nodes correspond to oberseved nodes.}
+\item{tree}{An igraph object that is a tree. It is assumed that the first \code{m} nodes correspond to observed nodes.}
 
 \item{m}{Integer, number of observed nodes.}
 
@@ -40,11 +40,11 @@ Default \code{FALSE}. This has no effect if \code{test_strategy="LR"}.}
 
 \item{nr_4}{Number of considered subsets of size 4. This is optional. 
 Useful for very high-dimensional models. Default \code{NULL} hence all subsets are considered. 
-If a number is given, subsets are choosen randomly and only the corresponding constraints are considered.}
+If a number is given, subsets are chosen randomly and only the corresponding constraints are considered.}
 
 \item{nr_3}{Number of considered subsets of size 3. This is optional. 
 Useful for very high-dimensional models. Default \code{NULL} hence all subsets are considered. 
-If a number is given, subsets are choosen randomly and only the corresponding constraints are considered.}
+If a number is given, subsets are chosen randomly and only the corresponding constraints are considered.}
 }
 \value{
 Named list with two entries: Test statistic (\code{TSTAT}) and p-value (\code{PVAL}).
@@ -52,7 +52,7 @@ Named list with two entries: Test statistic (\code{TSTAT}) and p-value (\code{PV
 \description{
 This function tests the goodness-of-fit of a given Gaussian latent tree model to observed data.
 It supports all Gaussian latent tree models where observed variables are restricted to 
-be the leaves of the tree. Four different test strategies are implmented. 
+be the leaves of the tree. Four different test strategies are implemented. 
 One is the likelihood ratio test, the other three are algebraic tests. 
 In the latter case the test statistic is formed as the maximum of unbiased estimates of the 
 polynomials characterizing the parameter space of the model. 

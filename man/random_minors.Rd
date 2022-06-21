@@ -22,5 +22,5 @@ the last \code{factors+1} columns correspond to the column-indices of the minor.
 Randomly samples indices of minors without replacement.
 }
 \examples{
-random_minors(20,2,10000)
+random_minors(10,2,100)
 }

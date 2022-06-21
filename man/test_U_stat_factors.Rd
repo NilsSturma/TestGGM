@@ -29,7 +29,7 @@ the test statistic and to compute the p-value of the test.
 }
 \examples{
 # Covariance matrix corresponding to the two-factor analysis model
-m=20
+m=10
 Gamma = matrix(stats::rnorm(2*m),m,2)
 Psi = diag(rep(1,m))
 cov = Psi + Gamma \%*\% t(Gamma)
@@ -38,9 +38,5 @@ cov = Psi + Gamma \%*\% t(Gamma)
 X = MASS::mvrnorm(500, mu=rep(0,nrow(cov)), Sigma=cov)
 
 # Apply the test
-test_U_stat_factors(X, 10000)
-
-}
-\references{
-TO BE WRITTEN
+test_U_stat_factors(X, 100)
 }

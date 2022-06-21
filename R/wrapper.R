@@ -19,10 +19,8 @@
 #' igraph::V(tree)$var = rep(1,8)
 #' igraph::E(tree)$corr = rep(0.7,7)
 #' sample_from_tree(tree, m=5, n=500)
+#' @export
 sample_from_tree <- function(tree, m, n){
-  
-  # TODO: Add checks for correct inputs
-  # TODO: Add error handling
   
   paths = get_paths(tree)
   cov = cov_from_graph(tree, m, paths)
@@ -38,7 +36,7 @@ sample_from_tree <- function(tree, m, n){
 #' 
 #' This function tests the goodness-of-fit of a given Gaussian latent tree model to observed data.
 #' It supports all Gaussian latent tree models where observed variables are restricted to 
-#' be the leaves of the tree. Four different test strategies are implmented. 
+#' be the leaves of the tree. Four different test strategies are implemented. 
 #' One is the likelihood ratio test, the other three are algebraic tests. 
 #' In the latter case the test statistic is formed as the maximum of unbiased estimates of the 
 #' polynomials characterizing the parameter space of the model. 
@@ -47,7 +45,7 @@ sample_from_tree <- function(tree, m, n){
 #' 
 #' @param X Matrix with observed data. Number of columns has to be equal to the number of 
 #' leaves of the tree (i.e. number of observed variables). Each row corresponds to one sample.
-#' @param tree An igraph object that is a tree. It is assumed that the first \code{m} nodes correspond to oberseved nodes.
+#' @param tree An igraph object that is a tree. It is assumed that the first \code{m} nodes correspond to observed nodes.
 #' @param m Integer, number of observed nodes.
 #' @param test_strategy String, determines the test that is applied. Has to be one 
 #' out of \code{c("LR", "grouping", "run-over", "U-stat")}. Default is \code{"gouping"}.
@@ -59,10 +57,10 @@ sample_from_tree <- function(tree, m, n){
 #' Default \code{FALSE}. This has no effect if \code{test_strategy="LR"}.
 #' @param nr_4 Number of considered subsets of size 4. This is optional. 
 #' Useful for very high-dimensional models. Default \code{NULL} hence all subsets are considered. 
-#' If a number is given, subsets are choosen randomly and only the corresponding constraints are considered.
+#' If a number is given, subsets are chosen randomly and only the corresponding constraints are considered.
 #' @param nr_3 Number of considered subsets of size 3. This is optional. 
 #' Useful for very high-dimensional models. Default \code{NULL} hence all subsets are considered. 
-#' If a number is given, subsets are choosen randomly and only the corresponding constraints are considered.
+#' If a number is given, subsets are chosen randomly and only the corresponding constraints are considered.
 #' 
 #' @return Named list with two entries: Test statistic (\code{TSTAT}) and p-value (\code{PVAL}).
 #' 
@@ -79,6 +77,7 @@ sample_from_tree <- function(tree, m, n){
 #' 
 #' # Goodness of fit test
 #' gltmtest(X, tree, m=5, test_strategy="grouping")
+#' @export
 gltmtest <- function(X, tree, m, 
                     test_strategy="grouping", 
                     E=1000, 

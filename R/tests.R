@@ -39,9 +39,7 @@
 #' 
 #' # Apply the test
 #' test_grouping(X, ind_eq, ind_ineq1, ind_ineq2)
-#' 
-#' @references
-#' TO BE WRITTEN
+#' @export
 test_grouping <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000){
   
   if (is.null(ind_ineq1) | is.null(ind_ineq2)){
@@ -118,7 +116,7 @@ test_blockwise <- function(X, block_length=5, ind_eq, ind_ineq1=NULL, ind_ineq2=
   n_block = choose(block_length,r)
   ind_large = matrix(0, nrow=(q*n_block), ncol=r)
   for (i in 1:q){
-    ind_block = t(combn(indices[i,], r))
+    ind_block = t(utils::combn(indices[i,], r))
     ind_large[((i-1)*n_block+1):((i-1)*n_block+n_block),] = ind_block 
   }
 
@@ -205,9 +203,7 @@ test_blockwise <- function(X, block_length=5, ind_eq, ind_ineq1=NULL, ind_ineq2=
 #' 
 #' # Apply the test
 #' test_run_over(X, ind_eq, ind_ineq1, ind_ineq2)
-#' 
-#' @references
-#' TO BE WRITTEN
+#' @export
 test_run_over <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, B=5, E=1000){
   
   # Call function to calculate matrix H
@@ -265,14 +261,12 @@ test_run_over <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, B=5, E=1000
 
 
 
-#' Tests the goodness-of-fit of a Gaussian latent tree model by the maximum of a high-dimensional U-statistic
+#' Tests the goodness-of-fit of a Gaussian latent tree model by the maximum of a high-dimensional incomplete U-statistic
 #' 
 #' This function tests the goodness-of-fit of a given Gaussian latent tree model to observed data.
 #' The parameter space of the model is characterized by polynomial constraints. The involved polynomials are 
-#' estimated by considering subsets of the data. The number of subsets as well as the subsets itself 
-#' are chosen randomly. Each subset is used to form an unbiased estimate of the polynomials. 
-#' The test statistic is the maximum of the U-statistic formed by 
-#' the studentized estimates. A Gaussian multiplier bootstrap is used to estimate the limiting distribution 
+#' estimable by a kernel function and the test statistic is the maximum of the corresponding incomplete U-statistic.
+#'  A Gaussian multiplier bootstrap is used to estimate the limiting distribution 
 #' of the  test statistic and to compute the p-value of the test.
 #' 
 #' @param X Matrix with observed data. The number of columns has to be equal to the number of 
@@ -310,6 +304,7 @@ test_run_over <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, B=5, E=1000
 #' 
 #' @references
 #' TO BE WRITTEN
+#' @export
 test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=1000){
   
   
@@ -393,7 +388,6 @@ test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=100
 # helper function
 min_zero <- function(x){min(x,0)}
 
-
 test_grouping_BSS  <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000, alphas=0.05, betas=0.005){
 
   if (is.null(ind_ineq1) | is.null(ind_ineq2)){
@@ -439,7 +433,7 @@ test_grouping_BSS  <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000
     # Calculate c_beta
     W_standardized = t(t(W) * standardizer[(p_eq+1):p])
     bootstrap_res = matrixStats::rowMaxs(W_standardized)
-    c_beta = as.numeric(quantile(bootstrap_res, probs=1-betas[i]))
+    c_beta = as.numeric(stats::quantile(bootstrap_res, probs=1-betas[i]))
 
 
     # Calculate nuisance parameter lambda (zero for all equalities)
@@ -452,7 +446,7 @@ test_grouping_BSS  <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000
     W[,(p_eq+1):p] = t(t(W[,(p_eq+1):p]) + lambda * sqrt(n))
     W_standardized = t(t(W) * standardizer)
     maxima = matrixStats::rowMaxs(W_standardized)
-    critical_value = as.numeric(quantile(maxima, probs=1-alphas[i]+betas[i]))
+    critical_value = as.numeric(stats::quantile(maxima, probs=1-alphas[i]+betas[i]))
 
     # Reject?
     results[i] = (test_stat > critical_value)
@@ -534,7 +528,7 @@ test_U_stat_BSS <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E
     # Calculate c_beta
     U_standardized = t(t(U[,(p_eq+1):p]) * standardizer[(p_eq+1):p])
     bootstrap_res = matrixStats::rowMaxs(U_standardized)
-    c_beta = as.numeric(quantile(bootstrap_res, probs=1-betas[i]))
+    c_beta = as.numeric(stats::quantile(bootstrap_res, probs=1-betas[i]))
 
 
     # Calculate nuisance parameter lambda (zero for all equalities)
@@ -550,7 +544,7 @@ test_U_stat_BSS <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E
     U[,(p_eq+1):p] = t(t(U[,(p_eq+1):p]) + lambda * sqrt(n))
     U_standardized = t(t(U) * standardizer)
     maxima = matrixStats::rowMaxs(U_standardized)
-    critical_value = as.numeric(quantile(maxima, probs=1-alphas[i]+betas[i]))
+    critical_value = as.numeric(stats::quantile(maxima, probs=1-alphas[i]+betas[i]))
 
     # Reject?
     results[i] = (test_stat > critical_value)
@@ -605,336 +599,3 @@ test_complete_Ustat <- function(X, ind_eq, E=1000){
 
     return(list("PVAL"=pval, "TSTAT"=test_stat))
 }
-
-
-
-
-test_U_stat_GammaH <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=600, E=1000){
-  
-  
-  n = dim(X)[1]  # nr of samples
-  
-  
-  if (is.null(ind_ineq1) | is.null(ind_ineq2)){
-    if (!is.null(ind_ineq1) | !is.null(ind_ineq2)){
-      stop("ERROR - exactly one set of inequalities is missing. Cannot handle this.")
-    }
-    test_ineqs = FALSE
-    r = 2
-  } else {
-    test_ineqs = TRUE
-    r = 4
-  }
-  
-  
-  if (N > (choose(n,r)/2)){
-    stop("ERROR, N is larger than choose(n,r)/2")
-  } 
-  
-  
-  # determine N_hat by Bernoulli sampling
-  N_hat = stats::rbinom(1, choose(n,r), (N / choose(n,r)))
-  
-  # Choose randomly N_hat unique subsets with cardinality r of {1,...,n}
-  indices = matrix(unlist(random_combs(n,r,N_hat)[[1]]), ncol = r, byrow = TRUE)
-  
-  # Compute matrix H
-  if (test_ineqs){
-    H = calculate_H(X, indices, ind_eq, ind_ineq1, ind_ineq2)
-  } else {
-    H = calculate_H_eq(X, indices, ind_eq)
-  }
-  
-  H_mean = colMeans(H)
-  H_centered = t(t(H) - H_mean)
-  p = dim(H)[2]  # total nr of constraints
-  p_eq = dim(ind_eq)[1]  # equality constraints
-  
-  # Diagonal of the approximate variance of H
-  cov_H_diag = colSums(H_centered**2) / N_hat
-  cov_diag = cov_H_diag
-
-  
-  # Vector for standardizing
-  standardizer = cov_diag**(-1/2)
-  
-  # Test statistic
-  marginal_stats = sqrt(N) * H_mean
-  marginal_stats[1:p_eq] = abs(marginal_stats[1:p_eq])
-  test_stat =  max(standardizer * marginal_stats)
-  
-  # Bootstrap
-  U_B = bootstrap(E, H_centered)
-  U_B[,1:p_eq] = abs(U_B[,1:p_eq])
-  U_B_standardized = t(t(U_B) * standardizer)
-  results = matrixStats::rowMaxs(U_B_standardized)
-  
-  # pval
-  pval = (1 + sum(results >= test_stat)) / (1+E)
-  
-  return(list("PVAL"=pval, "TSTAT"=test_stat))
-}
-
-
-#############
-## archive ##
-#############
-
-
-# test_grouping_BSS  <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, E=1000, alpha=0.05, beta=0.005){
-# 
-#   if (is.null(ind_ineq1) | is.null(ind_ineq2)){
-#     if (!is.null(ind_ineq1) | !is.null(ind_ineq2)){
-#       stop("ERROR - exactly one set of inequalities is missing. Cannot handle this.")
-#     }
-#     test_ineqs = FALSE
-#     N = findn(nrow(X),2)
-#     indices = matrix(1:N, ncol=2)
-#     H = calculate_H_eq(X, indices, ind_eq)
-#   } else {
-#     test_ineqs = TRUE
-#     N = findn(nrow(X),4)
-#     indices = matrix(1:N, ncol=4)
-#     H = calculate_H(X, indices, ind_eq, ind_ineq1, ind_ineq2)
-#   }
-# 
-#   n = dim(H)[1]
-#   p = dim(H)[2]  # total nr of constraints
-#   p_eq = dim(ind_eq)[1]  # nr of equality constraints
-# 
-#   # Mean and centering
-#   H_mean = colMeans(H)
-#   H_centered = t(t(H) - H_mean) # Centering: H_i = (H_i - H_mean)
-# 
-#   # Diagonal of the sample covariance of H
-#   cov_H_diag = colSums(H_centered**2) / n
-# 
-#   # Vector for standardizing
-#   standardizer = cov_H_diag**(-1/2)
-# 
-#   # Test statistic
-#   marginal_stats = sqrt(n) * H_mean
-#   marginal_stats[1:p_eq] = abs(marginal_stats[1:p_eq])
-#   test_stat =  max(standardizer * marginal_stats)
-# 
-#   # Bootstrapping - first step (only inequalities)
-#   W = bootstrap(E, H_centered[,(p_eq+1):p])
-#   W_standardized = t(t(W) * standardizer[(p_eq+1):p])
-#   bootstrap_res = matrixStats::rowMaxs(W_standardized)
-#   c_beta= as.numeric(quantile(bootstrap_res, probs=1-beta))
-# 
-#   # Calculate nuisance parameter lambda (zero for all equalities)
-#   lambda = H_mean[(p_eq+1):p] + (cov_H_diag[(p_eq+1):p]**(1/2)) * c_beta/sqrt(n)
-#   lambda = sapply(lambda, min_zero)
-# 
-#   # Bootstrapping - second step
-#   W = bootstrap(E, H_centered)
-#   W[,1:p_eq] = abs(W[,1:p_eq])
-#   W[,(p_eq+1):p] = t(t(W[,(p_eq+1):p]) + lambda * sqrt(n))
-#   W_standardized = t(t(W) * standardizer)
-#   maxima = matrixStats::rowMaxs(W_standardized)
-#   critical_value = as.numeric(quantile(maxima, probs=1-alpha+beta))
-# 
-#   # Reject?
-#   result = (test_stat > critical_value)
-# 
-#   return(result)
-# }
-
-
-
-# test_U_stat_BSS <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=1000, alpha=0.05, beta=0.005){
-# 
-# 
-#   n = dim(X)[1]  # nr of samples
-# 
-# 
-#   if (is.null(ind_ineq1) | is.null(ind_ineq2)){
-#     if (!is.null(ind_ineq1) | !is.null(ind_ineq2)){
-#       stop("ERROR - exactly one set of inequalities is missing. Cannot handle this.")
-#     }
-#     test_ineqs = FALSE
-#     r = 2
-#   } else {
-#     test_ineqs = TRUE
-#     r = 4
-#   }
-# 
-# 
-#   N = min(0.7*choose(n,r), N)
-# 
-#   # determine N_hat by Bernoulli sampling
-#   N_hat = stats::rbinom(1, choose(n,r), (N / choose(n,r)))
-# 
-#   # Choose randomly N_hat unique subsets with cardinality r of {1,...,n}
-#   indices = matrix(unlist(random_combs(n,r,N_hat)[[1]]), ncol = r, byrow = TRUE)
-# 
-#   # Compute matrix H
-#   if (test_ineqs){
-#     H = calculate_H(X, indices, ind_eq, ind_ineq1, ind_ineq2)
-#   } else {
-#     H = calculate_H_eq(X, indices, ind_eq)
-#   }
-# 
-#   H_mean = colMeans(H)
-#   H_centered = t(t(H) - H_mean)
-#   p = dim(H)[2]  # total nr of constraints
-#   p_eq = dim(ind_eq)[1]  # equality constraints
-# 
-#   # Compute matrix G
-#   if (test_ineqs){
-#     G = calculate_G(X,L=(r-1), ind_eq, ind_ineq1, ind_ineq2)
-#   } else {
-#     G = calculate_G_eq(X, L=(r-1), ind_eq)
-#   }
-#   G_mean = colMeans(G)
-#   G_centered = t(t(G) - G_mean)
-# 
-#   # Diagonal of the approximate variance of H
-#   cov_H_diag = colSums(H_centered**2) / N_hat
-#   cov_G_diag = colSums(G_centered**2) / n
-#   cov_diag = r**2 * cov_G_diag + (n/N) * cov_H_diag
-# 
-#   # Vector for standardizing
-#   standardizer = cov_diag**(-1/2)
-# 
-#   # Test statistic
-#   marginal_stats = sqrt(n) * H_mean
-#   marginal_stats[1:p_eq] = abs(marginal_stats[1:p_eq])
-#   test_stat =  max(standardizer * marginal_stats)
-# 
-#   # Bootstrap # first step
-#   bootstrap_res = bootstrap_U(E, r, H_centered, G_centered)
-#   U_A = bootstrap_res[[1]]
-#   U_B = bootstrap_res[[2]]
-#   U = U_A + sqrt(n/N) * U_B
-# 
-# 
-#   # Calculate c_beta
-#   U_standardized = t(t(U[,(p_eq+1):p]) * standardizer[(p_eq+1):p])
-#   bootstrap_res = matrixStats::rowMaxs(U_standardized)
-#   c_beta = as.numeric(quantile(bootstrap_res, probs=1-beta))
-# 
-# 
-#   # Calculate nuisance parameter lambda (zero for all equalities)
-#   lambda = H_mean[(p_eq+1):p] + (cov_diag[(p_eq+1):p]**(1/2)) * c_beta/sqrt(n)
-#   lambda = sapply(lambda, min_zero)
-# 
-#   # Bootstrapping - second step
-#   bootstrap_res = bootstrap_U(E, r, H_centered, G_centered)
-#   U_A = bootstrap_res[[1]]
-#   U_B = bootstrap_res[[2]]
-#   U = U_A + sqrt(n/N) * U_B
-#   U[,1:p_eq] = abs(U[,1:p_eq])
-#   U[,(p_eq+1):p] = t(t(U[,(p_eq+1):p]) + lambda * sqrt(n))
-#   U_standardized = t(t(U) * standardizer)
-#   maxima = matrixStats::rowMaxs(U_standardized)
-#   critical_value = as.numeric(quantile(maxima, probs=1-alpha+beta))
-# 
-#   # Reject?
-#   result = (test_stat > critical_value)
-# 
-#   return(result)
-# }
-
-
-
-
-
-
-
-
-
-# ############# grouping_compute_cov ##############
-# # testing only equalities
-# # estimators h NOT symmetrized
-# 
-# test_grouping_compute_cov <- function(X, ind_eq, E=1000){
-#   
-#   # Call function to calculate matrix H
-#   N = findn(nrow(X),2)
-#   indices = matrix(1:N, ncol=2)
-#   H = calculate_H_not_symmetric_eq(X, indices, ind_eq)
-#   
-#   # Mean and centering
-#   H_mean = colMeans(H)
-#   H_centered = t(t(H) - H_mean) # Centering: H_i = (H_i - H_mean)
-#   
-#   # Nr of samples
-#   n = dim(X)[1]
-#   
-#   # Sample covariance
-#   S = (1/n)*t(X)%*%X
-#   
-#   # Estimate limiting covariance matrix
-#   cov = cov_grouping(S, ind_eq)
-#   
-#   # Vector for standardizing
-#   standardizer = diag(cov)**(-1/2)
-#   
-#   # Test statictic
-#   test_stat = sqrt(n/2) * max(abs(standardizer * H_mean))
-#   
-#   # Sample E sets from Z~N(0,cov)
-#   Z = MASS::mvrnorm(E, mu=rep(0,nrow(cov)), Sigma=cov)
-#   
-#   # Critical value
-#   results = apply(abs(standardizer * t(Z)), 2, max)
-#   
-#   # pval
-#   pval = (1 + sum(results >= test_stat)) / (1+E)
-#   
-#   return(list("PVAL"=pval, "TSTAT"=test_stat))
-# }
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# ############# run_over_compute_cov ##############
-# # testing only equalities
-# # estimators h NOT symmetrized
-# 
-# test_run_over_compute_cov <- function(X, ind_eq, E=1000){
-#   
-#   # Call function to calculate matrix H
-#   indices = matrix(c(1:(nrow(X)-1),2:nrow(X)), ncol=2, byrow=FALSE)
-#   H = calculate_H_not_symmetric_eq(X, indices, ind_eq)
-#   
-#   # Mean and centering
-#   H_mean = colMeans(H)
-#   H_centered = t(t(H) - H_mean) # Centering: H_i = (H_i - H_mean)
-#   
-#   # Nr of samples
-#   n = dim(X)[1]
-#   
-#   # Sample covariance
-#   S = (1/n)*t(X)%*%X
-#   
-#   # Estimate limiting covariance matrix
-#   cov = cov_run_over(S, ind_eq)
-#   
-#   # Vector for standardizing
-#   standardizer = diag(cov)**(-1/2)
-#   
-#   # Test statictic
-#   test_stat = sqrt(n-1) * max(abs(standardizer * H_mean))
-#   
-#   # Sample E sets from Z~N(0,cov)
-#   Z = MASS::mvrnorm(E, mu=rep(0,nrow(cov)), Sigma=cov)
-#   
-#   # Critical value
-#   results = apply(abs(standardizer * t(Z)), 2, max)
-#   
-#   # pval
-#   pval = (1 + sum(results >= test_stat)) / (1+E)
-#   
-#   return(list("PVAL"=pval, "TSTAT"=test_stat))
-# }
-
-
-
-
-

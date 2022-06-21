@@ -40,3 +40,6 @@ vignettes/*.pdf
 
 # Other studd
 .ide*
+
+# Files only needed for development
+dev/*

@@ -7,23 +7,23 @@
 collect_indices(g, m, nr_4 = NULL, nr_3 = NULL)
 }
 \arguments{
-\item{g}{An igraph object that is a tree. It is assumed that the first m nodes correspond to oberseved nodes.}
+\item{g}{An igraph object that is a tree. It is assumed that the first m nodes correspond to observed nodes.}
 
 \item{m}{Integer, number of observed nodes.}
 
 \item{nr_4}{Number of considered subsets of size 4. This is optional. 
 If \code{NULL}, all subsets are considered. 
-If a number is given, subsets are choosen randomly by the function \code{\link{random_combs}}.}
+If a number is given, subsets are chosen randomly.}
 
 \item{nr_3}{Number of considered subsets of size 3. This is optional. 
 If \code{NULL}, all subsets are considered. 
-If a number is given, subsets are choosen randomly by the function \code{\link{random_combs}}.}
+If a number is given, subsets are chosen randomly.}
 }
 \value{
 A list with three entries is returned. All entries are matrices. 
-The first matrx contains the equality constraints and has 8 columns. 
-The second matrx contains all inequality constraints where only 6 indices are necessary (i.e. it has 6 columns). 
-The third matrx contains the inequality constraints where 8 indices are necessary (i.e. it has 8 columns).
+The first matrix contains the equality constraints and has 8 columns. 
+The second matrix contains all inequality constraints where only 6 indices are necessary (i.e. it has 6 columns). 
+The third matrix contains the inequality constraints where 8 indices are necessary (i.e. it has 8 columns).
 }
 \description{
 The polynomials are represented as a list of indices. Example:

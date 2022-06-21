@@ -11,7 +11,8 @@
 #' the last \code{factors+1} columns correspond to the column-indices of the minor.
 #' 
 #' @examples
-#' random_minors(20,2,10000)
+#' random_minors(10,2,100)
+#' @export
 random_minors <- function(m, factors, nr){
   
   if ((2*(factors+1)) > m){
@@ -53,7 +54,7 @@ random_minors <- function(m, factors, nr){
 #' 
 #' @examples
 #' # Covariance matrix corresponding to the two-factor analysis model
-#' m=20
+#' m=10
 #' Gamma = matrix(stats::rnorm(2*m),m,2)
 #' Psi = diag(rep(1,m))
 #' cov = Psi + Gamma %*% t(Gamma)
@@ -62,15 +63,13 @@ random_minors <- function(m, factors, nr){
 #' X = MASS::mvrnorm(500, mu=rep(0,nrow(cov)), Sigma=cov)
 #' 
 #' # Apply the test
-#' test_indep_factors(X, 10000)
-#' 
-#' @references 
-#' TO BE WRITTEN
+#' test_indep_factors(X, 100)
+#' @export
 test_indep_factors <- function(X, nr_minors, E=1000){
   
   m = dim(X)[2] # nr of observed variables
   
-  # split dataset
+  # split data set
   N = findn(nrow(X),3)
   indices = matrix(1:N, ncol=3)
   
@@ -129,7 +128,7 @@ test_indep_factors <- function(X, nr_minors, E=1000){
 #' 
 #' @examples
 #' # Covariance matrix corresponding to the two-factor analysis model
-#' m=20
+#' m=10
 #' Gamma = matrix(stats::rnorm(2*m),m,2)
 #' Psi = diag(rep(1,m))
 #' cov = Psi + Gamma %*% t(Gamma)
@@ -138,10 +137,8 @@ test_indep_factors <- function(X, nr_minors, E=1000){
 #' X = MASS::mvrnorm(500, mu=rep(0,nrow(cov)), Sigma=cov)
 #' 
 #' # Apply the test
-#' test_U_stat_factors(X, 10000)
-#' 
-#' @references 
-#' TO BE WRITTEN
+#' test_U_stat_factors(X, 100)
+#' @export
 test_U_stat_factors <- function(X, nr_minors, N=5000, E=1000){
   
   

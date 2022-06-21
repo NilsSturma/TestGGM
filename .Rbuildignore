@@ -1,3 +1,9 @@
-^.*\.Rproj$ 
+^CRAN-RELEASE$
+^.*\.Rproj$
 ^\.Rproj\.user$
+cran-comments.md
+.Rhistory
+.DS_Store
+..Rcheck
+^\.travis\.yml$
 ^dev$

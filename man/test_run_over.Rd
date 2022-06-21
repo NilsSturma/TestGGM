@@ -55,8 +55,4 @@ ind_ineq2 = res$ind_ineq2
 
 # Apply the test
 test_run_over(X, ind_eq, ind_ineq1, ind_ineq2)
-
-}
-\references{
-TO BE WRITTEN
 }
