@@ -279,6 +279,8 @@ test_run_over <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, B=5, E=1000
 #' Create this object using the function \code{\link{collect_indices}}. If \code{NULL} inequality constraints are not tested.
 #' @param N Integer, computational budget parameter.
 #' @param E Integer, number of bootstrap iterations.
+#' @param n1 Integer, cardinality of the set \code{S_1} to compute the divide-and-conquer estimators. 
+#' The subset \code{S_1} is chosen randomly from \code{\{1,...,n\}}.
 #' 
 #' @return Named list with two entries: Test statistic (\code{TSTAT}) and p-value (\code{PVAL}).
 #' 
@@ -305,7 +307,7 @@ test_run_over <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, B=5, E=1000
 #' @references
 #' TO BE WRITTEN
 #' @export
-test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=1000){
+test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=1000, n1=500){
   
   
   n = dim(X)[1]  # nr of samples
@@ -343,19 +345,19 @@ test_U_stat <- function(X, ind_eq, ind_ineq1=NULL, ind_ineq2=NULL, N=5000, E=100
   p = dim(H)[2]  # total nr of constraints
   p_eq = dim(ind_eq)[1]  # equality constraints
   
-  # Compute matrix G
+  # Compute matrix G on subset of samples
+  X_G = X[sample(n, size=min(n1,n), replace=FALSE),]
   if (test_ineqs){
-    G = calculate_G(X,L=(r-1), ind_eq, ind_ineq1, ind_ineq2)
+    G = calculate_G(X_G,L=(r-1), ind_eq, ind_ineq1, ind_ineq2)
   } else {
-    G = calculate_G_eq(X, L=(r-1), ind_eq)
+    G = calculate_G_eq(X_G, L=(r-1), ind_eq)
   }
   G_mean = colMeans(G)
   G_centered = t(t(G) - G_mean)
   
   # Diagonal of the approximate variance of H
   cov_H_diag = colSums(H_centered**2) / N_hat
-  cov_G_diag = colSums(G_centered**2) / n
-  #cov_diag = cov_H_diag
+  cov_G_diag = colSums(G_centered**2) / n1
   cov_diag = r**2 * cov_G_diag + (n/N) * cov_H_diag
   
   # Vector for standardizing

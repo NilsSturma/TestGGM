@@ -4,7 +4,15 @@
 \alias{test_U_stat}
 \title{Tests the goodness-of-fit of a Gaussian latent tree model by the maximum of a high-dimensional incomplete U-statistic}
 \usage{
-test_U_stat(X, ind_eq, ind_ineq1 = NULL, ind_ineq2 = NULL, N = 5000, E = 1000)
+test_U_stat(
+  X,
+  ind_eq,
+  ind_ineq1 = NULL,
+  ind_ineq2 = NULL,
+  N = 5000,
+  E = 1000,
+  n1 = 500
+)
 }
 \arguments{
 \item{X}{Matrix with observed data. The number of columns has to be equal to the number of 
@@ -22,6 +30,9 @@ Create this object using the function \code{\link{collect_indices}}. If \code{NU
 \item{N}{Integer, computational budget parameter.}
 
 \item{E}{Integer, number of bootstrap iterations.}
+
+\item{n1}{Integer, cardinality of the set \code{S_1} to compute the divide-and-conquer estimators. 
+The subset \code{S_1} is chosen randomly from \code{\{1,...,n\}}.}
 }
 \value{
 Named list with two entries: Test statistic (\code{TSTAT}) and p-value (\code{PVAL}).
