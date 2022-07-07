@@ -13,7 +13,8 @@ LR_test(
   a = 0.5,
   b = 0.9,
   c = 0.5,
-  d = 1.5
+  d = 1.5,
+  maxiter = 10000
 )
 }
 \arguments{
@@ -39,6 +40,8 @@ This is done outside the LR test to accelerate the computation.}
 \item{c}{Variances are sampled from the interval \code{[c,d]}. Only used if \code{sampling==TRUE}.}
 
 \item{d}{Variances are sampled from the interval \code{[c,d]}. Only used if \code{sampling==TRUE}.}
+
+\item{maxiter}{Integer, maximum number of iterations in the EM algorithm.}
 }
 \value{
 Named list with three entries: Test statistic (\code{TSTAT}), p-value (\code{PVAL}) and number of iterations (\code{it}).

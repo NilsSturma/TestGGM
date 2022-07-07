@@ -131,6 +131,7 @@ sample_edge_corrs <- function(n,a,b){
 #' @param b Edge correlations are sampled from the union of intervals \code{[-b,-a]} and \code{[a,b]}. Only used if \code{sampling==TRUE}.
 #' @param c Variances are sampled from the interval \code{[c,d]}. Only used if \code{sampling==TRUE}.
 #' @param d Variances are sampled from the interval \code{[c,d]}. Only used if \code{sampling==TRUE}.
+#' @param maxiter Integer, maximum number of iterations in the EM algorithm.
 #' @return Named list with three entries: Test statistic (\code{TSTAT}), p-value (\code{PVAL}) and number of iterations (\code{it}).
 #' @examples 
 #' vertices <- data.frame(name=seq(1,8), type=c(rep(1,5), rep(2,3))) # 1=observed, 2=latent
@@ -153,7 +154,7 @@ sample_edge_corrs <- function(n,a,b){
 #' # Call the test
 #' LR_test(X, tree, paths)
 #' @export
-LR_test = function(X, g, paths, sampling=FALSE, nr_starts=100, a=0.5, b=0.9, c=0.5, d=1.5){
+LR_test = function(X, g, paths, sampling=FALSE, nr_starts=100, a=0.5, b=0.9, c=0.5, d=1.5, maxiter=10000){
   
   m = dim(X)[2]
   
@@ -163,20 +164,24 @@ LR_test = function(X, g, paths, sampling=FALSE, nr_starts=100, a=0.5, b=0.9, c=0
   
   # starting values and call expectation maximation
   if (sampling){
+    it = rep(0,nr_starts)
     for (nr in 1:nr_starts){
       Omega_0 = stats::runif(m,c,d)
       Rho_0 = sample_edge_corrs(dim(edges)[1],a,b)
-      r = EM(X, edges, paths, Omega_0, Rho_0)
+      r = EM(X, edges, paths, Omega_0, Rho_0, maxiter=maxiter)
+      it[nr] = r$it
       if (nr==1){
         res = r
       } else {
         if (r$loglik > res$loglik){res = r}
       }
     }
+    it_mean = mean(it)
   } else {
       Omega_0 = igraph::V(g)$var[1:m]
       Rho_0 = igraph::E(g)$corr
       res = EM(X, edges, paths, Omega_0, Rho_0)
+      it_mean = res$it
   }
   
   
@@ -186,5 +191,5 @@ LR_test = function(X, g, paths, sampling=FALSE, nr_starts=100, a=0.5, b=0.9, c=0
   df = choose((dim(X)[2]+1),2) - ( length(igraph::E(g)) + sum(igraph::V(g)$type==1) )
   p_value = 1 - stats::pchisq(LR_statistic, df)
   
-  return(list("PVAL"=p_value, "TSTAT"=LR_statistic, "iterations"=res$it))
+  return(list("PVAL"=p_value, "TSTAT"=LR_statistic, "it_mean"=it_mean))
 }
