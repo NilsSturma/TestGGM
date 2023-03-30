@@ -35,10 +35,42 @@ random_minors <- function(m, factors, nr){
   return(A)
 }
 
-
-#' Tests the (3x3)-minor constraints of a 2-factor model by the maximum of a high-dimensional independent sum
+#' Get all possible minors in a factor analysis model
 #' 
-#' This function tests the (3x3)-minor constraints of a given 2-factor model to observed data.
+#' @param m Integer, number of observed nodes
+#' @param factors Integer, number of hidden factors.
+#' 
+#' @return Matrix with \code{2*factors+2} columns. Each row corresponds to one (factors+1)x(factors+1)-minor.
+#' The first \code{factors+1} columns correspond to the row-indices of the minor, 
+#' the last \code{factors+1} columns correspond to the column-indices of the minor.
+#' 
+#' @examples
+#' get_minors(8,2)
+#' @export
+get_minors <- function(m, factors){
+  
+  if ((2*(factors+1)) > m){
+    stop("There is no (factors+1 x factors+1)-minor in a (m x m)-matrix.")
+  }
+  
+  subsets = t(utils::combn(1:m,(2*(factors+1))))
+  minors_per_subset = 0.5 * choose((2*(factors+1)),(factors+1))
+  
+  A = matrix(0,minors_per_subset*dim(subsets)[1],(2*(factors+1)))
+  
+  for (i in 1:dim(subsets)[1]){
+    sub_indices <- t(utils::combn(subsets[i,],(factors+1)))
+    minors <- cbind(sub_indices[1:minors_per_subset,],
+                    sub_indices[(2*minors_per_subset):(minors_per_subset+1),])
+    A[((i-1)*minors_per_subset+1):(i*minors_per_subset),] = minors
+  }
+  
+  return(A)
+}
+
+
+#' Tests the (m+1)x(m+1)-minor constraints of an m-factor model by the maximum of a high-dimensional independent sum
+#' 
 #' The minors are estimated by grouping the data into independent subsets. 
 #' Each group is used to form an unbiased estimate of all minors. 
 #' The test statistic is the maximum of the average of the independent studentized estimates. 
@@ -47,8 +79,10 @@ random_minors <- function(m, factors, nr){
 #' 
 #' @param X Matrix with observed data. The number of columns corresponds to the number of observed variables. 
 #' Each row corresponds to one sample.
-#' @param nr_minors Integer, number of randomly chosen minors that are tested. 
+#' @param factors Integer, number of latent factors
 #' @param E Integer, number of bootstrap iterations.
+#' @param random Logical. If TRUE, the minors are chosen randomly. If FALSE, all possible minors are tested.
+#' @param nr_minors Integer, number of randomly chosen minors that are tested. 
 #' 
 #' @return Named list with two entries: Test statistic (\code{TSTAT}) and p-value (\code{PVAL}).
 #' 
@@ -63,18 +97,26 @@ random_minors <- function(m, factors, nr){
 #' X = MASS::mvrnorm(500, mu=rep(0,nrow(cov)), Sigma=cov)
 #' 
 #' # Apply the test
-#' test_indep_factors(X, 100)
+#' test_indep_factors(X, random=TRUE, nr_minors=100)
 #' @export
-test_indep_factors <- function(X, nr_minors, E=1000){
+test_indep_factors <- function(X, factors=2, E=1000, random=FALSE, nr_minors=10000){
+  
+  if (factors != 2){
+    stop("Current implementation only supports 2 latent factors.")
+  }
   
   m = dim(X)[2] # nr of observed variables
   
   # split data set
-  N = findn(nrow(X),3)
-  indices = matrix(1:N, ncol=3)
+  N = findn(nrow(X),(factors+1))
+  indices = matrix(1:N, ncol=(factors+1))
   
-  # randomly choose minors to test
-  ind_minors = random_minors(m,2,nr_minors)
+  # Create minors to test
+  if (random){
+    ind_minors = random_minors(m,factors,nr_minors)
+  } else {
+    ind_minors = get_minors(m,factors)
+  }
   
   # Calculate matrix H of estimates
   H = H_factors(X, indices, ind_minors)
@@ -109,9 +151,8 @@ test_indep_factors <- function(X, nr_minors, E=1000){
 }
 
 
-#' Tests the (3x3)-minor constraints of a 2-factor model by the maximum of a high-dimensional U-statistic
+#' Tests the (m+1)x(m+1)-minor constraints of an m-factor model by the maximum of a high-dimensional U-statistic
 #' 
-#' This function tests the(3x3)-minor constraints of a given 2-factor model to observed data.
 #' The minors are estimated by considering subsets of the data. The number of subsets as well as
 #' the subsets itself are chosen randomly. Each subset is used to form an unbiased estimate of all minors. 
 #' The test statistic is the maximum of the U-statistic formed by the studentized estimates. 
@@ -120,9 +161,11 @@ test_indep_factors <- function(X, nr_minors, E=1000){
 #' 
 #' @param X Matrix with observed data. The number of columns corresponds to the number of observed variables. 
 #' Each row corresponds to one sample.
-#' @param nr_minors Integer, number of randomly chosen minors that are tested. 
+#' @param factors Integer, number of latent factors
 #' @param N Integer, computational budget parameter.
 #' @param E Integer, number of bootstrap iterations.
+#' @param random Logical. If TRUE, the minors are chosen randomly. If FALSE, all possible minors are tested.
+#' @param nr_minors Integer, number of randomly chosen minors that are tested. 
 #' 
 #' @return Named list with two entries: Test statistic (\code{TSTAT}) and p-value (\code{PVAL}).
 #' 
@@ -137,14 +180,17 @@ test_indep_factors <- function(X, nr_minors, E=1000){
 #' X = MASS::mvrnorm(500, mu=rep(0,nrow(cov)), Sigma=cov)
 #' 
 #' # Apply the test
-#' test_U_stat_factors(X, 100)
+#' test_U_stat_factors(X, random=TRUE, nr_minors=100)
 #' @export
-test_U_stat_factors <- function(X, nr_minors, N=5000, E=1000){
+test_U_stat_factors <- function(X, factors=2, N=5000, E=1000, random=FALSE, nr_minors=10000){
   
+  if (factors != 2){
+    stop("Current implementation only supports 2 latent factors.")
+  }
   
   n = dim(X)[1]  # nr of samples
   m = dim(X)[2] # nr of observed variables
-  r = 3 # order of U-statistic
+  r = (factors+1) # order of U-statistic
   
   N = min(0.7*choose(n,r), N)
   
@@ -154,8 +200,12 @@ test_U_stat_factors <- function(X, nr_minors, N=5000, E=1000){
   # Choose randomly N_hat unique subsets with cardinality r of {1,...,n}
   indices = matrix(unlist(random_combs(n,r,N_hat)[[1]]), ncol = r, byrow = TRUE)
   
-  # randomly choose minors to test
-  ind_minors = random_minors(m,2,nr_minors)
+  # Create minors to test
+  if (random){
+    ind_minors = random_minors(m,factors,nr_minors)
+  } else {
+    ind_minors = get_minors(m,factors)
+  }
   
   # Calculate matrix H of estimates
   H = H_factors(X, indices, ind_minors)

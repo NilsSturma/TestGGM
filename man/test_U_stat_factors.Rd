@@ -2,25 +2,35 @@
 % Please edit documentation in R/tests-factoranalysis.R
 \name{test_U_stat_factors}
 \alias{test_U_stat_factors}
-\title{Tests the (3x3)-minor constraints of a 2-factor model by the maximum of a high-dimensional U-statistic}
+\title{Tests the (m+1)x(m+1)-minor constraints of an m-factor model by the maximum of a high-dimensional U-statistic}
 \usage{
-test_U_stat_factors(X, nr_minors, N = 5000, E = 1000)
+test_U_stat_factors(
+  X,
+  factors = 2,
+  N = 5000,
+  E = 1000,
+  random = FALSE,
+  nr_minors = 10000
+)
 }
 \arguments{
 \item{X}{Matrix with observed data. The number of columns corresponds to the number of observed variables. 
 Each row corresponds to one sample.}
 
-\item{nr_minors}{Integer, number of randomly chosen minors that are tested.}
+\item{factors}{Integer, number of latent factors}
 
 \item{N}{Integer, computational budget parameter.}
 
 \item{E}{Integer, number of bootstrap iterations.}
+
+\item{random}{Logical. If TRUE, the minors are chosen randomly. If FALSE, all possible minors are tested.}
+
+\item{nr_minors}{Integer, number of randomly chosen minors that are tested.}
 }
 \value{
 Named list with two entries: Test statistic (\code{TSTAT}) and p-value (\code{PVAL}).
 }
 \description{
-This function tests the(3x3)-minor constraints of a given 2-factor model to observed data.
 The minors are estimated by considering subsets of the data. The number of subsets as well as
 the subsets itself are chosen randomly. Each subset is used to form an unbiased estimate of all minors. 
 The test statistic is the maximum of the U-statistic formed by the studentized estimates. 
@@ -38,5 +48,5 @@ cov = Psi + Gamma \%*\% t(Gamma)
 X = MASS::mvrnorm(500, mu=rep(0,nrow(cov)), Sigma=cov)
 
 # Apply the test
-test_U_stat_factors(X, 100)
+test_U_stat_factors(X, random=TRUE, nr_minors=100)
 }

@@ -24,13 +24,13 @@ NumericVector h_tilde_fac(NumericVector X1,
 
 // [[Rcpp::export]]
 NumericVector h_fac(List L, 
-                    IntegerMatrix ind,
+                    IntegerMatrix ind_minors,
                     IntegerMatrix perm){
   
-  NumericVector h(ind.nrow());
+  NumericVector h(ind_minors.nrow());
   
   for (int per = 0; per < perm.nrow(); per++){
-    h = h + h_tilde_fac(L[perm(per,0)], L[perm(per,1)], L[perm(per,2)], ind);
+    h = h + h_tilde_fac(L[perm(per,0)], L[perm(per,1)], L[perm(per,2)], ind_minors);
   }
   return(h/perm.nrow());
 }
@@ -39,17 +39,17 @@ NumericVector h_fac(List L,
 // [[Rcpp::export]]
 NumericMatrix H_factors(NumericMatrix X,
                         IntegerMatrix indices, 
-                        IntegerMatrix ind){
+                        IntegerMatrix ind_minors){
   
-  NumericMatrix H(indices.nrow(), ind.nrow());
+  NumericMatrix H(indices.nrow(), ind_minors.nrow());
   indices = indices - 1;
   
-  IntegerMatrix perm = permutations(3);
+  IntegerMatrix perm = permutations((0.5*ind_minors.ncol()));
   perm = perm - 1;
   
   for (int i = 0; i < indices.nrow(); i++){
     List L = List::create(X(indices(i,0),_), X(indices(i,1),_), X(indices(i,2),_));
-    H(i,_) = h_fac(L, ind, perm);
+    H(i,_) = h_fac(L, ind_minors, perm);
   }
   return(H);
 }
@@ -82,16 +82,16 @@ NumericVector g_fac(NumericMatrix X,
 // [[Rcpp::export]]
 NumericMatrix G_factors(NumericMatrix X,
                           int L,
-                          IntegerMatrix ind){
+                          IntegerMatrix ind_minors){
   
   int n = X.nrow();
-  NumericMatrix G(n, ind.nrow());
+  NumericMatrix G(n, ind_minors.nrow());
   
-  IntegerMatrix perm = permutations(3);
+  IntegerMatrix perm = permutations((0.5*ind_minors.ncol()));
   perm = perm - 1;
   
   for (int i = 1; i <= n; i++){
-    G((i-1),_) = g_fac(X, i, L, ind, perm);
+    G((i-1),_) = g_fac(X, i, L, ind_minors, perm);
   }
   return(G);
 }

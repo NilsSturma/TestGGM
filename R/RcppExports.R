@@ -93,20 +93,20 @@ h_tilde_fac <- function(X1, X2, X3, ind) {
     .Call(`_TestGGM_h_tilde_fac`, X1, X2, X3, ind)
 }
 
-h_fac <- function(L, ind, perm) {
-    .Call(`_TestGGM_h_fac`, L, ind, perm)
+h_fac <- function(L, ind_minors, perm) {
+    .Call(`_TestGGM_h_fac`, L, ind_minors, perm)
 }
 
-H_factors <- function(X, indices, ind) {
-    .Call(`_TestGGM_H_factors`, X, indices, ind)
+H_factors <- function(X, indices, ind_minors) {
+    .Call(`_TestGGM_H_factors`, X, indices, ind_minors)
 }
 
 g_fac <- function(X, i, L, ind, perm) {
     .Call(`_TestGGM_g_fac`, X, i, L, ind, perm)
 }
 
-G_factors <- function(X, L, ind) {
-    .Call(`_TestGGM_G_factors`, X, L, ind)
+G_factors <- function(X, L, ind_minors) {
+    .Call(`_TestGGM_G_factors`, X, L, ind_minors)
 }
 
 random_combs <- function(n, k, nr) {

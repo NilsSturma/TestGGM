@@ -338,28 +338,28 @@ BEGIN_RCPP
 END_RCPP
 }
 // h_fac
-NumericVector h_fac(List L, IntegerMatrix ind, IntegerMatrix perm);
-RcppExport SEXP _TestGGM_h_fac(SEXP LSEXP, SEXP indSEXP, SEXP permSEXP) {
+NumericVector h_fac(List L, IntegerMatrix ind_minors, IntegerMatrix perm);
+RcppExport SEXP _TestGGM_h_fac(SEXP LSEXP, SEXP ind_minorsSEXP, SEXP permSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< List >::type L(LSEXP);
-    Rcpp::traits::input_parameter< IntegerMatrix >::type ind(indSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_minors(ind_minorsSEXP);
     Rcpp::traits::input_parameter< IntegerMatrix >::type perm(permSEXP);
-    rcpp_result_gen = Rcpp::wrap(h_fac(L, ind, perm));
+    rcpp_result_gen = Rcpp::wrap(h_fac(L, ind_minors, perm));
     return rcpp_result_gen;
 END_RCPP
 }
 // H_factors
-NumericMatrix H_factors(NumericMatrix X, IntegerMatrix indices, IntegerMatrix ind);
-RcppExport SEXP _TestGGM_H_factors(SEXP XSEXP, SEXP indicesSEXP, SEXP indSEXP) {
+NumericMatrix H_factors(NumericMatrix X, IntegerMatrix indices, IntegerMatrix ind_minors);
+RcppExport SEXP _TestGGM_H_factors(SEXP XSEXP, SEXP indicesSEXP, SEXP ind_minorsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
     Rcpp::traits::input_parameter< IntegerMatrix >::type indices(indicesSEXP);
-    Rcpp::traits::input_parameter< IntegerMatrix >::type ind(indSEXP);
-    rcpp_result_gen = Rcpp::wrap(H_factors(X, indices, ind));
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_minors(ind_minorsSEXP);
+    rcpp_result_gen = Rcpp::wrap(H_factors(X, indices, ind_minors));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -379,15 +379,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // G_factors
-NumericMatrix G_factors(NumericMatrix X, int L, IntegerMatrix ind);
-RcppExport SEXP _TestGGM_G_factors(SEXP XSEXP, SEXP LSEXP, SEXP indSEXP) {
+NumericMatrix G_factors(NumericMatrix X, int L, IntegerMatrix ind_minors);
+RcppExport SEXP _TestGGM_G_factors(SEXP XSEXP, SEXP LSEXP, SEXP ind_minorsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
     Rcpp::traits::input_parameter< int >::type L(LSEXP);
-    Rcpp::traits::input_parameter< IntegerMatrix >::type ind(indSEXP);
-    rcpp_result_gen = Rcpp::wrap(G_factors(X, L, ind));
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_minors(ind_minorsSEXP);
+    rcpp_result_gen = Rcpp::wrap(G_factors(X, L, ind_minors));
     return rcpp_result_gen;
 END_RCPP
 }
