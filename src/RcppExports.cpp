@@ -466,6 +466,30 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// binomialCoefficient
+int binomialCoefficient(int n, int k);
+RcppExport SEXP _TestGGM_binomialCoefficient(SEXP nSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type k(kSEXP);
+    rcpp_result_gen = Rcpp::wrap(binomialCoefficient(n, k));
+    return rcpp_result_gen;
+END_RCPP
+}
+// generateSubsets
+NumericMatrix generateSubsets(int N, int k);
+RcppExport SEXP _TestGGM_generateSubsets(SEXP NSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type N(NSEXP);
+    Rcpp::traits::input_parameter< int >::type k(kSEXP);
+    rcpp_result_gen = Rcpp::wrap(generateSubsets(N, k));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_TestGGM_h_tilde", (DL_FUNC) &_TestGGM_h_tilde, 7},
@@ -501,6 +525,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_TestGGM_permutations", (DL_FUNC) &_TestGGM_permutations, 1},
     {"_TestGGM_update_param", (DL_FUNC) &_TestGGM_update_param, 3},
     {"_TestGGM_cov_from_graph_large", (DL_FUNC) &_TestGGM_cov_from_graph_large, 3},
+    {"_TestGGM_binomialCoefficient", (DL_FUNC) &_TestGGM_binomialCoefficient, 2},
+    {"_TestGGM_generateSubsets", (DL_FUNC) &_TestGGM_generateSubsets, 2},
     {NULL, NULL, 0}
 };
 

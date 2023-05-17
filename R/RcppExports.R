@@ -133,3 +133,11 @@ cov_from_graph_large <- function(Omega, Rho, paths) {
     .Call(`_TestGGM_cov_from_graph_large`, Omega, Rho, paths)
 }
 
+binomialCoefficient <- function(n, k) {
+    .Call(`_TestGGM_binomialCoefficient`, n, k)
+}
+
+generateSubsets <- function(N, k) {
+    .Call(`_TestGGM_generateSubsets`, N, k)
+}
+
