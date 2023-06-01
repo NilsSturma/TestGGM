@@ -105,12 +105,8 @@ g_fac <- function(X, i, L, ind, perm) {
     .Call(`_TestGGM_g_fac`, X, i, L, ind, perm)
 }
 
-G_factors <- function(X, L, ind_minors) {
-    .Call(`_TestGGM_G_factors`, X, L, ind_minors)
-}
-
-G_factors_flexible <- function(X, S1, L, ind) {
-    .Call(`_TestGGM_G_factors_flexible`, X, S1, L, ind)
+G_factors <- function(X, S1, L, ind) {
+    .Call(`_TestGGM_G_factors`, X, S1, L, ind)
 }
 
 random_combs <- function(n, k, nr) {

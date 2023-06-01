@@ -379,21 +379,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // G_factors
-NumericMatrix G_factors(NumericMatrix X, int L, IntegerMatrix ind_minors);
-RcppExport SEXP _TestGGM_G_factors(SEXP XSEXP, SEXP LSEXP, SEXP ind_minorsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
-    Rcpp::traits::input_parameter< int >::type L(LSEXP);
-    Rcpp::traits::input_parameter< IntegerMatrix >::type ind_minors(ind_minorsSEXP);
-    rcpp_result_gen = Rcpp::wrap(G_factors(X, L, ind_minors));
-    return rcpp_result_gen;
-END_RCPP
-}
-// G_factors_flexible
-NumericMatrix G_factors_flexible(NumericMatrix X, IntegerVector S1, int L, IntegerMatrix ind);
-RcppExport SEXP _TestGGM_G_factors_flexible(SEXP XSEXP, SEXP S1SEXP, SEXP LSEXP, SEXP indSEXP) {
+NumericMatrix G_factors(NumericMatrix X, IntegerVector S1, int L, IntegerMatrix ind);
+RcppExport SEXP _TestGGM_G_factors(SEXP XSEXP, SEXP S1SEXP, SEXP LSEXP, SEXP indSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -401,7 +388,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< IntegerVector >::type S1(S1SEXP);
     Rcpp::traits::input_parameter< int >::type L(LSEXP);
     Rcpp::traits::input_parameter< IntegerMatrix >::type ind(indSEXP);
-    rcpp_result_gen = Rcpp::wrap(G_factors_flexible(X, S1, L, ind));
+    rcpp_result_gen = Rcpp::wrap(G_factors(X, S1, L, ind));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -531,8 +518,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_TestGGM_h_fac", (DL_FUNC) &_TestGGM_h_fac, 3},
     {"_TestGGM_H_factors", (DL_FUNC) &_TestGGM_H_factors, 3},
     {"_TestGGM_g_fac", (DL_FUNC) &_TestGGM_g_fac, 5},
-    {"_TestGGM_G_factors", (DL_FUNC) &_TestGGM_G_factors, 3},
-    {"_TestGGM_G_factors_flexible", (DL_FUNC) &_TestGGM_G_factors_flexible, 4},
+    {"_TestGGM_G_factors", (DL_FUNC) &_TestGGM_G_factors, 4},
     {"_TestGGM_random_combs", (DL_FUNC) &_TestGGM_random_combs, 3},
     {"_TestGGM_findn", (DL_FUNC) &_TestGGM_findn, 2},
     {"_TestGGM_compute_S", (DL_FUNC) &_TestGGM_compute_S, 3},
