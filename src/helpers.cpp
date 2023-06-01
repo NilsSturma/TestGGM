@@ -168,5 +168,17 @@ int binomialCoefficient(int n, int k) {
   return res;
 }
 
-
+// [[Rcpp::export]]
+IntegerMatrix two_subsets(int n){
+  IntegerMatrix res(binomialCoefficient(n,2),2);
+  int count = 0;
+  for(int i=1; i <= n; i++){
+    for(int j=i+1; j <= n; j++){
+      res(count,0) = i;
+      res(count,1) = j;
+      count = count + 1;
+    }
+  }
+  return res;
+}
 

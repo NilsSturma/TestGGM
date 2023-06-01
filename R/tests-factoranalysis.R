@@ -182,19 +182,23 @@ test_indep_factors <- function(X, factors=2, E=1000, random=FALSE, nr_minors=100
 #' # Apply the test
 #' test_U_stat_factors(X, random=TRUE, nr_minors=100)
 #' @export
-test_U_stat_factors <- function(X, factors=2, N=5000, E=1000, random=FALSE, nr_minors=10000){
+test_U_stat_factors <- function(X, factors=2, N=5000, E=1000, n1=nrow(X), L=2, random=FALSE, nr_minors=10000){
   
   if (factors != 2){
     stop("Current implementation only supports 2 latent factors.")
   }
   
+  # Parameters
   n = dim(X)[1]  # nr of samples
   m = dim(X)[2] # nr of observed variables
   r = (factors+1) # order of U-statistic
-  
+  n1 = min(n,n1)
+  if (L < (r-1)){
+    L = r-1
+  }
   N = min(0.7*choose(n,r), N)
   
-  # determine N_hat by Bernoulli sampling
+  # Determine N_hat by Bernoulli sampling
   N_hat = stats::rbinom(1, choose(n,r), (N / choose(n,r)))
   
   # Choose randomly N_hat unique subsets with cardinality r of {1,...,n}
@@ -216,13 +220,14 @@ test_U_stat_factors <- function(X, factors=2, N=5000, E=1000, random=FALSE, nr_m
   H_centered = t(t(H) - H_mean)
   
   # Compute matrix G
-  G = G_factors(X,L=(r-1), ind_minors)
+  S1 = sample(n, n1, replace = FALSE)
+  G = G_factors(X, S1, L, ind_minors)
   G_mean = colMeans(G)
   G_centered = t(t(G) - G_mean)
   
   # Diagonal of the approximate variance of H
   cov_H_diag = colSums(H_centered**2) / N_hat
-  cov_G_diag = colSums(G_centered**2) / n
+  cov_G_diag = colSums(G_centered**2) / n1
   cov_diag = r**2 * cov_G_diag + (n/N) * cov_H_diag
   
   # Vector for standardizing

@@ -109,6 +109,10 @@ G_factors <- function(X, L, ind_minors) {
     .Call(`_TestGGM_G_factors`, X, L, ind_minors)
 }
 
+G_factors_flexible <- function(X, S1, L, ind) {
+    .Call(`_TestGGM_G_factors_flexible`, X, S1, L, ind)
+}
+
 random_combs <- function(n, k, nr) {
     .Call(`_TestGGM_random_combs`, n, k, nr)
 }
@@ -137,7 +141,7 @@ binomialCoefficient <- function(n, k) {
     .Call(`_TestGGM_binomialCoefficient`, n, k)
 }
 
-generateSubsets <- function(N, k) {
-    .Call(`_TestGGM_generateSubsets`, N, k)
+two_subsets <- function(n) {
+    .Call(`_TestGGM_two_subsets`, n)
 }
 

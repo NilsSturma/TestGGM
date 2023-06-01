@@ -391,6 +391,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// G_factors_flexible
+NumericMatrix G_factors_flexible(NumericMatrix X, IntegerVector S1, int L, IntegerMatrix ind);
+RcppExport SEXP _TestGGM_G_factors_flexible(SEXP XSEXP, SEXP S1SEXP, SEXP LSEXP, SEXP indSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type S1(S1SEXP);
+    Rcpp::traits::input_parameter< int >::type L(LSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type ind(indSEXP);
+    rcpp_result_gen = Rcpp::wrap(G_factors_flexible(X, S1, L, ind));
+    return rcpp_result_gen;
+END_RCPP
+}
 // random_combs
 List random_combs(int n, int k, int nr);
 RcppExport SEXP _TestGGM_random_combs(SEXP nSEXP, SEXP kSEXP, SEXP nrSEXP) {
@@ -478,15 +492,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// generateSubsets
-NumericMatrix generateSubsets(int N, int k);
-RcppExport SEXP _TestGGM_generateSubsets(SEXP NSEXP, SEXP kSEXP) {
+// two_subsets
+IntegerMatrix two_subsets(int n);
+RcppExport SEXP _TestGGM_two_subsets(SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type N(NSEXP);
-    Rcpp::traits::input_parameter< int >::type k(kSEXP);
-    rcpp_result_gen = Rcpp::wrap(generateSubsets(N, k));
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(two_subsets(n));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -519,6 +532,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_TestGGM_H_factors", (DL_FUNC) &_TestGGM_H_factors, 3},
     {"_TestGGM_g_fac", (DL_FUNC) &_TestGGM_g_fac, 5},
     {"_TestGGM_G_factors", (DL_FUNC) &_TestGGM_G_factors, 3},
+    {"_TestGGM_G_factors_flexible", (DL_FUNC) &_TestGGM_G_factors_flexible, 4},
     {"_TestGGM_random_combs", (DL_FUNC) &_TestGGM_random_combs, 3},
     {"_TestGGM_findn", (DL_FUNC) &_TestGGM_findn, 2},
     {"_TestGGM_compute_S", (DL_FUNC) &_TestGGM_compute_S, 3},
@@ -526,7 +540,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_TestGGM_update_param", (DL_FUNC) &_TestGGM_update_param, 3},
     {"_TestGGM_cov_from_graph_large", (DL_FUNC) &_TestGGM_cov_from_graph_large, 3},
     {"_TestGGM_binomialCoefficient", (DL_FUNC) &_TestGGM_binomialCoefficient, 2},
-    {"_TestGGM_generateSubsets", (DL_FUNC) &_TestGGM_generateSubsets, 2},
+    {"_TestGGM_two_subsets", (DL_FUNC) &_TestGGM_two_subsets, 1},
     {NULL, NULL, 0}
 };
 

@@ -79,19 +79,53 @@ NumericVector g_fac(NumericMatrix X,
 
 
 
+// // [[Rcpp::export]]
+// NumericMatrix G_factors(NumericMatrix X,
+//                           int L,
+//                           IntegerMatrix ind_minors){
+//   
+//   int n = X.nrow();
+//   NumericMatrix G(n, ind_minors.nrow());
+//   
+//   IntegerMatrix perm = permutations((0.5*ind_minors.ncol()));
+//   perm = perm - 1;
+//   
+//   for (int i = 1; i <= n; i++){
+//     G((i-1),_) = g_fac(X, i, L, ind_minors, perm);
+//   }
+//   return(G);
+// }
+
+
 // [[Rcpp::export]]
-NumericMatrix G_factors(NumericMatrix X,
-                          int L,
-                          IntegerMatrix ind_minors){
-  
+NumericMatrix G_factors(NumericMatrix X, 
+                        IntegerVector S1, 
+                        int L, 
+                        IntegerMatrix ind){
+  int r=3;
   int n = X.nrow();
-  NumericMatrix G(n, ind_minors.nrow());
-  
-  IntegerMatrix perm = permutations((0.5*ind_minors.ncol()));
+  int n1 = S1.length();
+  int K = floor((n-1)/L);
+  IntegerMatrix perm = permutations(r);
   perm = perm - 1;
   
-  for (int i = 1; i <= n; i++){
-    G((i-1),_) = g_fac(X, i, L, ind_minors, perm);
+  IntegerMatrix subsets = two_subsets(L);
+  subsets = subsets - 1;
+  int nr_subsets = subsets.nrow();
+  
+  NumericMatrix G(n1, ind.nrow());
+  
+  for(int i=0; i < n1; i++){
+    int i1 = S1[i];
+    IntegerMatrix S = compute_S(n,i1,L);
+    S = S - 1;
+    for(int k=0; k<K; k++){
+      for(int r=0; r < nr_subsets; r++){
+        List L = List::create(X((i1-1),_), X(S(k,subsets(r,0)),_), X(S(k,subsets(r,1)),_));
+        G(i,_) = G(i,_) + h_fac(L, ind, perm);
+      }
+    }
+    G(i,_) = G(i,_) / (K * nr_subsets);
   }
-  return(G);
+  return G;
 }
